@@ -1,14 +1,19 @@
 plugins {
-    id 'java-library'
+    id 'java'
     id 'jacoco'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+repositories {
+
 }
-
-
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
 
 jacocoTestReport {
     reports {
