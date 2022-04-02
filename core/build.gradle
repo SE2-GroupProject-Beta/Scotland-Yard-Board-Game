@@ -8,6 +8,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_7
 }
 
+
+
 jacocoTestReport {
     reports {
         xml.enabled true
