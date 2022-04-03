@@ -12,7 +12,7 @@ Number of underground tickets: 23
 Number of black tickets: 5
 Number of double-move tickets: 3
 
-Neighbors:
+Neighbors (remark: watch list in "raw" mode, otherwise, line breaks are shown as spaces only):
 
 Taxi Neighbors:
 Knoten: benachbarte Knoten
