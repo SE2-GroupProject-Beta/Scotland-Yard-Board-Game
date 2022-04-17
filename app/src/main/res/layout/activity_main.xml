@@ -15,6 +15,7 @@
         android:layout_marginBottom="17dp"
         android:text="Send"
         android:textSize="20sp"
+        android:onClick="button_click"
         app:layout_constraintBottom_toTopOf="@+id/ipAddress"
         app:layout_constraintStart_toStartOf="@+id/ipAddress"
         app:layout_constraintTop_toTopOf="parent" />
