@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+// ########################################################
+// note: this server class is not being used at the moment!
+// ########################################################
 
 public class Server implements Runnable {
 
