@@ -31,13 +31,16 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
+
     class Server implements Runnable {
 
         ServerSocket serverSocket;
         Socket socket;
+        Handler handler = new Handler(); // parameterless handler is deprecated
+
         DataInputStream dataInputStream;
         String message;
-        Handler handler = new Handler();
+
 
         @Override
         public void run() {
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(), "Waiting for client",
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Message received from client: " +
-                                    message, Toast.LENGTH_SHORT).show();
+                                    message, Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -71,28 +74,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     public void button_click(View view) {
         BackgroundTask backgroundTask = new BackgroundTask();
         backgroundTask.execute(ipAddress.getText().toString(),
-                sendData.getText().toString());
+                sendData.getText().toString()); // .execute calls doInBackground internally, may *not* be called manually!
     }
 
-    class BackgroundTask extends AsyncTask<String, Void, String> {
-        Socket socket;
+    class BackgroundTask extends AsyncTask<String, Void, String> { //AsyncTask<params, progress, result>
+        Socket clientSocket;
         DataOutputStream dataOutputStream;
         String ip, message;
 
 
         @Override
         protected String doInBackground(String... params) {
-            ip = params[0]; // first parameter is the ip-address
+            ip = ""; // params[0]; // first parameter is the ip-address
             message = params[1]; // second parameter is the message
             try {
-                socket = new Socket(ip, PORT);
-                dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                clientSocket = new Socket(ip, PORT);
+                dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
                 dataOutputStream.writeUTF(message);
                 dataOutputStream.close();
-                socket.close();
+                clientSocket.close();
             } catch(IOException e) {
                 e.printStackTrace();
             }
