@@ -13,9 +13,9 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="107dp"
         android:layout_marginBottom="17dp"
+        android:onClick="button_click"
         android:text="Send"
         android:textSize="20sp"
-        android:onClick="button_click"
         app:layout_constraintBottom_toTopOf="@+id/ipAddress"
         app:layout_constraintStart_toStartOf="@+id/ipAddress"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,5 +50,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ipAddress"
         app:layout_constraintTop_toBottomOf="@+id/ipAddress" />
+
+    <EditText
+        android:id="@+id/writeResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="result"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/sendData"
+        app:layout_constraintTop_toBottomOf="@+id/sendData" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,19 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.DataInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText ipAddress, sendData;
+    EditText ipAddress, sendData, writeResult;
     public static final int PORT = 9999;
 
     @Override
@@ -26,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ipAddress = (EditText) findViewById(R.id.ipAddress); // at the moment: 10.0.0.79
         sendData = (EditText) findViewById(R.id.sendData);
+        writeResult = (EditText) findViewById(R.id.writeResult);
 
         Thread thread = new Thread(new Server());
         thread.start();
@@ -36,10 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
         ServerSocket serverSocket;
         Socket socket;
-        Handler handler = new Handler(); // parameterless handler is deprecated
+        Handler handler = new Handler(Looper.getMainLooper()); // parameterless handler is deprecated
 
-        DataInputStream dataInputStream;
+        InputStream inputStream;
+        InputStreamReader inputStreamReader;
+        BufferedReader bufferedReader;
         String message;
+
+        OutputStream outputStream;
+        DataOutputStream dataOutputStream;
 
 
         @Override
@@ -55,12 +68,32 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 while(true) {
+                    // I deliberately use each of the following steps in a sequence
+                    // to make the wrapping process clearer
                     socket = serverSocket.accept();
-                    dataInputStream = new DataInputStream(socket.getInputStream());
-                    message = dataInputStream.readUTF();
+                    inputStream = socket.getInputStream();
+                    inputStreamReader = new InputStreamReader(inputStream);
+                    bufferedReader = new BufferedReader(inputStreamReader);
+                    message = bufferedReader.readLine();
+
+                    outputStream = socket.getOutputStream();
+                    dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                    dataOutputStream.writeUTF("This is the message: " + message);
+                    dataOutputStream.close();
+                    socket.close();
+
+                    /*
+                     dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+                    dataOutputStream.writeUTF(message);
+                    dataOutputStream.close();
+                    clientSocket.close();
+                     */
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            writeResult.setText("This is the message: " + message);
+
                             Toast.makeText(getApplicationContext(), "Message received from client: " +
                                     message, Toast.LENGTH_LONG).show();
                         }
@@ -83,18 +116,29 @@ public class MainActivity extends AppCompatActivity {
 
     class BackgroundTask extends AsyncTask<String, Void, String> { //AsyncTask<params, progress, result>
         Socket clientSocket;
+        OutputStream outputStream;
+        OutputStreamWriter outputStreamWriter;
+        BufferedWriter bufferedWriter;
+
+
         DataOutputStream dataOutputStream;
         String ip, message;
 
 
         @Override
         protected String doInBackground(String... params) {
-            ip = ""; // params[0]; // first parameter is the ip-address
+            ip = params[0]; // first parameter is the ip-address
             message = params[1]; // second parameter is the message
             try {
                 clientSocket = new Socket(ip, PORT);
+
+
+                // outputStream = new OutputStream
+
                 dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
                 dataOutputStream.writeUTF(message);
+
+
                 dataOutputStream.close();
                 clientSocket.close();
             } catch(IOException e) {
