@@ -1,6 +1,7 @@
 package com.example.attempt2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -13,16 +14,28 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private ViewGroup mainLayout;
     private ImageView image;
     private int xDelta;
     private int yDelta;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private EditText nickname;
+    private Spinner dropdownColours;
+
+    private Button addBtn;
+    private Button editBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         image = (ImageView) findViewById(R.id.figure1);
 
         image.setOnTouchListener(onTouchListener());
+
     }
 
     @Override
@@ -46,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-
+                createNewPopupDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -92,4 +106,32 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    public void createNewPopupDialog() {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View addPlayerPopup = getLayoutInflater().inflate(R.layout.popup, null);
+        nickname = findViewById(R.id.editTextTextPersonName);
+
+        /* funktioniert nicht
+        dropdownColours = (Spinner) findViewById(R.id.dropdownColours);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.colours_list, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdownColours.setAdapter(adapter);
+        dropdownColours.setOnItemSelectedListener(this);
+
+         */
+
+        dialogBuilder.setView(addPlayerPopup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        //String text = adapterView.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

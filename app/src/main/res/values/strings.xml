@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Attempt2</string>
+
+    <string-array name="colours_list">
+        <item>Red</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Black</item>
+    </string-array>
 </resources>
