@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ipAddress = (EditText) findViewById(R.id.ipAddress); // at the moment: 10.0.0.79
-        sendData = (EditText) findViewById(R.id.sendData);
-        writeResult = (EditText) findViewById(R.id.writeResult);
+        ipAddress = findViewById(R.id.ipAddress); // at the moment: 10.0.0.79
+        sendData = findViewById(R.id.sendData);
+        writeResult = findViewById(R.id.writeResult);
 
         Thread thread = new Thread(new Server());
         thread.start();
