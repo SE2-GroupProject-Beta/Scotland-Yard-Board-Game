@@ -10,8 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
         <activity
+            android:name=".JoinGameScreen"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+        <activity
+            android:name=".LobbyScreen"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".TitleScreen"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
