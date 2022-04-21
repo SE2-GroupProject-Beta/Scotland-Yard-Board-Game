@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
     class BackgroundTask extends AsyncTask<String, Void, String> { //AsyncTask<params, progress, result>
         Socket clientSocket;
-        OutputStream outputStream;
         OutputStreamWriter outputStreamWriter;
         BufferedWriter bufferedWriter;
 
@@ -131,13 +130,8 @@ public class MainActivity extends AppCompatActivity {
             message = params[1]; // second parameter is the message
             try {
                 clientSocket = new Socket(ip, PORT);
-
-
-                // outputStream = new OutputStream
-
                 dataOutputStream = new DataOutputStream(clientSocket.getOutputStream());
                 dataOutputStream.writeUTF(message);
-
 
                 dataOutputStream.close();
                 clientSocket.close();
