@@ -28,6 +28,17 @@ x 115 a 12 b 1 0\n      Mister X is in station 115, Player A in 12,
 I also suggest that the server 'remembers' all current and previous states in a file and is able to reproduce them as necessary
 This can be achieved using a similar or even the same lines as the messages which are added to the file
 
+## Game initialization
+Code from new player                Meaning
+p\n                                 Player wants to join, server adds it to players and 
+                                    replies one of the letters from a, b, c, d, e,
+                                    Mister X is predefined, so no registration is necessary
+
+Code from server                    Meaning
+x 71 a 91 b 94 c 103 d 141\n        current position of mister x and players, where
+                                    a and b are detectives, c and d are bobbies, this
+                                    is determined by the rules of the game
+
 ## Ideas
 all ideas are here for discussion!
 
