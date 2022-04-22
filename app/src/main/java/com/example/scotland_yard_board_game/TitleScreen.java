@@ -14,10 +14,10 @@ public class TitleScreen extends AppCompatActivity {
         setContentView(R.layout.activity_title_screen);
     }
 
-    public void goLobbyScreen(View view){
+    public void goHostNicknameScreen(View view){
 
-        Intent LobbyScreen = new Intent(this, LobbyScreen.class);
-        startActivity(LobbyScreen);
+        Intent HostNicknameScreen = new Intent(this, HostNicknameScreen.class);
+        startActivity(HostNicknameScreen);
     }
     public void goJoinGameScreen(View view){
 

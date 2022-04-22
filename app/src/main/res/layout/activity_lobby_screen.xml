@@ -11,10 +11,12 @@
         android:id="@+id/LobbyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="44dp"
         android:text="Lobby"
         android:textColor="#E91E63"
+        app:layout_constraintBottom_toTopOf="@+id/currentLobbyCode"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,13 +24,15 @@
         android:id="@+id/currentLobbyCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:backgroundTint="#E91E63"
         android:ems="10"
         android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LobbyView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.218" />
 
     <Button
         android:id="@+id/startGameButton"
@@ -39,8 +43,10 @@
         android:textColor="#E91E63"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerList" />
+        app:layout_constraintTop_toBottomOf="@+id/playerList"
+        app:layout_constraintVertical_bias="0.798" />
 
     <ScrollView
         android:id="@+id/playerList"
@@ -51,12 +57,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentLobbyCode"
-        app:layout_constraintVertical_bias="0.008">
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/player1View"
