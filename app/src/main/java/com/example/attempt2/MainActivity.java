@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Point;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button addBtn;
     private Button editBtn;
 
+    //new
+    private Button station1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         image.setOnTouchListener(onTouchListener());
 
+        station1 = findViewById(R.id.station1);
+        Point point = getCenterPointOfView(station1);
+
+        station1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                image.setX(point.x);
+                image.setY(point.y);
+            }
+        } );
+
+    }
+
+    private Point getCenterPointOfView(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+
+        return new Point(location[0], location[1]);
     }
 
     @Override
