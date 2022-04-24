@@ -2,7 +2,6 @@ package com.example.scotland_yard_board_game;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.Buffer;
-import java.nio.channels.AsynchronousChannelGroup;
+import java.util.Locale;
 
 public class OpenWeather extends AppCompatActivity {
 
@@ -79,7 +77,8 @@ public class OpenWeather extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String temperature) {
-            double celsius = Double.parseDouble(temperature) - 273.15;
+            Double celsius = Double.parseDouble((String.format(Locale.ENGLISH, "%.1f",
+                    Double.parseDouble(temperature) - 273.15)));
             weatherOutput.setText("Klagenfurt: " + celsius + " Grad Celsius");
         }
     }
