@@ -2,21 +2,20 @@ package com.example.scotland_yard_board_game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.net.ServerSocket;
-
 
 public class MainActivity2 extends AppCompatActivity {
 
-    // private static final String TAG = "Server";
-    private boolean isHost = true;
-
+    private static final String TAG = "MainActivity2";
+    Server server = new Server();
+    Client client = new Client();
 
 
     @Override
@@ -26,20 +25,38 @@ public class MainActivity2 extends AppCompatActivity {
 
         Button hostGameButton = findViewById(R.id.hostGameButton);
         Button joinGameButton = findViewById(R.id.joinGameButton);
+        Button sendMessageToServerButton = findViewById(R.id.sendMessageToServerButton);
         EditText messageToServer = findViewById(R.id.messageToServer);
         EditText messageFromServer = findViewById(R.id.messageFromServer);
 
-        if (isHost) { // todo: only true at the moment, change to check whether player is really the host
-            new Server().execute(); // todo: named variable necessary for Server?
-        }
-
+        hostGameButton.setOnClickListener(view -> {
+            server.execute();
+            client.execute();
+        });
 
         joinGameButton.setOnClickListener(view -> { // todo: does this need to call AsyncTask?
             Toast.makeText(getApplicationContext(),
                     "Join Game-Button is not implemented yet...",
-                     Toast.LENGTH_LONG).show();
-            new Client().execute();
+                    Toast.LENGTH_LONG).show();
+            client.execute();
         });
+
+        sendMessageToServerButton.setOnClickListener(view -> {
+
+        });
+
+        /* // use enter as alternative way to OnClickListener
+        sendMessageToServerButton.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    Log.d(TAG, "onKey: Enter pressed");
+                    // send message to server
+                    return true;
+                }
+                return false;
+            }
+        }); */
+
 
     }
 
