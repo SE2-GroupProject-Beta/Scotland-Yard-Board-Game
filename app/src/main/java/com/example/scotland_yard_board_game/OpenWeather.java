@@ -2,6 +2,8 @@ package com.example.scotland_yard_board_game;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,15 +27,28 @@ public class OpenWeather extends AppCompatActivity {
     private static final String urlOpenWeatherKlagenfurt =
             "https://api.openweathermap.org/data/2.5/weather?lat=46.6228162&lon=14.3079604&appid=27a23c76ccdfc820c455939f63005e70";
     TextView weatherOutput;
+    Button reloadButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final String TAG = "onCreate";
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_openweather);
         weatherOutput = findViewById(R.id.weatherOutput);
-        new GetWeatherTask(weatherOutput).execute(urlOpenWeatherKlagenfurt);
+        reloadButton = findViewById(R.id.reloadButton);
+        GetWeatherTask getWeatherTask;
 
+        getWeatherTask = new GetWeatherTask(weatherOutput);
+        getWeatherTask.execute(urlOpenWeatherKlagenfurt);
+        /*
+        reloadButton.setOnClickListener(view -> {
+            if (getWeatherTask.getStatus() != AsyncTask.Status.RUNNING) {
+                getWeatherTask = new GetWeatherTask(weatherOutput).execute();
+                Log.d(TAG, "onCreate: reloadButton.setOnClickListener");
+            }
+        }); */
     }
 
     private class GetWeatherTask extends AsyncTask<String, Void, String> {
