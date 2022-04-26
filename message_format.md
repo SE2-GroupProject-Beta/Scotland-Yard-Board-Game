@@ -39,6 +39,24 @@ x 71 a 91 b 94 c 103 d 141\n        current position of mister x and players, wh
                                     a and b are detectives, c and d are bobbies, this
                                     is determined by the rules of the game
 
-## Ideas
-all ideas are here for discussion!
+## Station coordinates:
+1, 552, 162
+2, 1323, 104
+3, 1816, 111
+4, 2118, 87
+5, 3332, 128
+6, 3698, 132
+7, 4072, 156
+8, 402, 334
+9, 703, 351
+...
+18, 224, 479
+19, 509, 512
+20, 874, 432
+...
+175, 4176, 2778
+...
+199, 3500, 3149
+
+(...die Liste ist in Arbeit, please check again later...)
 
