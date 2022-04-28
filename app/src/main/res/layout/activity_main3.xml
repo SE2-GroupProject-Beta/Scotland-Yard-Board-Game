@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="answer from server"
+        android:hint="message from server"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/teal_700"
