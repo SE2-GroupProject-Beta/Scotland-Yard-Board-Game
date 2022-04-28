@@ -5,9 +5,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,8 +26,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
     private ViewGroup mainLayout;
     private ImageView image;
     private int xDelta;
@@ -58,18 +61,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         station1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 image.setX(point.x);
                 image.setY(point.y);
+
+
+                /*
+                if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                    ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                    ViewGroup.MarginLayoutParams p2 = (ViewGroup.MarginLayoutParams) image.getLayoutParams();
+                    p2.setMarginStart(p.getMarginStart());
+                    p2.setMargins(p);
+                    view.requestLayout();
+                }
+
+                 */
             }
         } );
 
     }
 
     private Point getCenterPointOfView(View view) {
+
         int[] location = new int[2];
         view.getLocationOnScreen(location);
 
         return new Point(location[0], location[1]);
+
     }
 
     @Override
@@ -131,30 +149,50 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void createNewPopupDialog() {
         dialogBuilder = new AlertDialog.Builder(this);
-        final View addPlayerPopup = getLayoutInflater().inflate(R.layout.popup, null);
-        nickname = findViewById(R.id.editTextTextPersonName);
+        //LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
+        View addPlayerPopup = getLayoutInflater().inflate(R.layout.popup,null);
+        dialogBuilder.setTitle("Add new player");
 
-        /* funktioniert nicht
-        dropdownColours = (Spinner) findViewById(R.id.dropdownColours);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.colours_list, android.R.layout.simple_spinner_item);
+        //nickname = addPlayerPopup.findViewById(R.id.editTextTextPersonName);
+        dropdownColours = (Spinner) addPlayerPopup.findViewById(R.id.dropdownColours);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.colours_list));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdownColours.setAdapter(adapter);
-        dropdownColours.setOnItemSelectedListener(this);
 
-         */
+        dialogBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (!dropdownColours.getSelectedItem().toString().equalsIgnoreCase("Choose colour…")) {
+                    Toast.makeText(MainActivity.this, dropdownColours.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+                    dialogInterface.dismiss();
+
+                    //new
+                    ImageView newPlayer = new ImageView(MainActivity.this);
+                    newPlayer.setImageResource(R.drawable.blue);
+                    addPlayer(newPlayer, 100, 100);
+                    //new end
+                }
+            }
+        });
+
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
 
         dialogBuilder.setView(addPlayerPopup);
         dialog = dialogBuilder.create();
         dialog.show();
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        //String text = adapterView.getItemAtPosition(position).toString();
+    public void addPlayer(ImageView figure, int width, int height) {
+        mainLayout = (RelativeLayout) findViewById(R.id.main);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
+        layoutParams.setMargins(100, 100, 0, 0);
+        figure.setLayoutParams(layoutParams);
+        mainLayout.addView(figure);
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 }

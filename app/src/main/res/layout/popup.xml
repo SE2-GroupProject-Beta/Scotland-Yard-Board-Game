@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,44 +8,8 @@
 
     <Spinner
         android:id="@+id/dropdownColours"
-        android:layout_width="328dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="123dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginBottom="541dp"
-        android:contentDescription="@string/app_name"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="898dp"
+        android:layout_height="94dp"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="318dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="39dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Nickname"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dropdownColours" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="326dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="46dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="39dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Add new player: choose colour of your figure and provide your nickname"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

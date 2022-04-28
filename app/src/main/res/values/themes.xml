@@ -15,6 +15,6 @@
     </style>
 
     <style name="Theme.Attempt2.BackgroundImageStyle">
-        <item name="android:windowBackground">@drawable/map1</item>
+        <item name="android:windowBackground">@drawable/game_background</item>
     </style>
 </resources>

@@ -9,19 +9,40 @@
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
-        <Button
-            android:id="@+id/station1"
-            android:layout_width="wrap_content"
-            android:clickable="true"
-            android:contentDescription="@string/app_name"
-            android:focusable="true"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="174dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="43"
-             />
+    <Button
+        android:id="@+id/st19"
+        android:layout_width="21dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="50dp"
+        android:text="19"
+        android:textColor="#AED581"
+        android:visibility="visible"
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+
+    <Button
+        android:id="@+id/st18"
+        android:layout_width="21dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:text="18"
+        android:visibility="visible"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/station1"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="174dp"
+        android:clickable="true"
+        android:contentDescription="@string/app_name"
+        android:focusable="true"
+        android:text="43"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <ImageView
         android:id="@+id/figure1"
@@ -29,13 +50,43 @@
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="261dp"
-        android:layout_marginTop="-4dp"
+        android:layout_marginStart="217dp"
+        android:layout_marginTop="-5dp"
         android:clickable="true"
         android:contentDescription="@string/app_name"
         android:focusable="true"
         app:srcCompat="@drawable/figure" />
 
+    <Button
+        android:id="@+id/st1"
+        android:layout_width="21dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="10dp"
+        android:text="1"
+        android:visibility="visible"
+        android:background="@drawable/button_background"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/st8"
+        android:layout_width="21dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="30dp"
+        android:text="8"
+        android:visibility="visible"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <Button
+        android:id="@+id/st9"
+        android:layout_width="21dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="30dp"
+        android:text="9"
+        android:visibility="visible"
+        tools:ignore="TouchTargetSizeCheck" />
 
 
 </RelativeLayout>
