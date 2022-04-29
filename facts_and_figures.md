@@ -283,6 +283,8 @@ Knoten: benachbarte Knoten
 191: 163, 165, 190
 199: 128, 161
 
+... (Liste wird noch geprüft)
+
 
 Underground Neighbors:
 Knoten: benachbarte Knoten
@@ -300,6 +302,8 @@ Knoten: benachbarte Knoten
 153: 111, 140, 163, 185
 163: 111, 153
 185: 128, 153
+
+... (Liste wird noch geprüft)
 
 
 Ferry Neighbors:
