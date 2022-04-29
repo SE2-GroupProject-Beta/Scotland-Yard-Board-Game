@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
         <activity
+            android:name=".GameScreen"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".HostNicknameScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
@@ -24,7 +28,7 @@
         <activity
             android:name=".TitleScreen"
             android:exported="true"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

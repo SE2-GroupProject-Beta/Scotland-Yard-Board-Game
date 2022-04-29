@@ -14,12 +14,12 @@ public class LobbyScreen extends AppCompatActivity {
         setContentView(R.layout.activity_lobby_screen);
     }
 
-    /*
+
     //method with intent to transition to GameScreen (add method to onClick in LobbyScreen.xml)
     public void goGameScreen(View view){
 
         Intent GameScreen = new Intent(this, GameScreen.class);
         startActivity(GameScreen);
     }
-    */
+
 }
