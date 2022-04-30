@@ -10,6 +10,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Attempt2">
         <activity
+            android:name=".GameScreen"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".HostNicknameScreen"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".JoinGameScreen"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".LobbyScreen"
+            android:exported="false"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".TitleScreen"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Attempt2.BackgroundImageStyle">
