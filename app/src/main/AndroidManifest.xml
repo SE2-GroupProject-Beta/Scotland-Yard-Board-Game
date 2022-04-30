@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
         <activity
-            android:name=".MainActivity3"
+            android:name=".MainActivity4"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
