@@ -3,9 +3,10 @@ package com.example.scotland_yard_board_game;
 public class Detective {
     private int id;
     private String nickname;
-    private int[] inventory = {10,8,4};
+    private int[] inventory = {10,8,4}; //Taxi, Bus, Underground
     private Station position;
     private Colour colour;
+    private boolean turn;
 
     public Detective(int Clientid, String nickname) {
         this.id = id;

@@ -3,9 +3,10 @@ package com.example.scotland_yard_board_game;
 public class MrX {
     private int id;
     private String nickname;
-    private int[] inventory = {2,0};
+    private int[] inventory = {2,0}; //Double move, Black Tickets
     private Station position;
     private Colour colour = Colour.TRANSPARENT ;
+    private boolean turn;
 
     public MrX(int Clientid) {
         this.id = id;
