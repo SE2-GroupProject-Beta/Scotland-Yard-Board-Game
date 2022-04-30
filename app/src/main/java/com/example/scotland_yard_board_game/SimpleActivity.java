@@ -11,6 +11,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 
 public class SimpleActivity extends AppCompatActivity {
     private static final String TAG = "SimpleActivity";
@@ -34,7 +36,8 @@ public class SimpleActivity extends AppCompatActivity {
         textResult = findViewById(R.id.textResult);
 
         sendTextButton.setOnClickListener(view -> {
-            sendText();
+            String text = textInput.getText().toString();
+            sendText(text);
         });
 
         simpleHandlerThread = new SimpleHandlerThread("SimpleHandlerThread");
@@ -48,19 +51,20 @@ public class SimpleActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         simpleHandlerThread.quit(); // todo: only quit if running...
     }
 
-    public void sendText() {
+    public void sendText(String text) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run, toggle: " + toggle);
-                // SystemClock.sleep(2000);
+                SystemClock.sleep(2000); // "slow internet connection"
                 if (toggle++ % 2 == 0){
-                    textResult.setText("Button was pressed");
+                    textResult.setText(text);
                 } else {
-                    textResult.setText("it was pressed again...");
+                    textResult.setText(text.toUpperCase());
                 }
             }
         });
