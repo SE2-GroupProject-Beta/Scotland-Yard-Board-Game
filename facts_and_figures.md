@@ -262,7 +262,6 @@ Knoten: benachbarte Knoten
 127: 102, 116, 133
 128: 135, 142, 161, 187, 199
 133: 127, 140, 157
-
 135: 108, 128, 161
 140: 82, 133, 154, 156
 142: 116, 128, 157
@@ -283,8 +282,6 @@ Knoten: benachbarte Knoten
 191: 163, 165, 190
 199: 128, 161
 
-... (Liste wird noch geprüft)
-
 
 Underground Neighbors:
 Knoten: benachbarte Knoten
@@ -303,8 +300,6 @@ Knoten: benachbarte Knoten
 163: 111, 153
 185: 128, 153
 
-... (Liste wird noch geprüft)
-
 
 Ferry Neighbors:
 Knoten: benachbarte Knoten
@@ -312,3 +307,25 @@ Knoten: benachbarte Knoten
 115: 108, 157
 157: 115, 194
 194: 157
+
+
+Station coordinates:
+1, 552, 162
+2, 1323, 104
+3, 1816, 111
+4, 2118, 87
+5, 3332, 128
+6, 3698, 132
+7, 4072, 156
+8, 402, 334
+9, 703, 351
+...
+18, 224, 479
+19, 509, 512
+20, 874, 432
+...
+175, 4176, 2778
+...
+199, 3500, 3149
+
+(... die Liste wird noch vervollständigt)

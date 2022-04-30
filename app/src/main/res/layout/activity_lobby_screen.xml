@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#373737"
+    tools:context=".LobbyScreen">
+
+    <TextView
+        android:id="@+id/LobbyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Lobby"
+        android:textColor="#E91E63"
+        app:layout_constraintBottom_toTopOf="@+id/currentLobbyCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/currentLobbyCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E91E63"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.218" />
+
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#000000"
+        android:text="Start"
+        android:textColor="#E91E63"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerList"
+        app:layout_constraintVertical_bias="0.798" />
+
+    <ScrollView
+        android:id="@+id/playerList"
+        android:layout_width="493dp"
+        android:layout_height="132dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentLobbyCode"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/player1View"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mister X"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/player2View"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player 2"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/player3View"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player 3"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/player4View"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player 4"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/player5View"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player 5"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/player6View"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Player 6"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
