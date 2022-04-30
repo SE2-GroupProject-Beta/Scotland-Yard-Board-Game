@@ -19,8 +19,8 @@ public class MainActivity3 extends AppCompatActivity {
     EditText messageToServer;
     EditText messageFromServer;
 
-    private ServerHandlerThread4 serverHandlerThread =
-            new ServerHandlerThread4("ServerHandlerThread");
+    private ServerHandlerThread serverHandlerThread =
+            new ServerHandlerThread("ServerHandlerThread");
     private ClientHandlerThread3 clientHandlerThread3 =
             new ClientHandlerThread3("ClientHandlerThread");
 
