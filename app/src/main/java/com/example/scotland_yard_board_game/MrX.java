@@ -8,8 +8,8 @@ public class MrX {
     private Colour colour = Colour.TRANSPARENT ;
     private boolean turn;
 
-    public MrX(int Clientid) {
-        this.id = id;
+    public MrX(int clientid, String nickname) {
+        this.id = clientid;
         this.nickname = nickname;
     }
 

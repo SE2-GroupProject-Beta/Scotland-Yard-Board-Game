@@ -8,8 +8,8 @@ public class Detective {
     private Colour colour;
     private boolean turn;
 
-    public Detective(int Clientid, String nickname) {
-        this.id = id;
+    public Detective(int clientid, String nickname) {
+        this.id = clientid;
         this.nickname = nickname;
     }
 

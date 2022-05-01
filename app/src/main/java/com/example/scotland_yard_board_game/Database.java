@@ -28,7 +28,7 @@ public class Database { // TODO: 4/28/2022 implement database methods
 
     public int[] getRandomStart(int numPlayers){
         // TODO: 4/30/2022 Test implementation 
-        int [] temp;
+        int[] temp;
         int[] Start = new int[numPlayers];
 
         //MrX Start
