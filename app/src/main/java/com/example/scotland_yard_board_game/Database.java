@@ -66,7 +66,7 @@ public class Database {
         int number = random.nextInt(temp.length-1);
         Start[0] = temp[number];
         
-        //Detective Start
+        //Detective/Bobby Start
         temp = DetectiveStart;
         for (int i = 1 ; i<=numPlayers; i++){
             number = random.nextInt(temp.length-1);
