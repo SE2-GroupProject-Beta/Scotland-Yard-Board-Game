@@ -6,7 +6,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.attempt2"
+        applicationId "com.example.scotland_yard_board_game" // was .attempt2
         minSdk 21
         targetSdk 32
         versionCode 1
@@ -22,8 +22,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11 // was .VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_11 // was .VERSION_1_8
     }
 }
 
