@@ -1,4 +1,4 @@
-package com.example.attempt2;
+package com.example.scotland_yard_board_game;
 
 import java.util.List;
 import java.util.Random;

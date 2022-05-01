@@ -1,4 +1,4 @@
-package com.example.attempt2;
+package com.example.scotland_yard_board_game;
 
 public class Detective extends Player {
     public Detective(Colours colour, String nickname) {

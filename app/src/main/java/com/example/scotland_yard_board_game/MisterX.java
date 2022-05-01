@@ -1,4 +1,4 @@
-package com.example.attempt2;
+package com.example.scotland_yard_board_game;
 
 public class MisterX extends Player {
     private int blackTickets;
