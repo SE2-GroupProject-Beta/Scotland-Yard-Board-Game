@@ -2,6 +2,7 @@ package com.example.scotland_yard_board_game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.EditText;
 
@@ -18,8 +19,12 @@ public class MainActivity extends AppCompatActivity {
         sendData = findViewById(R.id.sendData);
         writeResult = findViewById(R.id.writeResult);
 
-        Thread thread = new Thread(new ServerThread());
+        Thread thread = new Thread(new ServerThread(getApplicationContext()));
         thread.start();
+
+
+
+
     }
 
 
