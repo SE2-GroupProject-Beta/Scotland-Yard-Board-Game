@@ -33,5 +33,11 @@ public class MrX {
         return false;
     }
 
+    //Get neighbours of current station
+    public int[][] getPlayerNeighbours(){
+        int[][] neighbours;
+        neighbours = this.position.getNeighbours();
+        return neighbours;
+    }
 
 }
