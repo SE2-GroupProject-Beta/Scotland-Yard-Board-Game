@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class ServerThread extends Thread {
     private Context context;
-
+    private Database database;
 
     public ServerThread(Context context) {
         this.context = context;
@@ -17,7 +17,11 @@ public class ServerThread extends Thread {
     public void run() {
 
         Log.d(TAG, "Server Started");
-        Database database = new Database(this.context);
+        this.database = new Database(this.context);
+        int[] testStart = database.getRandomStart(4);
+        for (int a: testStart) {
+            Log.d(TAG, String.valueOf(a));
+        }
     }
 
 

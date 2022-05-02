@@ -56,7 +56,6 @@ public class Database {
     }
 
     public int[] getRandomStart(int numPlayers){
-        // TODO: 4/30/2022 Test implementation 
         int[] temp;
         int[] Start = new int[numPlayers];
 
@@ -68,11 +67,11 @@ public class Database {
         
         //Detective Start
         temp = DetectiveStart;
-        for (int i = 1 ; i<=numPlayers; i++){
+        for (int i = 1 ; i<numPlayers; i++){
             number = random.nextInt(temp.length-1);
             if (temp[number]!=0){
                 Start[i] = temp[number];
-            }else{
+            }else{ //If start already taken, try until valid start found
                 while(temp[number]==0){
                     number = random.nextInt(temp.length-1);
                     Start[i] = temp[number];
