@@ -14,12 +14,12 @@ public class TitleScreen extends AppCompatActivity {
         setContentView(R.layout.activity_title_screen);
     }
 
-    public void goHostNicknameScreen(View view){
+    public void goHostNicknameScreen(){ // todo: change by Klemens: I took out the parameter View view because SonarCloud showed this to be a major error
 
         Intent HostNicknameScreen = new Intent(this, HostNicknameScreen.class);
         startActivity(HostNicknameScreen);
     }
-    public void goJoinGameScreen(View view){
+    public void goJoinGameScreen(){ // todo: change by Klemens: same as above
 
         Intent JoinGameScreen = new Intent(this, JoinGameScreen.class);
         startActivity(JoinGameScreen);
