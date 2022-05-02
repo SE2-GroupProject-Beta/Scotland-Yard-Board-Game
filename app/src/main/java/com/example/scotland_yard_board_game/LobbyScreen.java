@@ -8,10 +8,14 @@ import android.view.View;
 
 public class LobbyScreen extends AppCompatActivity {
 
+    ClientNetworkClient networkClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_screen);
+
+        networkClient = new ClientNetworkClient(this);
     }
 
     /*
@@ -22,4 +26,35 @@ public class LobbyScreen extends AppCompatActivity {
         startActivity(GameScreen);
     }
     */
+
+    //In your application's Activity
+
+    @Override
+    protected void onPause() {
+        networkClient.tearDown();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (networkClient != null) {
+            nsdHelper.registerService(connection.getLocalPort());
+            nsdHelper.discoverServices();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        nsdHelper.tearDown();
+        connection.tearDown();
+        super.onDestroy();
+    }
+
+    // NsdHelper's tearDown method
+    public void tearDown() {
+        nsdManager.unregisterService(registrationListener);
+        nsdManager.stopServiceDiscovery(discoveryListener);
+    }
+
 }

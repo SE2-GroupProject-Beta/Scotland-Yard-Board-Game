@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
         <activity
-            android:name=".HostNicknameScreen"
+            android:name="HostNicknameScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
