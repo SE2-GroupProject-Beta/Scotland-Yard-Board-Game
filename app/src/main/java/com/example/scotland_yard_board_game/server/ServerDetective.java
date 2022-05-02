@@ -1,14 +1,14 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.server;
 
-public class Detective {
+public class ServerDetective {
     private int id;
     private String nickname;
     private int[] inventory = {10,8,4}; //Taxi, Bus, Underground
-    private Station position;
+    private ServerStation position;
     private Colour colour;
     private boolean turn;
 
-    public Detective(int clientid, String nickname) {
+    public ServerDetective(int clientid, String nickname) {
         this.id = clientid;
         this.nickname = nickname;
     }
@@ -17,7 +17,7 @@ public class Detective {
         this.colour = a;
     }
 
-    public void setPosition(Station position) {
+    public void setPosition(ServerStation position) {
         this.position = position;
     }
 

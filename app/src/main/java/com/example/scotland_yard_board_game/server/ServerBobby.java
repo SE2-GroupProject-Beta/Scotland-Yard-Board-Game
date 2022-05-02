@@ -1,19 +1,19 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.server;
 
 // TODO: 5/1/2022 Clarify implementation in terms of how bobbys move 
-public class Bobby {
+public class ServerBobby {
     private int id;
     private String nickname;
-    private Station position;
+    private ServerStation position;
     private Colour colour = Colour.RAINBOW;
     private boolean turn;
 
-    public Bobby(int clientid, String nickname) {
+    public ServerBobby(int clientid, String nickname) {
         this.id = clientid;
         this.nickname = nickname;
     }
     
-    public void setPosition(Station position) {
+    public void setPosition(ServerStation position) {
         this.position = position;
     }
     

@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.server;
 
 
 import android.content.Context;
@@ -12,13 +12,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Database {
-    private ArrayList<Station> Stationlist;
+public class ServerDatabase {
+    private ArrayList<ServerStation> stationlist;
     private int[] DetectiveStart;
     private int[] MrXStart;
     private Context context;
 
-    public Database(Context context) {
+    public ServerDatabase(Context context) {
         this.context = context;
         builddatabase();
     }
@@ -41,13 +41,13 @@ public class Database {
         }
         //Use gson library to convert String to Station objects
         Gson gson = new Gson();
-        Type StationListType = new TypeToken<ArrayList<Station>>(){}.getType();
-        this.Stationlist = gson.fromJson(json, StationListType);
+        Type StationListType = new TypeToken<ArrayList<ServerStation>>(){}.getType();
+        this.stationlist = gson.fromJson(json, StationListType);
 
     }
 
-    public Station getStation(int id){
-        for (Station a: Stationlist) {
+    public ServerStation getStation(int id){
+        for (ServerStation a: stationlist) {
           if( a.getId() == id){
               return a;
           }

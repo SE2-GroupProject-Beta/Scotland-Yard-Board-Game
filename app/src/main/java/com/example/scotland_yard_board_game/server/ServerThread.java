@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.server;
 
 import static android.content.ContentValues.TAG;
 
@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class ServerThread extends Thread {
     private Context context;
-    private Database database;
+    private ServerDatabase serverDatabase;
 
     public ServerThread(Context context) {
         this.context = context;
@@ -17,8 +17,8 @@ public class ServerThread extends Thread {
     public void run() {
 
         Log.d(TAG, "Server Started");
-        this.database = new Database(this.context);
-        int[] testStart = database.getRandomStart(4);
+        this.serverDatabase = new ServerDatabase(this.context);
+        int[] testStart = serverDatabase.getRandomStart(4);
         for (int a: testStart) {
             Log.d(TAG, String.valueOf(a));
         }

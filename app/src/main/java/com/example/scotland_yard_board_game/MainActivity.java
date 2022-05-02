@@ -2,9 +2,10 @@ package com.example.scotland_yard_board_game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.EditText;
+
+import com.example.scotland_yard_board_game.server.ServerThread;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,14 +1,14 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.server;
 
-public class MrX {
+public class ServerMrX {
     private int id;
     private String nickname;
     private int[] inventory = {2,0}; //Double move, Black Tickets
-    private Station position;
+    private ServerStation position;
     private Colour colour = Colour.TRANSPARENT ;
     private boolean turn;
 
-    public MrX(int clientid, String nickname) {
+    public ServerMrX(int clientid, String nickname) {
         this.id = clientid;
         this.nickname = nickname;
     }
@@ -18,7 +18,7 @@ public class MrX {
         this.inventory[1] = NumDetectives;
     }
 
-    public void setPosition(Station position) {
+    public void setPosition(ServerStation position) {
         this.position = position;
     }
 

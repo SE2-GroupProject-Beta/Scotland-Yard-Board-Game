@@ -1,12 +1,12 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.server;
 
-public class Station {
+public class ServerStation {
    private int id;
    private int x;
    private int y;
    private int[][] neighbours; //2d array -> [ [id,type] ]
 
-    public Station(int id, int x, int y, int[][] neighbours) {
+    public ServerStation(int id, int x, int y, int[][] neighbours) {
         this.id = id;
         this.x = x;
         this.y = y;
