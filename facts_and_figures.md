@@ -12,7 +12,7 @@ Number of underground tickets: 23
 Number of black tickets: 5
 Number of double-move tickets: 3
 
-Neighbors (remark: watch list in "raw" mode, otherwise, line breaks are shown as spaces only):
+Neighbors:
 
 ```
 Taxi Neighbors:
@@ -218,6 +218,7 @@ Knoten: benachbarte Knoten
 199: 171, 188, 198
 ```
 
+```
 Bus Neighbors:
 Knoten: benachbarte Knoten
 1: 46, 58
@@ -283,8 +284,9 @@ Knoten: benachbarte Knoten
 190: 176, 180, 191
 191: 163, 165, 190
 199: 128, 161
+```
 
-
+```
 Underground Neighbors:
 Knoten: benachbarte Knoten
 1: 46
@@ -301,17 +303,18 @@ Knoten: benachbarte Knoten
 153: 111, 140, 163, 185
 163: 111, 153
 185: 128, 153
+```
 
-
+```
 Ferry Neighbors:
 Knoten: benachbarte Knoten
 108: 115
 115: 108, 157
 157: 115, 194
 194: 157
+```
 
-
-
+```
 ## Station coordinates:
 1, 552, 162
 2, 1323, 104
@@ -332,4 +335,4 @@ Knoten: benachbarte Knoten
 199, 3500, 3149
 
 (...die Liste ist in Arbeit, please check again later...)
-
+```
