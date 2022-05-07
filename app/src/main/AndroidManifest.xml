@@ -10,8 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
+
         <activity
             android:name=".MainActivityAsync" />
+        <activity
+            android:name=".GameScreen" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

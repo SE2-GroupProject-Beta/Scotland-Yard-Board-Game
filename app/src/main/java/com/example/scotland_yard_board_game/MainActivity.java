@@ -18,5 +18,10 @@ public class MainActivity extends AppCompatActivity {
             Intent MainActivityAsync = new Intent(this, MainActivityAsync.class);
             startActivity(MainActivityAsync);
         });
+        Button goToGameScreen = findViewById(R.id.goToGameScreen);
+        goToGameScreen.setOnClickListener(view -> {
+            Intent GameScreen = new Intent(this, GameScreen.class);
+            startActivity(GameScreen);
+        });
     }
 }
