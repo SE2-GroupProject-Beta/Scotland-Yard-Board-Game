@@ -2,6 +2,8 @@ package com.example.scotland_yard_board_game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+
 public class MessageEncoder extends AppCompatActivity {
     /*
     Encodes and decodes messages between client and server
@@ -22,11 +24,18 @@ public class MessageEncoder extends AppCompatActivity {
         return isProperlyEncoded;
     }
 
-    public String playerPositions(int misterX, int playerA, int playerB,
-                                  int PlayerC, int PlayerD, int playerE) {
-        String playerPositions = "";
+    /*public String playerPositionsAndWinningState(int misterX, int playerA, int playerB,
+                                  int PlayerC, int PlayerD, int playerE) { */
+
+    public String playerPositionsAndWinningState(int[] playerPositions) {
+
+        StringBuilder playerPosition = new StringBuilder();
+        for (int playerPos : playerPositions) {
+            playerPosition.append(" ");
+            playerPosition.append(Integer.toString(playerPos));
+        }
 
 
-        return playerPositions;
+        return playerPosition.toString();
     }
 }
