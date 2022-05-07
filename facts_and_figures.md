@@ -14,6 +14,7 @@ Number of double-move tickets: 3
 
 Neighbors (remark: watch list in "raw" mode, otherwise, line breaks are shown as spaces only):
 
+```
 Taxi Neighbors:
 Knoten: benachbarte Knoten
 1: 8, 9
@@ -215,7 +216,7 @@ Knoten: benachbarte Knoten
 197: 184, 195, 196
 198: 159, 186, 187, 199
 199: 171, 188, 198
-
+```
 
 Bus Neighbors:
 Knoten: benachbarte Knoten
