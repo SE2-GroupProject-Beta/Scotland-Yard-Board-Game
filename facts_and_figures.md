@@ -1,21 +1,18 @@
 # Facts and Figures of the Game
-
-For use in the program
-
-Start stations:
+## Start Stations:
+```
 Mister X: 35, 45, 51, 71, 78, 104, 106, 127, 132, 146, 166, 170, 172 (13 stations)
 Detectives/Bobbies: 13, 26, 29, 34, 50, 53, 91, 94, 103, 112, 117, 123, 138, 141, 155, 174 (16 stations)
-
+```
+```
 Number of taxi tickets: 57
 Number of bus tickets: 45
 Number of underground tickets: 23
 Number of black tickets: 5
 Number of double-move tickets: 3
-
-Neighbors (remark: watch list in "raw" mode, otherwise, line breaks are shown as spaces only):
-
-Taxi Neighbors:
-Knoten: benachbarte Knoten
+```
+## Taxi Neighbors:
+```
 1: 8, 9
 2: 10, 20
 3: 4, 11, 12
@@ -215,10 +212,9 @@ Knoten: benachbarte Knoten
 197: 184, 195, 196
 198: 159, 186, 187, 199
 199: 171, 188, 198
-
-
-Bus Neighbors:
-Knoten: benachbarte Knoten
+```
+## Bus Neighbors:
+```
 1: 46, 58
 3: 22, 23
 7: 42
@@ -262,7 +258,6 @@ Knoten: benachbarte Knoten
 127: 102, 116, 133
 128: 135, 142, 161, 187, 199
 133: 127, 140, 157
-
 135: 108, 128, 161
 140: 82, 133, 154, 156
 142: 116, 128, 157
@@ -282,10 +277,9 @@ Knoten: benachbarte Knoten
 190: 176, 180, 191
 191: 163, 165, 190
 199: 128, 161
-
-
-Underground Neighbors:
-Knoten: benachbarte Knoten
+```
+## Underground Neighbors:
+```
 1: 46
 13: 46, 67, 89
 46: 1, 13, 74, 79
@@ -300,17 +294,16 @@ Knoten: benachbarte Knoten
 153: 111, 140, 163, 185
 163: 111, 153
 185: 128, 153
-
-
-Ferry Neighbors:
-Knoten: benachbarte Knoten
+```
+## Ferry Neighbors:
+```
 108: 115
 115: 108, 157
 157: 115, 194
 194: 157
-
-
-Station coordinates:
+```
+## Station coordinates:
+```
 1, 552, 162
 2, 1323, 104
 3, 1816, 111
@@ -329,4 +322,5 @@ Station coordinates:
 ...
 199, 3500, 3149
 
-(... die Liste wird noch vervollständigt)
+(...the list is in progress, it will be completed as soon as we know whether the coordinates are detected)
+```
