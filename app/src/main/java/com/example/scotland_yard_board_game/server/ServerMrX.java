@@ -1,12 +1,13 @@
 package com.example.scotland_yard_board_game.server;
 
-public class ServerMrX {
+public class ServerMrX implements Player {
     private int id;
     private String nickname;
     private int[] inventory = {2,0}; //Double move, Black Tickets
     private ServerStation position;
     private Colour colour = Colour.TRANSPARENT ;
     private boolean turn;
+    private int moves =1;
 
     public ServerMrX(int clientid, String nickname) {
         this.id = clientid;
@@ -22,11 +23,26 @@ public class ServerMrX {
         this.position = position;
     }
 
-    //If item available -> use it, otherwise return false
-    public boolean useItem(int itemeid){
 
-        if(this.inventory[itemeid]>0){ // TODO: 4/30/2022 implement double move action
-            this.inventory[itemeid] -=1;
+    public boolean validmove(int stationid) {
+        int[][] neighbours = this.position.getNeighbours();
+        for(int i=0; i<neighbours.length; i++) {
+            if (neighbours[i][0] == stationid) {
+                return true; // TODO: 5/5/2022 implement check for black ticket
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+
+
+    //If item available -> use it, otherwise return false
+    public boolean useItem(int itemid){
+
+        if(this.inventory[itemid]>0){ // TODO: 4/30/2022 implement double move action
+            this.inventory[itemid] -=1;
             return true;
         }
 
@@ -40,4 +56,27 @@ public class ServerMrX {
         return neighbours;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public Colour getColour() {
+        return colour;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setColour(Colour colour) {
+        this.colour = colour;
+    }
+
+    public int getmoves() {
+        return moves;
+    }
+
+    public void setmoves(int moves) {
+        this.moves = moves;
+    }
 }
