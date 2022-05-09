@@ -2,6 +2,7 @@ package com.example.scotland_yard_board_game;
 
 import static java.lang.Character.isLowerCase;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +21,7 @@ public class MainActivityAsync extends AppCompatActivity {
     private static final String TAG = MainActivityAsync.class.getSimpleName(); // ='MainActivityAsync'
 
     Button sendTextButton;
+    Button backButton;
     EditText textInput;
     EditText textResult;
 
@@ -34,6 +36,7 @@ public class MainActivityAsync extends AppCompatActivity {
 
         // initialize variables from layout:
         sendTextButton = findViewById(R.id.sendTextButton);
+        backButton = findViewById(R.id.backButton);
         textInput = findViewById(R.id.textInput);
         textResult = findViewById(R.id.textResult);
 
@@ -41,6 +44,10 @@ public class MainActivityAsync extends AppCompatActivity {
         sendTextButton.setOnClickListener(view -> {
             String text = textInput.getText().toString();
             sendText(text);
+        });
+        backButton.setOnClickListener(view -> {
+            Intent MainActivity = new Intent(this, MainActivity.class);
+            startActivity(MainActivity);
         });
 
         // start HandlerThread
