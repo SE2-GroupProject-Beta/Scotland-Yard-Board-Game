@@ -95,6 +95,21 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                 return false;
         }
     }
+
+    //Find view and set Tag to draggable view
+    private void findViews(){
+        button = (Button) findViewById(R.id.charButton);
+        button.setTag(BUTTON_VIEW_TAG);
+    }
+
+    //implement LongClick and DragListener
+    private void implementEvents(){
+        button.setOnLongClickListener(this::onLongClick);
+
+        findViewById(R.id.station1).setOnDragListener(this::onDrag);
+        findViewById(R.id.station9).setOnDragListener(this::onDrag);
+    }
+
     //drag object
     //response to long press on a view
     public boolean onLongClick(View view){
@@ -113,37 +128,55 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         view.setVisibility(View.INVISIBLE);
         return true;
     }
+    //called method at drag event
     public boolean onDrag(View view, DragEvent event){
+        // Defines a variable to store the action type for the incoming event
         int action = event.getAction();
 
+        // Handles each of the expected events
         switch(action){
             case DragEvent.ACTION_DRAG_STARTED:
+                // Determines if this View can accept the dragged data
                 if(event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)){
+                    // returns true to indicate that the View can accept the dragged data.
                     return true;
                 }
+                // Returns false. During the current drag and drop operation, this View will
+                // not receive events again until ACTION_DRAG_ENDED is sent.
                 return false;
             case DragEvent.ACTION_DRAG_ENTERED:
+                // Applies a YELLOW or any color tint to the View, when the dragged view entered into drag acceptable view
+                // Return true; the return value is ignored.
                 view.getBackground().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
                 view.invalidate();
 
                 return true;
             case DragEvent.ACTION_DRAG_LOCATION:
+                // Ignore the event
                 return true;
             case DragEvent.ACTION_DRAG_EXITED:
+                // Re-sets the color tint to blue, if you had set the BLUE color or any color in ACTION_DRAG_STARTED. Returns true; the return value is ignored.
+                //view.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
+                //If u had not provided any color in ACTION_DRAG_STARTED then clear color filter.
                 view.getBackground().clearColorFilter();
+                // Invalidate the view to force a redraw in the new tint
                 view.invalidate();
 
                 return true;
             case DragEvent.ACTION_DROP:
+                // Gets the item containing the dragged data
                 ClipData.Item item = event.getClipData().getItemAt(0);
-
+                // Gets the text data from the item.
                 String dragData = item.getText().toString();
 
+                // Displays a message containing the dragged data.
                 Toast.makeText(this, "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
 
+                // Turns off any color tints
                 view.getBackground().clearColorFilter();
                 view.invalidate();
 
+                //remove dragged view, cast view into LinearLayout, add dragged view, set visible
                 View v = (View) event.getLocalState();
                 ViewGroup owner = (ViewGroup) v.getParent();
                 owner.removeView(v);
@@ -151,37 +184,28 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                 container.addView(v);
                 v.setVisibility(View.VISIBLE);
 
+                // Returns true. DragEvent.getResult() will return true.
                 return true;
             case DragEvent.ACTION_DRAG_ENDED:
+                // Turns off any color tinting
                 view.getBackground().clearColorFilter();
 
                 view.invalidate();
 
+                // Does a getResult(), and displays what happened.
                 if(event.getResult())
                     Toast.makeText(this, "Character has been moved", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(this,"Character has not been moved",Toast.LENGTH_SHORT).show();
 
                 return true;
-
+            //unknown action type received
             default:
                 Log.e("DragDrop", "Unknown action type received by OnDragListener");
                 break;
         }
-                return false;
+        return false;
 
     }// onDrag done
-
-    private void findViews(){
-        button = (Button) findViewById(R.id.charButton);
-        button.setTag(BUTTON_VIEW_TAG);
-    }
-
-    private void implementEvents(){
-        button.setOnLongClickListener(this::onLongClick);
-
-        findViewById(R.id.charButton).setOnDragListener(this::onDrag);
-    }
-
 
 }

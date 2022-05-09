@@ -32,13 +32,6 @@
         app:layout_constraintTop_toTopOf="@+id/mapZoom"
         app:layout_constraintVertical_bias="0.04">
 
-        <View
-            android:id="@+id/character"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_gravity="center"
-            android:background="@android:color/black"></View>
-
         <Button
             android:id="@+id/charButton"
             android:layout_width="wrap_content"
