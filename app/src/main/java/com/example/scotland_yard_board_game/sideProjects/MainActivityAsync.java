@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.sideProjects;
 
 import static java.lang.Character.isLowerCase;
 
@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.scotland_yard_board_game.R;
 
 
 // to our development team: see instructions of use at the end of this file!
@@ -46,7 +48,7 @@ public class MainActivityAsync extends AppCompatActivity {
             sendText(text);
         });
         backButton.setOnClickListener(view -> {
-            Intent MainActivity = new Intent(this, MainActivity.class);
+            Intent MainActivity = new Intent(this, com.example.scotland_yard_board_game.MainActivity.class);
             startActivity(MainActivity);
         });
 

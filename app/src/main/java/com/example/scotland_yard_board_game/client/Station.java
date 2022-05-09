@@ -1,7 +1,6 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.client;
 
 import java.util.List;
-import java.util.Random;
 
 public class Station {
     private final int number;
