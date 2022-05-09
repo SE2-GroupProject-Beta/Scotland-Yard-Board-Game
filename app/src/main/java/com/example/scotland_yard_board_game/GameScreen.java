@@ -207,5 +207,4 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         return false;
 
     }// onDrag done
-
 }
