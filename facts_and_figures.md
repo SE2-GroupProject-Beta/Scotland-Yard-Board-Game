@@ -304,6 +304,8 @@ Number of double-move tickets: 3
 ```
 ## Station coordinates:
 ```
+Total pixels of jpg: 4368 x 3312
+
 1, 552, 162
 2, 1323, 104
 3, 1816, 111
