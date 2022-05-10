@@ -1,10 +1,12 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.scotland_yard_board_game.R;
 
 public class HostNicknameScreen extends AppCompatActivity {
 

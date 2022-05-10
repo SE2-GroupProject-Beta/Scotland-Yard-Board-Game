@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.utils;
 
 import androidx.appcompat.app.AppCompatActivity;
 

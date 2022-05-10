@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game;
+package com.example.scotland_yard_board_game.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.example.scotland_yard_board_game.R;
 import com.ortiz.touchview.TouchImageView;
 
 public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {

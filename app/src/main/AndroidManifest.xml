@@ -20,23 +20,23 @@
         <activity
             android:name=".sideProjects.MainActivityAsync" />
         <activity
-            android:name=".GameScreen"
+            android:name=".client.GameScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".HostNicknameScreen"
+            android:name=".client.HostNicknameScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".JoinGameScreen"
+            android:name=".client.JoinGameScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".LobbyScreen"
+            android:name=".client.LobbyScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".TitleScreen"
+            android:name=".client.TitleScreen"
             android:exported="true"
             android:screenOrientation="landscape">
         </activity>
@@ -48,9 +48,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
     </application>
-
 </manifest>

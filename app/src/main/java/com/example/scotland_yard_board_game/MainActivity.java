@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         });
         Button goToGameScreen = findViewById(R.id.goToGameScreen);
         goToGameScreen.setOnClickListener(view -> {
-            Intent GameScreen = new Intent(this, GameScreen.class);
+            Intent GameScreen = new Intent(this, com.example.scotland_yard_board_game.client.GameScreen.class);
             startActivity(GameScreen);
         });
     }
