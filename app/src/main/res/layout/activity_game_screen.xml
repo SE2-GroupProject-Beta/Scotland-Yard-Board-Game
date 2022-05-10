@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:src="@drawable/game_background"
         tools:ignore="SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteX="51dp"      <!-- todo: checken -->
+        tools:layout_editor_absoluteX="51dp"
         tools:layout_editor_absoluteY="-35dp" />
 
     <LinearLayout

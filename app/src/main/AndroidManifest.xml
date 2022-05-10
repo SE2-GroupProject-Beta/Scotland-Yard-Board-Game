@@ -14,9 +14,6 @@
         <activity
             android:name=".sideProjects.MainActivityAsync" />
         <activity
-            android:name=".GameScreen" />
-
-        <activity
             android:name=".GameScreen"
             android:exported="false"
             android:screenOrientation="landscape" />
@@ -36,11 +33,6 @@
             android:name=".TitleScreen"
             android:exported="true"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
