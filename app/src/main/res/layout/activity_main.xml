@@ -7,24 +7,34 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/goToMainAsync"
+        android:id="@+id/goToAsync"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
-        android:text="To Main Async"
+        android:layout_marginTop="16dp"
+        android:text="To Async"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/goToGameScreen" />
 
     <Button
         android:id="@+id/goToGameScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="To GameScreen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goToMainAsync" />
+        app:layout_constraintTop_toBottomOf="@+id/goToTitleScreen" />
+
+    <Button
+        android:id="@+id/goToTitleScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="To TitleScreen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

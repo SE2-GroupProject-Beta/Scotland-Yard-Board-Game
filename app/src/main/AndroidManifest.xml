@@ -18,7 +18,7 @@
         android:theme="@style/Theme.ScotlandYardBoardGame">
 
         <activity
-            android:name=".sideProjects.MainActivityAsync" />
+            android:name=".sideProjects.ActivityAsync" />
         <activity
             android:name=".client.GameScreen"
             android:exported="false"

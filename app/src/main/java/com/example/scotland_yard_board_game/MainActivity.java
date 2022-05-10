@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.scotland_yard_board_game.sideProjects.ActivityAsync;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -13,15 +15,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button goToMainAsync = findViewById(R.id.goToMainAsync);
-        goToMainAsync.setOnClickListener(view -> {
-            Intent MainActivityAsync = new Intent(this, com.example.scotland_yard_board_game.sideProjects.MainActivityAsync.class);
-            startActivity(MainActivityAsync);
+        Button goToTitleScreen = findViewById(R.id.goToTitleScreen);
+        goToTitleScreen.setOnClickListener(view -> {
+            Intent TitleScreen = new Intent(this, com.example.scotland_yard_board_game.client.TitleScreen.class);
+            startActivity(TitleScreen);
         });
         Button goToGameScreen = findViewById(R.id.goToGameScreen);
         goToGameScreen.setOnClickListener(view -> {
             Intent GameScreen = new Intent(this, com.example.scotland_yard_board_game.client.GameScreen.class);
             startActivity(GameScreen);
         });
+        Button goToAsync = findViewById(R.id.goToAsync);
+        goToAsync.setOnClickListener(view -> {
+            Intent ActivityAsync = new Intent(this, ActivityAsync.class);
+            startActivity(ActivityAsync);
+        });
+
     }
 }

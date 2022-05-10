@@ -17,12 +17,11 @@ public class TitleScreen extends AppCompatActivity {
     }
 
     public void goHostNicknameScreen(View view){
-
         Intent HostNicknameScreen = new Intent(this, HostNicknameScreen.class);
         startActivity(HostNicknameScreen);
     }
-    public void goJoinGameScreen(View view){
 
+    public void goJoinGameScreen(View view){
         Intent JoinGameScreen = new Intent(this, JoinGameScreen.class);
         startActivity(JoinGameScreen);
     }

@@ -19,8 +19,8 @@ import com.example.scotland_yard_board_game.R;
 
 // to our development team: see instructions of use at the end of this file!
 
-public class MainActivityAsync extends AppCompatActivity {
-    private static final String TAG = MainActivityAsync.class.getSimpleName(); // ='MainActivityAsync'
+public class ActivityAsync extends AppCompatActivity {
+    private static final String TAG = ActivityAsync.class.getSimpleName(); // ='MainActivityAsync'
 
     Button sendTextButton;
     Button backButton;
