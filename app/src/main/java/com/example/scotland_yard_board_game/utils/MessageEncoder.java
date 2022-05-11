@@ -17,12 +17,12 @@ public class MessageEncoder extends AppCompatActivity {
 
      */
 
-    public boolean encodeMessage() {
-        boolean isProperlyEncoded = false;
+    public String encodeMessage() {
+        // boolean isProperlyEncoded = false;
 
         // todo: implement encodeMessage();
 
-        return isProperlyEncoded;
+        return "x 1"; // Mister X is on station 1
     }
 
     /*public String playerPositionsAndWinningState(int misterX, int playerA, int playerB,
