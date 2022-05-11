@@ -17,7 +17,7 @@ public class MessageEncoder extends AppCompatActivity {
 
      */
 
-    public String encodeMessage() {
+    public String encodeMessage(int[] playerPositions) {
         // boolean isProperlyEncoded = false;
 
         // todo: implement encodeMessage();
