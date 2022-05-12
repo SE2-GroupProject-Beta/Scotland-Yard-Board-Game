@@ -28,14 +28,24 @@ public class GameScreen extends AppCompatActivity { // implements View.OnTouchLi
 
         // zoom = (int) gameBackgroundView.getCurrentZoom();
         gameBackgroundView.setOnTouchListener((view, motionEvent) -> {
-            int x = (int) motionEvent.getX(); // getX() shows screen pixels, not jpg pixels
+            //int x = (int) motionEvent.getRawX(); // getX() shows screen pixels, not jpg pixels
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            float screenX = motionEvent.getRawX();
+            float screenY = motionEvent.getRawY();
+            float viewX = screenX - location[0];
+            float viewY = screenY - location[1];
+
+            // Container, auf den dann den Listener
 
             // also tried:
             // int x = (int) motionEvent.getScaleX(); // not a method of motionEvent
             // int x = (int) motionEvent.getRawX();
             // int x = (int) motionEvent.getPointerCount();
 
-            Log.d(TAG, "onCreate: x = " + x); // todo: correct coordinates
+            Log.d(TAG, "onCreate: x = " + viewX); // todo: correct coordinates
+            Log.d(TAG, "onCreate: y = " + viewY); // todo: correct coordinates
+
             return true; // true if the event was handled, false if it should be passed on to child view
         });
     }
