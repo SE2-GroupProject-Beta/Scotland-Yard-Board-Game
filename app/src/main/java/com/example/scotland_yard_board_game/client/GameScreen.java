@@ -1,12 +1,18 @@
 package com.example.scotland_yard_board_game.client;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PointF;
+import android.graphics.ColorFilter;
+import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
@@ -15,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -23,9 +30,14 @@ import com.example.scotland_yard_board_game.R;
 import com.ortiz.touchview.TouchImageView;
 
 public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-
+    private static final String TAG = "GameScreen";
     //mapZoom is the id of zoomable image (jpg)
     private TouchImageView mapZoom = null;
+    private Matrix matrix;
+    private float[] m;
+    private float normalizedScale;
+    private ImageView.ScaleType mScaleType;
+    private Drawable drawable;
 
     //implement draggable player button
     private Button button;
@@ -38,18 +50,75 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         findViews();
         implementEvents();
 
+        // Drawable current = drawable.getCurrent()
+
         //print image coordinates
         mapZoom = (TouchImageView) findViewById(R.id.mapZoom);
-
         mapZoom.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int x = (int) motionEvent.getX();
+                int y = (int) motionEvent.getY();
+                Log.d(TAG, "onTouch: x = " + x);
 
 
-                int x = (int)event.getX();
-                int y = (int)event.getY();
+                double scaleX = view.getScaleX();
+                int width = view.getWidth();
+                int left = view.getLeft();
+                int measuredWidth = view.getMeasuredWidth();
+                double viewGetX = view.getX();
 
-                switch (event.getAction()) {
+                Log.d(TAG, "onTouch: scaleX = " + scaleX);
+                // Log.d(TAG, "onTouch: width = " + width);
+                // Log.d(TAG, "onTouch: left = " + left);
+                // Log.d(TAG, "onTouch: measuredWidth = " + measuredWidth);
+                Log.d(TAG, "onTouch: view.getX() = " + viewGetX);
+
+                /*
+                drawable = new Drawable() {
+                    @Override
+                    public void draw(@NonNull Canvas canvas) {
+
+                    }
+
+                    @Override
+                    public void setAlpha(int i) {
+
+                    }
+
+                    @Override
+                    public void setColorFilter(@Nullable ColorFilter colorFilter) {
+
+                    }
+
+                    @Override
+                    public int getOpacity() {
+                        return PixelFormat.OPAQUE;
+                    }
+                }.getCurrent();
+
+                float origW = drawable.getIntrinsicWidth(); // was ' = getDrawable().getIntrinsic..."
+                float origH = drawable.getIntrinsicHeight();
+                // float transX = m[Matrix.MTRANS_X];
+                // float transY = m[Matrix.MTRANS_Y];
+                float finalX = ((x - origW) * origW) / 4368; // getImageWidth(); // imageWidth = 4368
+                float finalY = ((y - origH) * origH) / 3312; // getImageHeight(); // imageHeight = 3312
+                Log.d(TAG, "onTouch: finalX = " + finalX);
+                Log.d(TAG, "onTouch: finalY = " + finalY); */
+
+
+                // transformCoordTouchToBitmap(x, y, false);
+
+                /*
+                float curX = (event.getX() / scale) - (left * scale);
+                float curY = (event.getY() / scale) - (top * scale);
+                mCanvas.drawCircle(((curX / scale)), ((curY / scale)),
+                       width / 2 / scale, mPaint);
+                */
+
+
+                /*
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         Log.i("TAG", "touched down: (" + x + ", " + y + ")");
                         break;
@@ -59,13 +128,52 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                     case MotionEvent.ACTION_UP:
                         Log.i("TAG", "touched up");
                         break;
-                }
-                Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
+                } */
+                // Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
 
+
+
     }
+
+    private void transformCoordTouchToBitmap(float x, float y, boolean clipToBitmap) {
+        Log.d(TAG, "transformCoordTouchToBitmap: start");
+        /*
+        matrix = new Matrix();
+        m = new float[9];
+        normalizedScale = 1;
+        if (mScaleType == null) {
+            mScaleType = ImageView.ScaleType.FIT_CENTER;
+        }
+        matrix.getValues(m); */
+
+        /*
+        Resources res = context.getResources();
+        Drawable myImage = ResourcesCompat.getDrawable(res, R.drawable.my_image, null);
+         */
+        /*
+        Context context = null; // abstract class
+        Drawable drawable = ResourcesCompat.getDrawable(R.drawable.game_background, null);
+        // Drawable drawable = new ResourcesCompat.getDrawable(res, R.drawable.game_background, null);
+
+        float origW = drawable.getIntrinsicWidth(); // was ' = getDrawable().getIntrinsic..."
+        float origH = drawable.getIntrinsicHeight();
+        float transX = m[Matrix.MTRANS_X];
+        float transY = m[Matrix.MTRANS_Y];
+        float finalX = ((x - transX) * origW) / 4368; // getImageWidth(); // imageWidth = 4368
+        float finalY = ((y - transY) * origH) / 3312; // getImageHeight(); // imageHeight = 3312
+        if (clipToBitmap) {
+            finalX = Math.min(Math.max(finalX, 0), origW);
+            finalY = Math.min(Math.max(finalY, 0), origH);
+        } */
+
+        // Log.d(TAG, "transformCoordTouchToBitmap: finalX = " + finalX);
+        // Log.d(TAG, "transformCoordTouchToBitmap: finalY = " + finalY);
+        // return new PointF(finalX, finalY);
+    }
+
 
     //PopupMenu Transportation
     //Show Popup Menu on button

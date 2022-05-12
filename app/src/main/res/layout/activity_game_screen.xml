@@ -14,9 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/game_background"
-        tools:ignore="SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteX="51dp"
-        tools:layout_editor_absoluteY="-35dp" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
         android:id="@+id/station1"

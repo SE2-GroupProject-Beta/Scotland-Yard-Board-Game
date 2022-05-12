@@ -3,16 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_client.xml" value="0.14221014492753623" />
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_host_nickname_screen.xml" value="0.25" />
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_join_game_screen.xml" value="0.25" />
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_lobby_screen.xml" value="0.335" />
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_main2.xml" value="0.14221014492753623" />
-        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_title_screen.xml" value="0.14221014492753623" />
+        <entry key="..\:/Users/Benjamin/AndroidStudioProjects/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_host_nickname_screen.xml" value="0.3875" />
+        <entry key="..\:/Users/Benjamin/AndroidStudioProjects/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_join_game_screen.xml" value="0.33" />
+        <entry key="..\:/Users/Benjamin/AndroidStudioProjects/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_lobby_screen.xml" value="0.5" />
+        <entry key="..\:/Users/Benjamin/AndroidStudioProjects/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_title_screen.xml" value="0.33" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1365" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1365" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_asynchronous.xml" value="0.1802536231884058" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_game_screen.xml" value="0.25" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_host_nickname_screen.xml" value="0.1" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_main2.xml" value="0.13019250253292808" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_main3.xml" value="0.25" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_main4.xml" value="0.6546052631578947" />
+        <entry key="..\:/Users/Megaport/OneDrive - Vospernik Klemens, Dr/Informatik/Software Engineering/Software Engineering 2/Scotland-Yard-Board-Game/app/src/main/res/layout/activity_simple.xml" value="0.25" />
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
 </project>
