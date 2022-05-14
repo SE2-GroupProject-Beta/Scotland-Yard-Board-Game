@@ -1,16 +1,11 @@
 package com.example.scotland_yard_board_game.client;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -32,7 +27,7 @@ import com.ortiz.touchview.TouchImageView;
 public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final String TAG = "GameScreen";
     //mapZoom is the id of zoomable image (jpg)
-    private TouchImageView mapZoom = null;
+    private TouchImageView gameBoardView = null;
     private Matrix matrix;
     private float[] m;
     private float normalizedScale;
@@ -50,85 +45,24 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         findViews();
         implementEvents();
 
-        // Drawable current = drawable.getCurrent()
-
-        //print image coordinates
-        mapZoom = (TouchImageView) findViewById(R.id.mapZoom);
-        mapZoom.setOnTouchListener(new View.OnTouchListener() {
+        gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
+        gameBoardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int x = (int) motionEvent.getX();
                 int y = (int) motionEvent.getY();
+                double zoomFactor = gameBoardView.getCurrentZoom(); // ... Heureka ...
+
                 Log.d(TAG, "onTouch: x = " + x);
+                Log.d(TAG, "onTouch: y = " + y);
+                Log.d(TAG, "onTouch: mapZoom.getCurrentZoom() = " + zoomFactor);
 
-
+                /*
                 double scaleX = view.getScaleX();
                 int width = view.getWidth();
                 int left = view.getLeft();
                 int measuredWidth = view.getMeasuredWidth();
-                double viewGetX = view.getX();
-
-                Log.d(TAG, "onTouch: scaleX = " + scaleX);
-                // Log.d(TAG, "onTouch: width = " + width);
-                // Log.d(TAG, "onTouch: left = " + left);
-                // Log.d(TAG, "onTouch: measuredWidth = " + measuredWidth);
-                Log.d(TAG, "onTouch: view.getX() = " + viewGetX);
-
-                /*
-                drawable = new Drawable() {
-                    @Override
-                    public void draw(@NonNull Canvas canvas) {
-
-                    }
-
-                    @Override
-                    public void setAlpha(int i) {
-
-                    }
-
-                    @Override
-                    public void setColorFilter(@Nullable ColorFilter colorFilter) {
-
-                    }
-
-                    @Override
-                    public int getOpacity() {
-                        return PixelFormat.OPAQUE;
-                    }
-                }.getCurrent();
-
-                float origW = drawable.getIntrinsicWidth(); // was ' = getDrawable().getIntrinsic..."
-                float origH = drawable.getIntrinsicHeight();
-                // float transX = m[Matrix.MTRANS_X];
-                // float transY = m[Matrix.MTRANS_Y];
-                float finalX = ((x - origW) * origW) / 4368; // getImageWidth(); // imageWidth = 4368
-                float finalY = ((y - origH) * origH) / 3312; // getImageHeight(); // imageHeight = 3312
-                Log.d(TAG, "onTouch: finalX = " + finalX);
-                Log.d(TAG, "onTouch: finalY = " + finalY); */
-
-
-                // transformCoordTouchToBitmap(x, y, false);
-
-                /*
-                float curX = (event.getX() / scale) - (left * scale);
-                float curY = (event.getY() / scale) - (top * scale);
-                mCanvas.drawCircle(((curX / scale)), ((curY / scale)),
-                       width / 2 / scale, mPaint);
-                */
-
-
-                /*
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Log.i("TAG", "touched down: (" + x + ", " + y + ")");
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        Log.i("TAG", "moving: (" + x + ", " + y + ")");
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        Log.i("TAG", "touched up");
-                        break;
-                } */
+                double viewGetX = view.getX(); */
                 // Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
                 return true;
             }
