@@ -7,6 +7,7 @@ import android.content.ClipDescription;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,11 +29,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private static final String TAG = "GameScreen";
     //mapZoom is the id of zoomable image (jpg)
     private TouchImageView gameBoardView = null;
-    private Matrix matrix;
     private float[] m;
-    private float normalizedScale;
-    private ImageView.ScaleType mScaleType;
-    private Drawable drawable;
 
     //implement draggable player button
     private Button button;
@@ -46,68 +43,29 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         implementEvents();
 
         gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
+        gameBoardView.setMaxZoom(5);
         gameBoardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 int x = (int) motionEvent.getX();
                 int y = (int) motionEvent.getY();
                 double zoomFactor = gameBoardView.getCurrentZoom(); // ... Heureka ...
+                RectF rectF = gameBoardView.getZoomedRect();
+                double left = rectF.left;
+                double top = rectF.top;
+                double right = rectF.right;
+                double bottom = rectF.bottom;
 
-                Log.d(TAG, "onTouch: x = " + x);
-                Log.d(TAG, "onTouch: y = " + y);
-                Log.d(TAG, "onTouch: mapZoom.getCurrentZoom() = " + zoomFactor);
+                Log.d(TAG, "onTouch: x, y = " + x + ", " + y);
+                Log.d(TAG, "onTouch: left, top, right, bottom =  " +
+                        left + ", " + top + ", " + right + ", " + bottom);
+                Log.d(TAG, "onTouch: zoom factor = " + zoomFactor);
 
-                /*
-                double scaleX = view.getScaleX();
-                int width = view.getWidth();
-                int left = view.getLeft();
-                int measuredWidth = view.getMeasuredWidth();
-                double viewGetX = view.getX(); */
                 // Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-
-
-
     }
-
-    private void transformCoordTouchToBitmap(float x, float y, boolean clipToBitmap) {
-        Log.d(TAG, "transformCoordTouchToBitmap: start");
-        /*
-        matrix = new Matrix();
-        m = new float[9];
-        normalizedScale = 1;
-        if (mScaleType == null) {
-            mScaleType = ImageView.ScaleType.FIT_CENTER;
-        }
-        matrix.getValues(m); */
-
-        /*
-        Resources res = context.getResources();
-        Drawable myImage = ResourcesCompat.getDrawable(res, R.drawable.my_image, null);
-         */
-        /*
-        Context context = null; // abstract class
-        Drawable drawable = ResourcesCompat.getDrawable(R.drawable.game_background, null);
-        // Drawable drawable = new ResourcesCompat.getDrawable(res, R.drawable.game_background, null);
-
-        float origW = drawable.getIntrinsicWidth(); // was ' = getDrawable().getIntrinsic..."
-        float origH = drawable.getIntrinsicHeight();
-        float transX = m[Matrix.MTRANS_X];
-        float transY = m[Matrix.MTRANS_Y];
-        float finalX = ((x - transX) * origW) / 4368; // getImageWidth(); // imageWidth = 4368
-        float finalY = ((y - transY) * origH) / 3312; // getImageHeight(); // imageHeight = 3312
-        if (clipToBitmap) {
-            finalX = Math.min(Math.max(finalX, 0), origW);
-            finalY = Math.min(Math.max(finalY, 0), origH);
-        } */
-
-        // Log.d(TAG, "transformCoordTouchToBitmap: finalX = " + finalX);
-        // Log.d(TAG, "transformCoordTouchToBitmap: finalY = " + finalY);
-        // return new PointF(finalX, finalY);
-    }
-
 
     //PopupMenu Transportation
     //Show Popup Menu on button
