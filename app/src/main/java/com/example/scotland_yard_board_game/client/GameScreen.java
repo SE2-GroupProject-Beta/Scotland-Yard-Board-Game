@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Color;
-import android.graphics.PointF;
+import android.graphics.Matrix;
 import android.graphics.PorterDuff;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
@@ -15,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -23,9 +26,10 @@ import com.example.scotland_yard_board_game.R;
 import com.ortiz.touchview.TouchImageView;
 
 public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
-
+    private static final String TAG = "GameScreen";
     //mapZoom is the id of zoomable image (jpg)
-    private TouchImageView mapZoom = null;
+    private TouchImageView gameBoardView = null;
+    private float[] m;
 
     //implement draggable player button
     private Button button;
@@ -38,33 +42,29 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         findViews();
         implementEvents();
 
-        //print image coordinates
-        mapZoom = (TouchImageView) findViewById(R.id.mapZoom);
-
-        mapZoom.setOnTouchListener(new View.OnTouchListener() {
+        gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
+        gameBoardView.setMaxZoom(5);
+        gameBoardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int x = (int) motionEvent.getX();
+                int y = (int) motionEvent.getY();
+                double zoomFactor = gameBoardView.getCurrentZoom(); // ... Heureka ...
+                RectF rectF = gameBoardView.getZoomedRect();
+                double left = rectF.left;
+                double top = rectF.top;
+                double right = rectF.right;
+                double bottom = rectF.bottom;
 
+                Log.d(TAG, "onTouch: x, y = " + x + ", " + y);
+                Log.d(TAG, "onTouch: left, top, right, bottom =  " +
+                        left + ", " + top + ", " + right + ", " + bottom);
+                Log.d(TAG, "onTouch: zoom factor = " + zoomFactor);
 
-                int x = (int)event.getX();
-                int y = (int)event.getY();
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Log.i("TAG", "touched down: (" + x + ", " + y + ")");
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        Log.i("TAG", "moving: (" + x + ", " + y + ")");
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        Log.i("TAG", "touched up");
-                        break;
-                }
-                Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-
     }
 
     //PopupMenu Transportation

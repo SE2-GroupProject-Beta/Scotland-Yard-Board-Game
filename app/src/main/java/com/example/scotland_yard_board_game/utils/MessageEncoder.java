@@ -12,16 +12,17 @@ public class MessageEncoder extends AppCompatActivity {
       select station to move to
 
     server -> client:
-      provide list of all players and after each round
+      provide list of all players and after each round (the only
+      message that will be implemented for merge_0516
 
      */
 
+    public String encodeMessage(int[] playerPositions) {
+        // boolean isProperlyEncoded = false;
 
-    public boolean encodeMessage() {
-        boolean isProperlyEncoded = false;
+        // todo: implement encodeMessage();
 
-
-        return isProperlyEncoded;
+        return "x 1"; // Mister X is on station 1
     }
 
     /*public String playerPositionsAndWinningState(int misterX, int playerA, int playerB,
@@ -29,13 +30,16 @@ public class MessageEncoder extends AppCompatActivity {
 
     public String playerPositionsAndWinningState(int[] playerPositions) {
 
-        StringBuilder playerPosition = new StringBuilder();
+        StringBuilder messageString = new StringBuilder();
         for (int playerPos : playerPositions) {
-            playerPosition.append(" ");
-            playerPosition.append(Integer.toString(playerPos));
+            messageString.append(" ");
+            messageString.append(Integer.toString(playerPos));
         }
 
+        // todo: implement winning state,
+        // todo: add more players, for now only the position of Mister X is sent
 
-        return playerPosition.toString();
+        //return messageString.toString();
+        return "x 1"; // Mister X is on station 1
     }
 }

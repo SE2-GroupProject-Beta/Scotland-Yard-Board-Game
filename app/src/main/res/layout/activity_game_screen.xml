@@ -10,13 +10,11 @@
     tools:context=".client.GameScreen">
 
     <com.ortiz.touchview.TouchImageView
-        android:id="@+id/mapZoom"
+        android:id="@+id/gameBoardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/game_background"
-        tools:ignore="SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteX="51dp"
-        tools:layout_editor_absoluteY="-35dp" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
         android:id="@+id/station1"
@@ -29,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.213"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/mapZoom"
+        app:layout_constraintTop_toTopOf="@+id/gameBoardView"
         app:layout_constraintVertical_bias="0.04">
 
         <Button
@@ -63,7 +61,7 @@
         android:backgroundTint="#E91E63"
         android:text="Journey Table"
         android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/mapZoom"
+        app:layout_constraintBottom_toBottomOf="@+id/gameBoardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.974"
         app:layout_constraintStart_toStartOf="parent"
