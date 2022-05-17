@@ -1,14 +1,13 @@
 package com.example.scotland_yard_board_game.client;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
@@ -17,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -27,9 +25,10 @@ import com.ortiz.touchview.TouchImageView;
 
 public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     private static final String TAG = "GameScreen";
-    //mapZoom is the id of zoomable image (jpg)
+    private ConstraintLayout gameScreenLayout;
     private TouchImageView gameBoardView = null;
-    private float[] m;
+    private final int BOARD_X = 4368;
+    private final int BOARD_Y = 3312;
 
     //implement draggable player button
     private Button button;
@@ -39,29 +38,48 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        findViews();
-        implementEvents();
+        findViews(); // todo: necessary?
+        implementEvents(); // todo: necessary?
 
+        gameScreenLayout = (ConstraintLayout) findViewById(R.id.gameScreenLayout);
         gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
         gameBoardView.setMaxZoom(5);
         gameBoardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                int x = (int) motionEvent.getX();
-                int y = (int) motionEvent.getY();
-                double zoomFactor = gameBoardView.getCurrentZoom(); // ... Heureka ...
-                RectF rectF = gameBoardView.getZoomedRect();
+                int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
+                int maxScreenHeight = gameScreenLayout.getHeight();
+
+                int screenX = (int) motionEvent.getX(); // touched screen coordinates
+                int screenY = (int) motionEvent.getY();
+
+                RectF rectF = gameBoardView.getZoomedRect(); // current left, top, zoom factor
                 double left = rectF.left;
                 double top = rectF.top;
-                double right = rectF.right;
-                double bottom = rectF.bottom;
+                double zoomFactor = gameBoardView.getCurrentZoom();
 
-                Log.d(TAG, "onTouch: x, y = " + x + ", " + y);
-                Log.d(TAG, "onTouch: left, top, right, bottom =  " +
-                        left + ", " + top + ", " + right + ", " + bottom);
-                Log.d(TAG, "onTouch: zoom factor = " + zoomFactor);
+                /*
+                double right = rectF.right; // probably not needed
+                double bottom = rectF.bottom; // probably not needed
+                */
 
-                // Toast.makeText(getApplicationContext(), "I was touched at (" + x + ", " + y + ")", Toast.LENGTH_SHORT).show();
+                // calculation of boardX
+                double conversionFactor = (double) BOARD_Y / maxScreenHeight; // 5.710344827586207
+                int currentBoardWidth = (int) (BOARD_X / conversionFactor);
+                int offsetX = (int) maxScreenWidth / 2 - currentBoardWidth / 2;
+                int currentBoardX = (int) ((screenX - offsetX) * conversionFactor);
+                     //   (int) ((screenX - offsetX) * conversionFactor);
+
+                Log.d(TAG, "onTouch: maxScreenWidth = " + maxScreenWidth +
+                        ", maxScreenHeight = " + maxScreenHeight);
+                Log.d(TAG, "onTouch: left = " + left + ", top = " + top +
+                        ", zoom factor = " + zoomFactor);
+                Log.d(TAG, "onTouch: screenX, screenY = " + screenX + ", " + screenY);
+                Log.d(TAG, "onTouch: conversionFactor = " + conversionFactor);
+                Log.d(TAG, "onTouch: currentBoardWidth = " + currentBoardWidth);
+                Log.d(TAG, "onTouch: offsetX = " + offsetX);
+                Log.d(TAG, "onTouch: currentBoardX = " + currentBoardX);
+
                 return true;
             }
         });
