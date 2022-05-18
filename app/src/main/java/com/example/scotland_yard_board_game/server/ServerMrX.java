@@ -25,14 +25,14 @@ public class ServerMrX implements Player {
 
 
     public boolean validmove(int stationid) {
-        int[][] neighbours = this.position.getNeighbours();
+      /*  int[][] neighbours = this.position.getNeighbours();
         for(int i=0; i<neighbours.length; i++) {
             if (neighbours[i][0] == stationid) {
                 return true; // TODO: 5/5/2022 implement check for black ticket
             } else {
                 return false;
             }
-        }
+        } */
         return false;
     }
 
@@ -51,9 +51,10 @@ public class ServerMrX implements Player {
 
     //Get neighbours of current station
     public int[][] getPlayerNeighbours(){
-        int[][] neighbours;
+      /*  int[][] neighbours;
         neighbours = this.position.getNeighbours();
-        return neighbours;
+        return neighbours; */
+        return null;
     }
 
     public String getNickname() {

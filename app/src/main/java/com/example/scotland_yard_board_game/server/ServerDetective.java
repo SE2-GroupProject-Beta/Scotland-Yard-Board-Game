@@ -19,7 +19,7 @@ public class ServerDetective implements Player {
     }
 
     public boolean validmove(int stationid) { //Validate if station is neighbour and if sufficient tickets are available
-        int[][] neighbours = this.position.getNeighbours();
+       /* int[][] neighbours = this.position.getNeighbours();
         for(int i=0; i<neighbours.length; i++) {
             if (neighbours[i][0] == stationid) {
                 switch (neighbours[i][1]){
@@ -33,7 +33,7 @@ public class ServerDetective implements Player {
             } else {
                 return false;
             }
-        }
+        } */
         return false;
     }
 
@@ -54,9 +54,10 @@ public class ServerDetective implements Player {
 
     //Get neighbours of current station
     public int[][] getPlayerNeighbours(){
-        int[][] neighbours;
+      /*  int[][] neighbours;
         neighbours = this.position.getNeighbours();
-        return neighbours;
+        return neighbours; */
+        return null;
     }
 
     public String getNickname() {
