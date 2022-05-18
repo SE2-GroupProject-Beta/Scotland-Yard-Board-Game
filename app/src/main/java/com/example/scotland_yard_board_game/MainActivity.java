@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.scotland_yard_board_game.server.ServerThread;
 import com.example.scotland_yard_board_game.sideProjects.ActivityAsync;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
             Intent ActivityAsync = new Intent(this, ActivityAsync.class);
             startActivity(ActivityAsync);
         });
+
+        Thread serverthread = new ServerThread(getApplicationContext());
+        serverthread.start();
 
     }
 }
