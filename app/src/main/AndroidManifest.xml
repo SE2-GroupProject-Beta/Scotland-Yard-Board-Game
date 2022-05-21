@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
-
+        <activity
+            android:name=".sideProjects.DrawTest" />
         <activity
             android:name=".sideProjects.ActivityAsync" />
         <activity
