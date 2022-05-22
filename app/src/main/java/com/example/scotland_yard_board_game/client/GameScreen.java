@@ -5,6 +5,8 @@ import static com.example.scotland_yard_board_game.R.drawable.circle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -12,6 +14,9 @@ import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.scotland_yard_board_game.R;
 import com.ortiz.touchview.TouchImageView;
 
@@ -37,8 +42,44 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         gameScreenLayout = (ConstraintLayout) findViewById(R.id.gameScreenLayout);
         gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
-        // circle = (Shape) R.drawable.circle;
         gameBoardView.setMaxZoom(5);
+        /*
+        Canvas canvas = new Canvas();
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.BLUE);
+
+        circle.draw(canvas, paint);
+        circle.resize(20, 20); */
+
+        /*
+        LayoutParams params = new LayoutParams(
+        LayoutParams.WRAP_CONTENT,
+        LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(left, top, right, bottom);
+        yourbutton.setLayoutParams(params);
+         */
+        View circleView = findViewById(R.id.circle);
+        // circleView.setLeft(700);
+        // circleView.setTop(150);
+        // circleView.requestLayout();
+
+        ViewGroup.MarginLayoutParams params =
+                (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
+        // params.setMargins(700, 150, 750, 200);
+        params.setMargins(900, params.topMargin, params.rightMargin, params.bottomMargin);
+
+        /*
+        public static void setMarginLeft(View v, int left) {
+        ViewGroup.MarginLayoutParams params =
+                                    (ViewGroup.MarginLayoutParams)v.getLayoutParams();
+        params.setMargins(left, params.topMargin,
+                                params.rightMargin, params.bottomMargin);
+}
+         */
+
+
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
             int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
@@ -46,6 +87,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
             int screenX = (int) motionEvent.getX(); // touched screen coordinates
             int screenY = (int) motionEvent.getY();
+
+
 
             RectF rectF = gameBoardView.getZoomedRect(); // current left, top, zoom factor
             double left = rectF.left;
@@ -71,7 +114,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int currentBoardY = (int) (screenY * conversionFactor / zoomFactor) + negativeOffsetY;
 
             // calculation of screenX and screenY given currentBoardX and -Y
-            // screenX = (int) (703 * zoomFactor / conversionFactor + offsetX); // currentBoardX = 703 (station 9)
+            screenX = (int) (703 * zoomFactor / conversionFactor + offsetX); // currentBoardX = 703 (station 9)
 
 
 
