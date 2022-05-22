@@ -47,4 +47,16 @@ public class ServerStation {
     public int[] getFerry() {
         return ferry;
     }
+
+    public int[] getNeighbours(int type){
+        int[] neighbours;
+        switch(type){
+            case 0: return neighbours = taxi;
+            case 1: return neighbours = bus;
+            case 2: return neighbours = underground;
+            case 3: return neighbours = ferry;
+        }
+
+        return null;
+    }
 }

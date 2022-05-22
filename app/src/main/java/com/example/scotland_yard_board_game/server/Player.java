@@ -9,7 +9,7 @@ public interface Player {
     public void setPosition(ServerStation position);
     public Colour getColour();
     public void setColour(Colour colour);
-    public boolean validmove(int stationid);
+    public boolean validmove(int stationid, int type);
     public int getmoves ();
     public void setmoves (int moves);
 }

@@ -77,10 +77,10 @@ public class ServerThread extends Thread {
         return false;
     }
 
-    public boolean move(int clientid, int Stationid){
+    public boolean move(int clientid, int Stationid, int type){
         for (Player a: Clients) {
             if(a.getId() == clientid ){
-                boolean valid = a.validmove(Stationid);
+                boolean valid = a.validmove(Stationid, type);
                 if(valid){
                     a.setPosition(serverDatabase.getStation(Stationid));
                     return true;
