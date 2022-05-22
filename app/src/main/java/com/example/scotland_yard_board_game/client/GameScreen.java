@@ -68,6 +68,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        // setContentView(new MyView(this));
+
         // findViews(); // todo: necessary?
         // implementEvents(); // todo: necessary?
 
@@ -96,11 +98,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
             double left = rectF.left;
             double top = rectF.top;
             double zoomFactor = gameBoardView.getCurrentZoom();
-
-
             double right = rectF.right; // probably not needed
             double bottom = rectF.bottom; // probably not needed
-
+            double boardWidth = rectF.width();
 
             // calculation of boardX
             double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // 5.710344827586207
@@ -138,6 +138,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             Log.d(TAG, "***** onTouch: currentBoardX = " + currentBoardX +
                     ", currentBoardY = " + currentBoardY + " *****");
             Log.d(TAG, "onTouch: delta-height = " + (bottom - top));
+            Log.d(TAG, "onTouch: boardWidth = " + boardWidth);
+
 
 
 
@@ -165,6 +167,38 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+
+        return super.onTouchEvent(event);
+    }
+    /*
+    public class MyView extends View {
+        public MyView(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+
+            int x = getWidth();
+            int y = getHeight();
+            int radius;
+            radius = 100;
+            Paint paint = new Paint();
+            // paint.setStyle(Color.rgb(255, 187, 115);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.WHITE);
+            canvas.drawPaint(paint);
+            paint.setColor(Color.parseColor("#da4747"));
+            canvas.drawCircle(x / 2, y / 2, radius, paint);
+
+
+        }
+    } */
 
 
     /*

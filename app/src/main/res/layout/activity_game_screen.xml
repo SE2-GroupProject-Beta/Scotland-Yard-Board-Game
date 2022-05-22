@@ -14,7 +14,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/game_background_bmp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <View
+        android:id="@+id/circle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="70dp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        android:background="@drawable/circle"
+        tools:visibility="visible">
+
+    </View>
+
 
     <!--
     <LinearLayout
