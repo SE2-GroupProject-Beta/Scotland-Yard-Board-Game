@@ -18,16 +18,16 @@ public class ServerDetective implements Player {
         this.colour = colour;
     }
 
-    public boolean validmove(int stationid) { //Validate if station is neighbour and if sufficient tickets are available
-        int[][] neighbours = this.position.getNeighbours();
+    public boolean validmove(int stationid, int type) { //Validate if station is neighbour and if sufficient tickets are available
+       int[] neighbours = this.position.getNeighbours(type);
         for(int i=0; i<neighbours.length; i++) {
-            if (neighbours[i][0] == stationid) {
-                switch (neighbours[i][1]){
-                    case -1:
+            if (neighbours[i] == stationid) {
+                switch (type){
+                    case 0:
                         return useItem(0);
-                    case -2:
+                    case 1:
                         return useItem(1);
-                    case -3:
+                    case 2:
                         return useItem(2);
                 }
             } else {
@@ -54,9 +54,10 @@ public class ServerDetective implements Player {
 
     //Get neighbours of current station
     public int[][] getPlayerNeighbours(){
-        int[][] neighbours;
+      /*  int[][] neighbours;
         neighbours = this.position.getNeighbours();
-        return neighbours;
+        return neighbours; */
+        return null;
     }
 
     public String getNickname() {

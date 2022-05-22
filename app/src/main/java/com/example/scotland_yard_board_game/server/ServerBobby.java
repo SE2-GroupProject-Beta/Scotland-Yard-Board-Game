@@ -18,9 +18,9 @@ public class ServerBobby {
     }
     
     //Get neighbours of current station
-    public int[][] getPlayerNeighbours(){
-        int[][] neighbours;
-        neighbours = this.position.getNeighbours();
+    public int[] getPlayerNeighbours(int type){
+        int[] neighbours;
+        neighbours = position.getNeighbours(type);
         return neighbours;
     }
 

@@ -1,7 +1,10 @@
 package com.example.scotland_yard_board_game.server;
 
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -43,7 +46,7 @@ public class ServerDatabase {
         Gson gson = new Gson();
         Type StationListType = new TypeToken<ArrayList<ServerStation>>(){}.getType();
         this.stationlist = gson.fromJson(json, StationListType);
-
+        Log.d(TAG,"Stations loaded Sucessfully!");
     }
 
     public ServerStation getStation(int id){

@@ -25,6 +25,9 @@ public class ServerThread extends Thread {
         for (int a: testStart) {
             Log.d(TAG, String.valueOf(a));
         }
+        ServerStation station = serverDatabase.getStation(1);
+        Log.d(TAG, String.valueOf(station.getX()));
+
     }
 
     public void addPlayer(String nickname){ // TODO: 5/5/2022  also needs connection information -> added later
@@ -74,10 +77,10 @@ public class ServerThread extends Thread {
         return false;
     }
 
-    public boolean move(int clientid, int Stationid){
+    public boolean move(int clientid, int Stationid, int type){
         for (Player a: Clients) {
             if(a.getId() == clientid ){
-                boolean valid = a.validmove(Stationid);
+                boolean valid = a.validmove(Stationid, type);
                 if(valid){
                     a.setPosition(serverDatabase.getStation(Stationid));
                     return true;
