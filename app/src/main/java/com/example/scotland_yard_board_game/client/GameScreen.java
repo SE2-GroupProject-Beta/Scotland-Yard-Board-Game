@@ -38,6 +38,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide(); //hides the action bar
         setContentView(R.layout.activity_game_screen);
         findViews();
         implementEvents();
@@ -109,6 +110,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         findViewById(R.id.station1).setOnDragListener(this::onDrag);
         findViewById(R.id.station9).setOnDragListener(this::onDrag);
+        findViewById(R.id.station46).setOnDragListener(this::onDrag);
     }
 
     //drag object
