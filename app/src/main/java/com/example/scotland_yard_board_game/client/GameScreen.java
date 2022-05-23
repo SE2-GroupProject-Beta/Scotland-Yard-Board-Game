@@ -1,6 +1,7 @@
 package com.example.scotland_yard_board_game.client;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -35,6 +36,11 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private Button button;
     private static final String BUTTON_VIEW_TAG = "DRAGGABLE BUTTON";
 
+    //journeyTableButton
+    Button jTB;
+    ConstraintLayout jTL;
+    Button cJTB;            //close journeyTable
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,12 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                 return true;
             }
         });
+
+        //side bar buttons here!
+        //memory for journeyTableButton and journeyTableLayout
+        jTB = (Button) findViewById(R.id.journeyTableButton);
+        jTL = (ConstraintLayout) findViewById(R.id.journeyTableLayout);
+        cJTB = (Button) findViewById(R.id.closeJTButton);
     }
 
     //PopupMenu Transportation
@@ -210,4 +222,13 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         return false;
 
     }// onDrag done
+
+    //journeyTableButton onClick method
+    public void jTBClicked(View v){
+        jTL.setVisibility(View.VISIBLE);
+    }
+    //close journeyTableButton method
+    public void cJTBClicked(View v){
+        jTL.setVisibility(View.GONE);
+    }
 }
