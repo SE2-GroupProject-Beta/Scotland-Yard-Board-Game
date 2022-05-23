@@ -3,9 +3,8 @@
     android:shape="oval"
     android:height="50dp"
     android:width="50dp"
-    android:useLevel="false"
-    >
+    android:useLevel="false">
     <solid android:color="#ff0000" />
 </shape>
 
-<!-- ring, oval, rectangle, line -->
+<!-- also: ring, oval, rectangle, line -->

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/gameScreenLayout"
@@ -9,29 +8,57 @@
     android:background="#373737"
     tools:context=".client.GameScreen">
 
+    <!-- gameBoardView -->
     <com.ortiz.touchview.TouchImageView
         android:id="@+id/gameBoardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/game_background_bmp"
+        android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
+    <!-- circle -->
     <View
         android:id="@+id/circle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="300dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="451dp"
         android:layout_marginTop="70dp"
+        android:background="@drawable/circle"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
-        android:background="@drawable/circle"
-        tools:visibility="visible">
+        tools:visibility="visible"></View>
 
-    </View>
+    <TextView
+        android:id="@+id/showBoardX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="#373737"
+        android:hint="Board X"
+        android:textColor="@android:color/holo_orange_light"
+        android:textColorHint="@android:color/holo_orange_light"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/showBoardY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="16dp"
+        android:background="#373737"
+        android:hint="Board Y"
+        android:textColor="@android:color/holo_orange_light"
+        android:textColorHint="@android:color/holo_orange_light"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--
     <LinearLayout
