@@ -6,11 +6,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.annotation.SuppressLint;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
@@ -30,23 +27,19 @@ import com.ortiz.touchview.TouchImageView;
 
 public class GameScreen extends AppCompatActivity { // extends View {
     private static final String TAG = "GameScreen";
-    //mapZoom is the id of zoomable image (jpg)
-    private float[] m;
 
     //implement draggable player button
     private Button button;
     private static final String BUTTON_VIEW_TAG = "DRAGGABLE BUTTON";
 
-    //journeyTableButton
-    Button jTB;
+    Button jTB; //journeyTableButton
     ConstraintLayout jTL;
-    Button cJTB;            //close journeyTable
+    Button cJTB; //close journeyTable
 
     private ConstraintLayout gameScreenLayout;
     private TouchImageView gameBoardView;
     private TextView showBoardX;
     private TextView showBoardY;
-    private Shape circle;
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
     private int getBoardX = 0;
@@ -68,7 +61,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         showBoardX = (TextView) findViewById(R.id.showBoardX);
         showBoardY = (TextView) findViewById(R.id.showBoardY);
 
-        //side bar buttons here!
+        //side bar buttons
         //memory for journeyTableButton and journeyTableLayout
         jTB = (Button) findViewById(R.id.journeyTableButton);
         jTL = (ConstraintLayout) findViewById(R.id.journeyTableLayout);
@@ -109,7 +102,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int negativeOffsetY = (int) (top * BOARD_MAX_Y * (zoomFactor * 2) / conversionFactor); // todo: not correct yet
             int getBoardY = (int) (getScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
 
-            // show boardX and boardY on screen
+            // show boardX and boardY on screen, todo: delete later
             showBoardX.setText("X = " + getBoardX);
             showBoardY.setText("Y = " + getBoardY);
 
@@ -136,12 +129,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             Log.d(TAG, "onCreate: boardWidth = " + boardWidth);
 
             return true;
-
         });
-
-
-
-    } // todo: Klammer weg?
+    }
 
     // @Override // todo: @Override necessary?
     public boolean onMenuItemClick(MenuItem item) {

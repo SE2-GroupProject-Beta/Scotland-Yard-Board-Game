@@ -61,7 +61,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    
     <LinearLayout
         android:id="@+id/station1"
         android:layout_width="30dp"
@@ -82,7 +81,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="#E91E63"
-            android:onClick="showPopup"
             android:text="Transport" />
     </LinearLayout>
 
