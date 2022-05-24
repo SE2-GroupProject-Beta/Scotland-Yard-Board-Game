@@ -2,6 +2,7 @@ package com.example.scotland_yard_board_game.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Color;
@@ -14,10 +15,15 @@ import android.graphics.RectF;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.scotland_yard_board_game.R;
 import com.ortiz.touchview.TouchImageView;
@@ -25,7 +31,6 @@ import com.ortiz.touchview.TouchImageView;
 public class GameScreen extends AppCompatActivity { // extends View {
     private static final String TAG = "GameScreen";
     //mapZoom is the id of zoomable image (jpg)
-    private TouchImageView gameBoardView = null;
     private float[] m;
 
     //implement draggable player button
@@ -63,6 +68,12 @@ public class GameScreen extends AppCompatActivity { // extends View {
         showBoardX = (TextView) findViewById(R.id.showBoardX);
         showBoardY = (TextView) findViewById(R.id.showBoardY);
 
+        //side bar buttons here!
+        //memory for journeyTableButton and journeyTableLayout
+        jTB = (Button) findViewById(R.id.journeyTableButton);
+        jTL = (ConstraintLayout) findViewById(R.id.journeyTableLayout);
+        cJTB = (Button) findViewById(R.id.closeJTButton);
+
         View circleView = findViewById(R.id.circle); // to move the circle, todo: move to onTouch method
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
         params.setMargins(600, 400, params.rightMargin, params.bottomMargin);
@@ -94,7 +105,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
                 negativeOffsetX = (int) (left * BOARD_MAX_X * (zoomFactor * 2) / conversionFactor); // todo: not correct yet
                 getBoardX = (int) (getScreenX * conversionFactor / zoomFactor) + negativeOffsetX;
             }
-        
+
             int negativeOffsetY = (int) (top * BOARD_MAX_Y * (zoomFactor * 2) / conversionFactor); // todo: not correct yet
             int getBoardY = (int) (getScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
 
@@ -115,7 +126,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             Log.d(TAG, "onCreate: conversionFactor = " + conversionFactor);
             // Log.d(TAG, "onCreate: currentBoardWidth = " + currentBoardWidth);
             Log.d(TAG, "onCreate: offsetX = " + offsetX);
-            if (offsetX < 0 ) {
+            if (offsetX < 0) {
                 Log.d(TAG, "onCreate: offsetX < 0");
             }
             Log.d(TAG, "onCreate: negativeOffsetX = " + negativeOffsetX +
@@ -125,19 +136,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
             Log.d(TAG, "onCreate: boardWidth = " + boardWidth);
 
             return true;
- 
-  });
 
-        //side bar buttons here!
-        //memory for journeyTableButton and journeyTableLayout
-        jTB = (Button) findViewById(R.id.journeyTableButton);
-        jTL = (ConstraintLayout) findViewById(R.id.journeyTableLayout);
-        cJTB = (Button) findViewById(R.id.closeJTButton);
+        });
+
+
+
     } // todo: Klammer weg?
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item){
-        switch (item.getItemId()){
+    // @Override // todo: @Override necessary?
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.itemTaxi:
                 Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
                 return true;
@@ -156,13 +164,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
     }
 
     //Find view and set Tag to draggable view
-    private void findViews(){
+    private void findViews() {
         button = (Button) findViewById(R.id.charButton);
         button.setTag(BUTTON_VIEW_TAG);
     }
 
     //implement LongClick and DragListener
-    private void implementEvents(){
+    private void implementEvents() {
         button.setOnLongClickListener(this::onLongClick);
 
         findViewById(R.id.station1).setOnDragListener(this::onDrag);
@@ -172,14 +180,14 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     //drag object
     //response to long press on a view
-    public boolean onLongClick(View view){
+    public boolean onLongClick(View view) {
         // Create a new ClipData.Item from object's tag
         ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());
 
         //This will create a new ClipDescription object within the
         //ClipData, and set its MIME type entry to "text/plain"
         String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
-        ClipData data = new ClipData(view.getTag().toString(),mimeTypes,item);
+        ClipData data = new ClipData(view.getTag().toString(), mimeTypes, item);
 
         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
 
@@ -188,16 +196,17 @@ public class GameScreen extends AppCompatActivity { // extends View {
         view.setVisibility(View.INVISIBLE);
         return true;
     }
+
     //called method at drag event
-    public boolean onDrag(View view, DragEvent event){
+    public boolean onDrag(View view, DragEvent event) {
         // Defines a variable to store the action type for the incoming event
         int action = event.getAction();
 
         // Handles each of the expected events
-        switch(action){
+        switch (action) {
             case DragEvent.ACTION_DRAG_STARTED:
                 // Determines if this View can accept the dragged data
-                if(event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)){
+                if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     // returns true to indicate that the View can accept the dragged data.
                     return true;
                 }
@@ -253,10 +262,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
                 view.invalidate();
 
                 // Does a getResult(), and displays what happened.
-                if(event.getResult())
+                if (event.getResult())
                     Toast.makeText(this, "Character has been moved", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(this,"Character has not been moved",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Character has not been moved", Toast.LENGTH_SHORT).show();
 
                 return true;
             //unknown action type received
@@ -269,13 +278,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
     }// onDrag done
 
     //journeyTableButton onClick method
-    public void jTBClicked(View v){
+    public void jTBClicked(View v) {
         jTL.setVisibility(View.VISIBLE);
     }
+
     //close journeyTableButton method
-    public void cJTBClicked(View v){
+    public void cJTBClicked(View v) {
         jTL.setVisibility(View.GONE);
     }
+
     public boolean onTouchEvent(MotionEvent motionEvent) { // todo: not used yet
         int screenX = (int) motionEvent.getX(); // touched screen coordinates
         Log.d(TAG, "onTouchEvent: screenX = " + screenX);
