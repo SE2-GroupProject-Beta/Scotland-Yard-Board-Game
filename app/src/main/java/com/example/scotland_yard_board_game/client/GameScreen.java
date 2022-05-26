@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.annotation.SuppressLint;
 import android.graphics.RectF;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
@@ -40,6 +39,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TouchImageView gameBoardView;
     private TextView showBoardX;
     private TextView showBoardY;
+    private View circleView;
+    private ViewGroup.MarginLayoutParams moveCircle;
+
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
     private int getBoardX = 0;
@@ -56,7 +58,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         gameScreenLayout = (ConstraintLayout) findViewById(R.id.gameScreenLayout);
         gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
-        gameBoardView.setMaxZoom(5);
+        gameBoardView.setMaxZoom(6);
 
         showBoardX = (TextView) findViewById(R.id.showBoardX);
         showBoardY = (TextView) findViewById(R.id.showBoardY);
@@ -67,9 +69,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
         jTL = (ConstraintLayout) findViewById(R.id.journeyTableLayout);
         cJTB = (Button) findViewById(R.id.closeJTButton);
 
-        View circleView = findViewById(R.id.circle); // to move the circle, todo: move to onTouch method
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
-        params.setMargins(600, 400, params.rightMargin, params.bottomMargin);
+        circleView = findViewById(R.id.circle); // to move the circle
+        moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
+        // params.setMargins(600, 400, params.rightMargin, params.bottomMargin);
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
             int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
@@ -88,7 +90,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
             // calculation of getBoardX and getBoardY given getScreenX and -Y
             double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // 5.710344827586207
-            double currentBoardWidth = (double) (BOARD_MAX_X * zoomFactor / conversionFactor);
+            double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
             int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2);
             int negativeOffsetX = 0;
             getBoardX = 0;
@@ -108,7 +110,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
 
             // calculation of getScreenX and getScreenY given getBoardX and -Y, conversionFactor = 5.71
-            // getScreenX = (int) (703 * zoomFactor / conversionFactor + offsetX); // getBoardX = 703, y = 351 (station 9)
+            getScreenX = (int) ((703 - 10) * zoomFactor / conversionFactor + offsetX); // getBoardX = 703, y = 351 (station 9)
+            getScreenY = (int) ((351 - 10) * zoomFactor / conversionFactor);
+
+            moveCircle.setMargins(getScreenX, getScreenY, moveCircle.rightMargin, moveCircle.bottomMargin);
+
 
             Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
                     ", maxScreenHeight = " + maxScreenHeight);
