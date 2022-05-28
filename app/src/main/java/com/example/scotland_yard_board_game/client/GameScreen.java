@@ -1,10 +1,12 @@
 package com.example.scotland_yard_board_game.client;
+// todo: try various zoom factors to find error for negativeOffsetX and -Y
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.annotation.SuppressLint;
@@ -24,104 +26,174 @@ import android.widget.Toast;
 import com.example.scotland_yard_board_game.R;
 import com.ortiz.touchview.TouchImageView;
 
+import java.util.Objects;
+
 public class GameScreen extends AppCompatActivity { // extends View {
     private static final String TAG = "GameScreen";
+
+    private ConstraintLayout gameScreenLayout;
+    private TouchImageView gameBoardView;
+    private ConstraintLayout journeyTableLayout;
+    private ViewGroup.MarginLayoutParams moveCircle;
 
     //implement draggable player button
     private Button button;
     private static final String BUTTON_VIEW_TAG = "DRAGGABLE BUTTON";
 
-    Button jTB; //journeyTableButton
-    ConstraintLayout jTL;
-    Button cJTB; //close journeyTable
-
-    private ConstraintLayout gameScreenLayout;
-    private TouchImageView gameBoardView;
-    private TextView showBoardX;
+    private TextView showBoardX; // todo: delete later
     private TextView showBoardY;
-    private View circleView;
-    private ViewGroup.MarginLayoutParams moveCircle;
 
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
     private int getBoardX = 0;
+    int player1screenX;
+    int player1screenY;
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide(); //hides the action bar
+        // getSupportActionBar().hide(); //hides the action bar
+        Objects.requireNonNull(getSupportActionBar()).hide(); // todo: hides the action bar, suggestion to change to this line
         setContentView(R.layout.activity_game_screen);
 
-        // findViews(); // todo: necessary?
-        // implementEvents(); // todo: necessary?
-
-        gameScreenLayout = (ConstraintLayout) findViewById(R.id.gameScreenLayout);
-        gameBoardView = (TouchImageView) findViewById(R.id.gameBoardView);
+        gameScreenLayout = findViewById(R.id.gameScreenLayout);
+        gameBoardView = findViewById(R.id.gameBoardView);
         gameBoardView.setMaxZoom(6);
 
-        showBoardX = (TextView) findViewById(R.id.showBoardX);
-        showBoardY = (TextView) findViewById(R.id.showBoardY);
+        journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
-        //side bar buttons
-        //memory for journeyTableButton and journeyTableLayout
-        jTB = (Button) findViewById(R.id.journeyTableButton);
-        jTL = (ConstraintLayout) findViewById(R.id.journeyTableLayout);
-        cJTB = (Button) findViewById(R.id.closeJTButton);
+        showBoardX = findViewById(R.id.showBoardX);
+        showBoardY = findViewById(R.id.showBoardY);
 
-        circleView = findViewById(R.id.circle); // to move the circle
+        // side bar buttons
+        // memory for journeyTableButton and journeyTableLayout
+        // journeyTableButton
+        // Button journeyTableButton = (Button) findViewById(R.id.journeyTableButton); // todo: is never used
+        // close journeyTable
+        // Button closeJourneyTableButton = (Button) findViewById(R.id.closeJTButton); // todo: is never used
+
+        // initialization of test stations, todo: remove later
+        /* x- and y-coordinates of stations 1, 2, 3, 8 and 9 (0: unused)
+            0, 0, 0
+            1, 552, 162
+            2, 1323, 104
+            3, 1816, 111
+            4, 2118, 87
+            5, 3332, 128
+            6, 3698, 132
+            7, 4072, 156
+            8, 402, 334
+            9, 703, 351
+             */
+        int[][] station = new int[2][10]; // int[x/y][station number]
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 10; j++) {
+                station[i][j] = 0;
+            }
+        }
+        station[0][1] = 552;
+        station[1][1] = 162;
+        station[0][2] = 1323;
+        station[1][2] = 104;
+        station[0][3] = 1816;
+        station[1][3] = 111;
+        station[0][8] = 402;
+        station[1][8] = 334;
+        station[0][9] = 703;
+        station[1][9] = 351;
+
+        int closestStation = 0;
+        int closestDistance; // todo: set to max
+
+
+        View circleView = findViewById(R.id.circle); // to move the circle
         moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
-        // params.setMargins(600, 400, params.rightMargin, params.bottomMargin);
+        // params.setMargins(600, 400, params.rightMargin, params.bottomMargin); // todo: delete later
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
             int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
             int maxScreenHeight = gameScreenLayout.getHeight();
+            double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // on Samsung: ~4.88
 
-            int getScreenX = (int) motionEvent.getX(); // touched screen coordinates
-            int getScreenY = (int) motionEvent.getY();
+            int touchedScreenX = (int) motionEvent.getX(); // touched screen coordinates
+            int touchedScreenY = (int) motionEvent.getY();
 
             RectF rectF = gameBoardView.getZoomedRect(); // current left, top, zoom factor
             double left = rectF.left;
             double top = rectF.top;
             double zoomFactor = gameBoardView.getCurrentZoom();
-            // double right = rectF.right; // probably not needed
-            // double bottom = rectF.bottom; // probably not needed
-            double boardWidth = rectF.width();
+            // double right = rectF.right; // todo: probably not needed
+            // double bottom = rectF.bottom; // todo: probably not needed
+            // double boardWidth = rectF.width(); // todo: probably not needed
 
-            // calculation of getBoardX and getBoardY given getScreenX and -Y
-            double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // 5.710344827586207
+            // calculation of getBoardX and getBoardY given touchedScreenX and -Y
+            // double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // 5.710344827586207
             double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
-            int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2);
+            int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
             int negativeOffsetX = 0;
-            getBoardX = 0;
             if (offsetX > 0) {
-                getBoardX = (int) ((getScreenX - offsetX) * conversionFactor / zoomFactor);
+                getBoardX = (int) ((touchedScreenX - offsetX) * conversionFactor / zoomFactor);
             } else {
-                negativeOffsetX = (int) (left * BOARD_MAX_X * (zoomFactor * 2) / conversionFactor); // todo: not correct yet
-                getBoardX = (int) (getScreenX * conversionFactor / zoomFactor) + negativeOffsetX;
+                negativeOffsetX = (int) (left * BOARD_MAX_X); // *** nächstes Heureka ***
+                getBoardX = (int) (touchedScreenX * conversionFactor / zoomFactor) + negativeOffsetX;
             }
+            int negativeOffsetY = (int) (top * BOARD_MAX_Y);
+            int getBoardY = (int) (touchedScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
 
-            int negativeOffsetY = (int) (top * BOARD_MAX_Y * (zoomFactor * 2) / conversionFactor); // todo: not correct yet
-            int getBoardY = (int) (getScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
-
-            // show boardX and boardY on screen, todo: delete later
+            // print boardX and boardY to screen, todo: delete later
             showBoardX.setText("X = " + getBoardX);
             showBoardY.setText("Y = " + getBoardY);
 
+            // calculation of screen x and y given board coordinates,
+            // conversionFactor and zoomFactor
+            int player1X = 703; // board coordinates station 9
+            int player1Y = 351;
 
-            // calculation of getScreenX and getScreenY given getBoardX and -Y, conversionFactor = 5.71
-            getScreenX = (int) ((703 - 10) * zoomFactor / conversionFactor + offsetX); // getBoardX = 703, y = 351 (station 9)
-            getScreenY = (int) ((351 - 10) * zoomFactor / conversionFactor);
+            if (offsetX > 0) {
+                player1screenX = (int) (player1X * zoomFactor / conversionFactor) + offsetX;
+            } else {
+                negativeOffsetX = (int) (left * BOARD_MAX_X);
+                player1screenX = (int) ((player1X - negativeOffsetX) * zoomFactor / conversionFactor);
+            }
 
-            moveCircle.setMargins(getScreenX, getScreenY, moveCircle.rightMargin, moveCircle.bottomMargin);
+            player1screenY = (int) ((player1Y - negativeOffsetY) * zoomFactor / conversionFactor);
 
+            // player1screenX = (int) (player1X  + negativeOffsetX); // todo: delete later
+            // player1screenY = (int) (player1Y + negativeOffsetY);
+
+            moveCircle.setMargins(player1screenX - 25, player1screenY - 25,
+                    moveCircle.rightMargin, moveCircle.bottomMargin);
+
+
+
+            // touchedScreenX = (int) (player1X * zoomFactor / conversionFactor + offsetX); // getBoardX = 703, y = 351 (station 9)
+            // touchedScreenY = (int) (player1Y * zoomFactor / conversionFactor);
+
+            /*
+            closestStation = 0;
+            closestDistance = 10000; // todo: set to max
+            int distance;
+            for (int i = 0; i < 10; i++) {
+                distance = (station[0][i] * station[0][i]) +
+                        (station[1][i] * station[1][i]); // pythagoras
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                }
+            } */
+
+
+
+
+            // moveCircle.setMargins(touchedScreenX - 10, touchedScreenY - 10,
+            //         moveCircle.rightMargin, moveCircle.bottomMargin);
 
             Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
                     ", maxScreenHeight = " + maxScreenHeight);
             Log.d(TAG, "onCreate: left = " + left + ", top = " + top +
                     ", zoom factor = " + zoomFactor);
             // Log.d(TAG, "onCreate: right = " + right + ", bottom = " + bottom);
-            Log.d(TAG, "onCreate: getScreenX, getScreenY = " + getScreenX + ", " + getScreenY);
+            Log.d(TAG, "onCreate: touchedScreenX, touchedScreenY = " + touchedScreenX + ", " + touchedScreenY);
             Log.d(TAG, "onCreate: conversionFactor = " + conversionFactor);
             // Log.d(TAG, "onCreate: currentBoardWidth = " + currentBoardWidth);
             Log.d(TAG, "onCreate: offsetX = " + offsetX);
@@ -132,11 +204,26 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     ", negativeOffsetY = " + negativeOffsetY);
             Log.d(TAG, "***** onCreate: getBoardX = " + getBoardX +
                     ", getBoardY = " + getBoardY + " *****");
-            Log.d(TAG, "onCreate: boardWidth = " + boardWidth);
+            // Log.d(TAG, "onCreate: boardWidth = " + boardWidth);
 
             return true;
         });
     }
+
+    public static float dpFromPx(final Context context, final float px) { // todo: probably not needed
+        return px / context.getResources().getDisplayMetrics().density;
+    }
+
+    public static float pxFromDp(final Context context, final float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    /* todo: not used yet, delete?
+    public boolean onTouchEvent(MotionEvent motionEvent) { //
+        int screenX = (int) motionEvent.getX(); // touched screen coordinates
+        Log.d(TAG, "onTouchEvent: screenX = " + screenX);
+        return super.onTouchEvent(motionEvent);
+    } */
 
     // @Override // todo: @Override necessary?
     public boolean onMenuItemClick(MenuItem item) {
@@ -274,17 +361,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     //journeyTableButton onClick method
     public void jTBClicked(View v) {
-        jTL.setVisibility(View.VISIBLE);
+        journeyTableLayout.setVisibility(View.VISIBLE);
     }
 
     //close journeyTableButton method
     public void cJTBClicked(View v) {
-        jTL.setVisibility(View.GONE);
+        journeyTableLayout.setVisibility(View.GONE);
     }
 
-    public boolean onTouchEvent(MotionEvent motionEvent) { // todo: not used yet
-        int screenX = (int) motionEvent.getX(); // touched screen coordinates
-        Log.d(TAG, "onTouchEvent: screenX = " + screenX);
-        return super.onTouchEvent(motionEvent);
-    }
+
 }
