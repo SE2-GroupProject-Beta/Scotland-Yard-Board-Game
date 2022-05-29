@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Scotland-Yard-Board-Game</string>
+    <string name="taxiButton">Taxi</string>
+    <string name="busButton">Bus</string>
+    <string name="undergroundButton">Underground</string>
+    <string name="journeyTableButton">Journey Table</string>
 </resources>
