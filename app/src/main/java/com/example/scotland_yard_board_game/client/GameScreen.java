@@ -1,12 +1,10 @@
 package com.example.scotland_yard_board_game.client;
-// todo: try various zoom factors to find error for negativeOffsetX and -Y
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.annotation.SuppressLint;
@@ -15,10 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,15 +33,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ViewGroup.MarginLayoutParams moveCircle;
 
     //implement draggable player button
+    /*
     private Button button;
-    private static final String BUTTON_VIEW_TAG = "DRAGGABLE BUTTON";
+    private static final String BUTTON_VIEW_TAG = "DRAGGABLE BUTTON"; */
 
     private TextView showBoardX; // todo: delete later
     private TextView showBoardY;
 
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
-    private int getBoardX = 0;
+    // private int getBoardX = 0; todo: delete later
     int player1screenX;
     int player1screenY;
 
@@ -103,10 +100,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
         station[0][9] = 703;
         station[1][9] = 351;
 
-        int closestStation = 0;
-        int closestDistance; // todo: set to max
-
-
         View circleView = findViewById(R.id.circle); // to move the circle
         moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
         // params.setMargins(600, 400, params.rightMargin, params.bottomMargin); // todo: delete later
@@ -131,6 +124,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             // double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // 5.710344827586207
             double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
             int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
+            int getBoardX;
             int negativeOffsetX = 0;
             if (offsetX > 0) {
                 getBoardX = (int) ((touchedScreenX - offsetX) * conversionFactor / zoomFactor);
@@ -150,38 +144,37 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int player1X = 703; // board coordinates station 9
             int player1Y = 351;
 
+            // calculate closest distance of station
+            int distance;
+            int closestDistance = 2147483647; // max of int
+            int deltaX;
+            int deltaY;
+            int closestStation = 0;
+
+            for (int i = 0; i < 10; i++) {
+                deltaX = getBoardX - station[0][i]; // not necessary to get absolute value,
+                deltaY = getBoardY - station[1][i]; // because they are squared later
+
+                distance = deltaX * deltaX + deltaY * deltaY;
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestStation = i;
+                }
+            }
+            player1X = station[0][closestStation];
+            player1Y = station[1][closestStation];
+
+            // calculate player1screenX and -Y and set circle to these coordinates
             if (offsetX > 0) {
                 player1screenX = (int) (player1X * zoomFactor / conversionFactor) + offsetX;
             } else {
                 negativeOffsetX = (int) (left * BOARD_MAX_X);
                 player1screenX = (int) ((player1X - negativeOffsetX) * zoomFactor / conversionFactor);
             }
-
             player1screenY = (int) ((player1Y - negativeOffsetY) * zoomFactor / conversionFactor);
-
-            // player1screenX = (int) (player1X  + negativeOffsetX); // todo: delete later
-            // player1screenY = (int) (player1Y + negativeOffsetY);
 
             moveCircle.setMargins(player1screenX - 25, player1screenY - 25,
                     moveCircle.rightMargin, moveCircle.bottomMargin);
-
-
-
-            // touchedScreenX = (int) (player1X * zoomFactor / conversionFactor + offsetX); // getBoardX = 703, y = 351 (station 9)
-            // touchedScreenY = (int) (player1Y * zoomFactor / conversionFactor);
-
-            /*
-            closestStation = 0;
-            closestDistance = 10000; // todo: set to max
-            int distance;
-            for (int i = 0; i < 10; i++) {
-                distance = (station[0][i] * station[0][i]) +
-                        (station[1][i] * station[1][i]); // pythagoras
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                }
-            } */
-
 
             Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
                     ", maxScreenHeight = " + maxScreenHeight);
@@ -204,7 +197,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
     }
-
 
     /* todo: not used yet, delete?
     public boolean onTouchEvent(MotionEvent motionEvent) { //
