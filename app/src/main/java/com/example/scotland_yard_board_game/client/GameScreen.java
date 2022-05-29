@@ -183,11 +183,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
             } */
 
 
-
-
-            // moveCircle.setMargins(touchedScreenX - 10, touchedScreenY - 10,
-            //         moveCircle.rightMargin, moveCircle.bottomMargin);
-
             Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
                     ", maxScreenHeight = " + maxScreenHeight);
             Log.d(TAG, "onCreate: left = " + left + ", top = " + top +
@@ -210,13 +205,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
         });
     }
 
-    public static float dpFromPx(final Context context, final float px) { // todo: probably not needed
-        return px / context.getResources().getDisplayMetrics().density;
-    }
-
-    public static float pxFromDp(final Context context, final float dp) {
-        return dp * context.getResources().getDisplayMetrics().density;
-    }
 
     /* todo: not used yet, delete?
     public boolean onTouchEvent(MotionEvent motionEvent) { //
@@ -246,19 +234,21 @@ public class GameScreen extends AppCompatActivity { // extends View {
     }
 
     //Find view and set Tag to draggable view
+    /*
     private void findViews() {
         button = (Button) findViewById(R.id.charButton);
         button.setTag(BUTTON_VIEW_TAG);
-    }
+    } */
 
     //implement LongClick and DragListener
+    /*
     private void implementEvents() {
         button.setOnLongClickListener(this::onLongClick);
 
         findViewById(R.id.station1).setOnDragListener(this::onDrag);
         findViewById(R.id.station9).setOnDragListener(this::onDrag);
         findViewById(R.id.station46).setOnDragListener(this::onDrag);
-    }
+    } */
 
     //drag object
     //response to long press on a view
