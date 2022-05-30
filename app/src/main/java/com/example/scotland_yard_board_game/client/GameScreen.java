@@ -32,6 +32,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ConstraintLayout journeyTableLayout;
     private ViewGroup.MarginLayoutParams moveCircle;
 
+    //nickname
+    TextView hostNameOut;
+    String hostString;
+
+    //ticket count (adjust maximum)
+    int taxiTickets = 10;
+
     //implement draggable player button
     /*
     private Button button;
@@ -59,6 +66,12 @@ public class GameScreen extends AppCompatActivity { // extends View {
         gameBoardView.setMaxZoom(6);
 
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
+        //nickname on GameScreen
+        /*
+        hostNameOut = findViewById(R.id.MrXNameGameView);
+        hostString = getIntent().getExtras().getString("Value");
+        hostNameOut.setText(hostString);
+        */
 
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
@@ -351,5 +364,17 @@ public class GameScreen extends AppCompatActivity { // extends View {
         journeyTableLayout.setVisibility(View.GONE);
     }
 
+    //method to decrease taxi count value
+    public void decreaseTaxiCount(View view){
+
+        taxiTickets = taxiTickets -1;
+        display(taxiTickets);
+    }
+
+    //method to display current taxi count value on textView
+    private void display(int number){
+        TextView displayTaxi = (TextView) findViewById(R.id.taxiTicketView1);
+        displayTaxi.setText("" + number);
+    }
 
 }
