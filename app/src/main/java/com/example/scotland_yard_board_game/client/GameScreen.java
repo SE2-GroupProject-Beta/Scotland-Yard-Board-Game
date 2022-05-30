@@ -67,11 +67,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
         //nickname on GameScreen
-        /*
-        hostNameOut = findViewById(R.id.MrXNameGameView);
-        hostString = getIntent().getExtras().getString("Value");
-        hostNameOut.setText(hostString);
-        */
+        hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
+        hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
+        hostNameOut.setText(hostString);                            //setText to value of hostString variable
+
 
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);

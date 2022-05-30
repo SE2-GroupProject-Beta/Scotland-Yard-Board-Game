@@ -12,7 +12,7 @@ import com.example.scotland_yard_board_game.R;
 
 public class HostNicknameScreen extends AppCompatActivity {
 
-    //nickname
+    //nickname variables
     EditText hostNameIn;
     String hostString;
 
@@ -21,7 +21,7 @@ public class HostNicknameScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_nickname_screen);
 
-        //editText nickname
+        //editText nickname, find source of input
         hostNameIn = (EditText) findViewById(R.id.editTextHostName);
     }
 

@@ -14,6 +14,7 @@ public class LobbyScreen extends AppCompatActivity {
     //nickname
     TextView hostNameOut;
     String hostString;
+    TextView hostNameIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +22,15 @@ public class LobbyScreen extends AppCompatActivity {
         setContentView(R.layout.activity_lobby_screen);
 
         //nickname
+        //find output TextView
         hostNameOut = findViewById(R.id.player1View);
 
+        //get value from previous activity
         hostString = getIntent().getExtras().getString("Value");
         hostNameOut.setText(hostString);
+
+        //TextView, find source of input
+        hostNameIn = (TextView) findViewById(R.id.player1View);
     }
 
 
@@ -32,6 +38,9 @@ public class LobbyScreen extends AppCompatActivity {
     public void goGameScreen(View view){
 
         Intent GameScreen = new Intent(this, GameScreen.class);
+        //pass host nickname to GameScreen
+        hostString = hostNameIn.getText().toString();
+        GameScreen.putExtra("Val", hostString);
         startActivity(GameScreen);
     }
 
