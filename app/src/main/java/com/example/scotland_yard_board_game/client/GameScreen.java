@@ -15,6 +15,7 @@ import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,20 +32,22 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
     private ViewGroup.MarginLayoutParams moveCircle;
-
-    //implement draggable player button
-    /*
-    private Button button;
-    private static final String BUTTON_VIEW_TAG = "DRAGGABLE BUTTON"; */
-
-    private TextView showBoardX; // todo: delete later
-    private TextView showBoardY;
+    private Button taxiDrawButton;
+    private Button busDrawButton;
+    private Button undergroundDrawButton;
+    private Button journeyTableButton;
 
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
-    // private int getBoardX = 0; todo: delete later
-    int player1screenX;
-    int player1screenY;
+
+    private TextView showBoardX; // todo: delete later
+    private TextView showBoardY;
+    private TextView showTransport;
+
+    private int boardX;
+    private int boardY;
+    private int player1ScreenX;
+    private int player1ScreenY;
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
@@ -56,21 +59,22 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         gameScreenLayout = findViewById(R.id.gameScreenLayout);
         gameBoardView = findViewById(R.id.gameBoardView);
-        gameBoardView.setMaxZoom(6);
-
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
-
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
+        showTransport = findViewById(R.id.showTransport);
+        taxiDrawButton = findViewById(R.id.taxiDrawButton);
+        busDrawButton = findViewById(R.id.busDrawButton);
+        undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
+        journeyTableButton = findViewById(R.id.journeyTableButton);
 
-        // side bar buttons
-        // memory for journeyTableButton and journeyTableLayout
-        // journeyTableButton
-        // Button journeyTableButton = (Button) findViewById(R.id.journeyTableButton); // todo: is never used
-        // close journeyTable
-        // Button closeJourneyTableButton = (Button) findViewById(R.id.closeJTButton); // todo: is never used
+        View circleView = findViewById(R.id.circle); // to move the circle
+        moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
 
-        // initialization of test stations, todo: remove later
+        gameBoardView.setMaxZoom(6);
+
+
+        // initialization of test stations, todo: remove later, replace by initialization code
         /* x- and y-coordinates of stations 1, 2, 3, 8 and 9 (0: unused)
             0, 0, 0
             1, 552, 162
@@ -98,11 +102,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         station[0][8] = 402;
         station[1][8] = 334;
         station[0][9] = 703;
-        station[1][9] = 351;
-
-        View circleView = findViewById(R.id.circle); // to move the circle
-        moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
-        // params.setMargins(600, 400, params.rightMargin, params.bottomMargin); // todo: delete later
+        station[1][9] = 351; // remove until here
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
             int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
@@ -116,33 +116,29 @@ public class GameScreen extends AppCompatActivity { // extends View {
             double left = rectF.left;
             double top = rectF.top;
             double zoomFactor = gameBoardView.getCurrentZoom();
-            // double right = rectF.right; // todo: probably not needed
-            // double bottom = rectF.bottom; // todo: probably not needed
-            // double boardWidth = rectF.width(); // todo: probably not needed
 
-            // calculation of getBoardX and getBoardY given touchedScreenX and -Y
-            // double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // 5.710344827586207
+            // calculation of boardX and boardY given touchedScreenX and touchedScreenY
             double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
             int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
-            int getBoardX;
+            // int boardX;
             int negativeOffsetX = 0;
             if (offsetX > 0) {
-                getBoardX = (int) ((touchedScreenX - offsetX) * conversionFactor / zoomFactor);
+                boardX = (int) ((touchedScreenX - offsetX) * conversionFactor / zoomFactor);
             } else {
                 negativeOffsetX = (int) (left * BOARD_MAX_X); // *** nächstes Heureka ***
-                getBoardX = (int) (touchedScreenX * conversionFactor / zoomFactor) + negativeOffsetX;
+                boardX = (int) (touchedScreenX * conversionFactor / zoomFactor) + negativeOffsetX;
             }
             int negativeOffsetY = (int) (top * BOARD_MAX_Y);
-            int getBoardY = (int) (touchedScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
+            boardY = (int) (touchedScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
 
             // print boardX and boardY to screen, todo: delete later
-            showBoardX.setText("X = " + getBoardX);
-            showBoardY.setText("Y = " + getBoardY);
+            showBoardX.setText("X = " + boardX);
+            showBoardY.setText("Y = " + boardY);
 
-            // calculation of screen x and y given board coordinates,
+            // calculation of player1X and player1Y given board coordinates,
             // conversionFactor and zoomFactor
-            int player1X = 703; // board coordinates station 9
-            int player1Y = 351;
+            int player1X; // = 703; // board coordinates station 9
+            int player1Y; // = 351;
 
             // calculate closest distance of station
             int distance;
@@ -152,8 +148,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int closestStation = 0;
 
             for (int i = 0; i < 10; i++) {
-                deltaX = getBoardX - station[0][i]; // not necessary to get absolute value,
-                deltaY = getBoardY - station[1][i]; // because they are squared later
+                deltaX = boardX - station[0][i]; // not necessary to get absolute value,
+                deltaY = boardY - station[1][i]; // because they are squared later
 
                 distance = deltaX * deltaX + deltaY * deltaY;
                 if (distance < closestDistance) {
@@ -164,46 +160,51 @@ public class GameScreen extends AppCompatActivity { // extends View {
             player1X = station[0][closestStation];
             player1Y = station[1][closestStation];
 
-            // calculate player1screenX and -Y and set circle to these coordinates
+            // calculate player1ScreenX and player1ScreenY and set circle to these coordinates
             if (offsetX > 0) {
-                player1screenX = (int) (player1X * zoomFactor / conversionFactor) + offsetX;
+                player1ScreenX = (int) (player1X * zoomFactor / conversionFactor) + offsetX;
             } else {
                 negativeOffsetX = (int) (left * BOARD_MAX_X);
-                player1screenX = (int) ((player1X - negativeOffsetX) * zoomFactor / conversionFactor);
+                player1ScreenX = (int) ((player1X - negativeOffsetX) * zoomFactor / conversionFactor);
             }
-            player1screenY = (int) ((player1Y - negativeOffsetY) * zoomFactor / conversionFactor);
+            player1ScreenY = (int) ((player1Y - negativeOffsetY) * zoomFactor / conversionFactor);
 
-            moveCircle.setMargins(player1screenX - 25, player1screenY - 25,
+            moveCircle.setMargins(player1ScreenX - 25, player1ScreenY - 25,
                     moveCircle.rightMargin, moveCircle.bottomMargin);
 
+            // todo: delete the following logs later
             Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
                     ", maxScreenHeight = " + maxScreenHeight);
             Log.d(TAG, "onCreate: left = " + left + ", top = " + top +
                     ", zoom factor = " + zoomFactor);
-            // Log.d(TAG, "onCreate: right = " + right + ", bottom = " + bottom);
             Log.d(TAG, "onCreate: touchedScreenX, touchedScreenY = " + touchedScreenX + ", " + touchedScreenY);
             Log.d(TAG, "onCreate: conversionFactor = " + conversionFactor);
-            // Log.d(TAG, "onCreate: currentBoardWidth = " + currentBoardWidth);
             Log.d(TAG, "onCreate: offsetX = " + offsetX);
-            if (offsetX < 0) {
-                Log.d(TAG, "onCreate: offsetX < 0");
-            }
+            if (offsetX < 0) Log.d(TAG, "onCreate: offsetX < 0");
             Log.d(TAG, "onCreate: negativeOffsetX = " + negativeOffsetX +
                     ", negativeOffsetY = " + negativeOffsetY);
-            Log.d(TAG, "***** onCreate: getBoardX = " + getBoardX +
-                    ", getBoardY = " + getBoardY + " *****");
-            // Log.d(TAG, "onCreate: boardWidth = " + boardWidth);
+            Log.d(TAG, "***** onCreate: boardX = " + boardX +
+                    ", boardY = " + boardY + " *****");
 
             return true;
         });
-    }
+        
+        taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
+            showTransport.setText("Taxi");
+            return true;
+        });
 
-    /* todo: not used yet, delete?
-    public boolean onTouchEvent(MotionEvent motionEvent) { //
-        int screenX = (int) motionEvent.getX(); // touched screen coordinates
-        Log.d(TAG, "onTouchEvent: screenX = " + screenX);
-        return super.onTouchEvent(motionEvent);
-    } */
+        busDrawButton.setOnTouchListener((view, motionEvent) -> {
+            showTransport.setText("Bus");
+            return true;
+        });
+
+        undergroundDrawButton.setOnTouchListener((view, motionEvent) -> {
+            showTransport.setText("Underground");
+            return true;
+        });
+        
+    }
 
     // @Override // todo: @Override necessary?
     public boolean onMenuItemClick(MenuItem item) {
@@ -224,23 +225,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
                 return false;
         }
     }
-
-    //Find view and set Tag to draggable view
-    /*
-    private void findViews() {
-        button = (Button) findViewById(R.id.charButton);
-        button.setTag(BUTTON_VIEW_TAG);
-    } */
-
-    //implement LongClick and DragListener
-    /*
-    private void implementEvents() {
-        button.setOnLongClickListener(this::onLongClick);
-
-        findViewById(R.id.station1).setOnDragListener(this::onDrag);
-        findViewById(R.id.station9).setOnDragListener(this::onDrag);
-        findViewById(R.id.station46).setOnDragListener(this::onDrag);
-    } */
 
     //drag object
     //response to long press on a view
