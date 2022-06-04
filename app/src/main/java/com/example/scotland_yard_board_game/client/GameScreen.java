@@ -40,17 +40,14 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
 
-    private TextView showBoardX; // todo: delete later
+    private TextView showBoardX; // todo: delete before production release
     private TextView showBoardY;
     private TextView showTransport;
 
-    private int touchedBoardX; // todo change to int[] touchedBoardCoordinates
-    private int touchedBoardY;
-    private int player1BoardX;
-    private int player1BoardY;
-    private final int[] player1BoardCoordinates = new int[2];
-    private final int[] player1ScreenCoordinates = new int[2];
-    // private int player1ScreenY;
+    private int[] touchedBoardCoordinates = new int[2];
+    private int[] touchedScreenCoordinates = new int[2];
+    private int[] player1BoardCoordinates = new int[2];
+    private int[] player1ScreenCoordinates = new int[2];
 
 
 
@@ -74,10 +71,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
         journeyTableButton = findViewById(R.id.journeyTableButton);
 
-        View circleView = findViewById(R.id.circle); // to move the circle
+        View circleView = findViewById(R.id.circle); // to move the circle (player)
         moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
 
-        gameBoardView.setMaxZoom(6);
+        gameBoardView.setMaxZoom(6); // augment zoom
 
 
         // initialization of test stations, todo: remove later, replace by initialization code
@@ -111,20 +108,22 @@ public class GameScreen extends AppCompatActivity { // extends View {
         station[1][9] = 351; // remove until here
 
 
+
+
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
-            int[] screenCoordinates = new int[2];
-            int[] boardCoordinates = new int[2];
+            // int[] screenCoordinates = new int[2]; // todo: delete
+            // int[] boardCoordinates = new int[2];
 
-            screenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
-            screenCoordinates[1] = (int) motionEvent.getY();
+            touchedScreenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
+            touchedScreenCoordinates[1] = (int) motionEvent.getY();
 
-            boardCoordinates = calculateBoardCoordinates(screenCoordinates);
-            touchedBoardX = boardCoordinates[0];
-            touchedBoardY = boardCoordinates[1];
+            touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
+            // touchedBoardX = boardCoordinates[0];
+            // touchedBoardY = boardCoordinates[1];
 
             // print boardX and boardY to screen, todo: delete later
-            showBoardX.setText("X = " + touchedBoardX);
-            showBoardY.setText("Y = " + touchedBoardY);
+            showBoardX.setText("X = " + touchedBoardCoordinates[0]);
+            showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
 
 
@@ -139,8 +138,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int closestStation = 0;
 
             for (int i = 0; i < 10; i++) {
-                deltaX = touchedBoardX - station[0][i]; // not necessary to get absolute value,
-                deltaY = touchedBoardY - station[1][i]; // because they are squared later
+                deltaX = touchedBoardCoordinates[0] - station[0][i]; // not necessary to get absolute value,
+                deltaY = touchedBoardCoordinates[1] - station[1][i]; // because they are squared later
 
                 distance = deltaX * deltaX + deltaY * deltaY;
                 if (distance < closestDistance) {
@@ -149,35 +148,20 @@ public class GameScreen extends AppCompatActivity { // extends View {
                 }
             }
 
-            player1BoardX = station[0][closestStation]; // todo
-            player1BoardY = station[1][closestStation];
+            player1BoardCoordinates[0] = station[0][closestStation]; // todo
+            player1BoardCoordinates[1] = station[1][closestStation];
 
-            // calculate player1ScreenX and player1ScreenY and set circle to these coordinates
 
-            /*
-            if (offsetX > 0) {
-                player1ScreenX = (int) (player1BoardX * zoomFactor / conversionFactor) + offsetX;
-            } else {
-                negativeOffsetX = (int) (left * BOARD_MAX_X);
-                player1ScreenX = (int) ((player1BoardX - negativeOffsetX) * zoomFactor / conversionFactor);
-            }
-            player1ScreenY = (int) ((player1BoardY - negativeOffsetY) * zoomFactor / conversionFactor);
-            */
 
-            // boardCoordinates = calculateBoardCoordinates(screenCoordinates);
 
-            player1BoardCoordinates[0] = 700;
-            player1BoardCoordinates[1] = 350;
+            // *****
+            // calculate player1ScreenCoordinates and set circle to these coordinates
+            // *****
 
-            screenCoordinates = calculateScreenCoordinates(boardCoordinates);
-
-            player1ScreenCoordinates[0] = screenCoordinates[0];
-            player1ScreenCoordinates[1] = screenCoordinates[1];
-
+            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
             moveCircle.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
                     moveCircle.rightMargin, moveCircle.bottomMargin);
-
 
             return true;
         });
@@ -189,10 +173,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             screenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
             screenCoordinates[1] = (int) motionEvent.getY();
 
-            boardCoordinates = calculateBoardCoordinates(screenCoordinates);
-
-
-
+            // boardCoordinates = calculateBoardCoordinates(screenCoordinates);
             return true;
         });
         
@@ -250,11 +231,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
         if (offsetX < 0) Log.d(TAG, "onCreate: offsetX < 0");
         Log.d(TAG, "onCreate: negativeOffsetX = " + negativeOffsetX +
                 ", negativeOffsetY = " + negativeOffsetY);
-        Log.d(TAG, "***** onCreate: boardX = " + player1BoardX +
-                ", boardY = " + player1BoardY + " *****");
+        Log.d(TAG, "***** onCreate: boardX = " + player1BoardCoordinates[0] +
+                ", boardY = " + player1BoardCoordinates[1] + " *****");
 
-        // boardCoordinates[0] = player1BoardX;
-        // boardCoordinates[1] = player1BoardY;
+        // boardCoordinates[0] = 1; // player1BoardX;
+        // boardCoordinates[1] = 2; // player1BoardY;
 
         return boardCoordinates;
     }
@@ -277,14 +258,14 @@ public class GameScreen extends AppCompatActivity { // extends View {
         int negativeOffsetX = 0;
 
         if (offsetX > 0) {
-            player1ScreenCoordinates[0] = (int) (player1BoardX * zoomFactor / conversionFactor) + offsetX;
+            player1ScreenCoordinates[0] = (int) (player1BoardCoordinates[0] * zoomFactor / conversionFactor) + offsetX;
         } else {
             negativeOffsetX = (int) (left * BOARD_MAX_X);
-            player1ScreenCoordinates[0] = (int) ((player1BoardX - negativeOffsetX) * zoomFactor / conversionFactor);
+            player1ScreenCoordinates[0] = (int) ((player1BoardCoordinates[0] - negativeOffsetX) * zoomFactor / conversionFactor);
         }
 
         int negativeOffsetY = (int) (top * BOARD_MAX_Y);
-        player1ScreenCoordinates[1] = (int) ((player1BoardY - negativeOffsetY) * zoomFactor / conversionFactor);
+        player1ScreenCoordinates[1] = (int) ((player1BoardCoordinates[1] - negativeOffsetY) * zoomFactor / conversionFactor);
 
         screenCoordinates[0] = player1ScreenCoordinates[0];
         screenCoordinates[1] = player1ScreenCoordinates[1];
