@@ -44,12 +44,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TextView showBoardY;
     private TextView showTransport;
 
-    private int touchedBoardX;
+    private int touchedBoardX; // todo change to int[] touchedBoardCoordinates
     private int touchedBoardY;
     private int player1BoardX;
     private int player1BoardY;
-    private int player1ScreenX;
-    private int player1ScreenY;
+    private final int[] player1BoardCoordinates = new int[2];
+    private final int[] player1ScreenCoordinates = new int[2];
+    // private int player1ScreenY;
 
 
 
@@ -125,6 +126,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showBoardX.setText("X = " + touchedBoardX);
             showBoardY.setText("Y = " + touchedBoardY);
 
+
+
             // calculation of player1X and player1Y given board coordinates,
             // conversionFactor and zoomFactor
 
@@ -153,29 +156,42 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
             /*
             if (offsetX > 0) {
-                player1ScreenX = (int) (player1X * zoomFactor / conversionFactor) + offsetX;
+                player1ScreenX = (int) (player1BoardX * zoomFactor / conversionFactor) + offsetX;
             } else {
                 negativeOffsetX = (int) (left * BOARD_MAX_X);
-                player1ScreenX = (int) ((player1X - negativeOffsetX) * zoomFactor / conversionFactor);
+                player1ScreenX = (int) ((player1BoardX - negativeOffsetX) * zoomFactor / conversionFactor);
             }
-            player1ScreenY = (int) ((player1Y - negativeOffsetY) * zoomFactor / conversionFactor);
+            player1ScreenY = (int) ((player1BoardY - negativeOffsetY) * zoomFactor / conversionFactor);
+            */
 
-            moveCircle.setMargins(player1ScreenX - 25, player1ScreenY - 25,
+            // boardCoordinates = calculateBoardCoordinates(screenCoordinates);
+
+            player1BoardCoordinates[0] = 700;
+            player1BoardCoordinates[1] = 350;
+
+            screenCoordinates = calculateScreenCoordinates(boardCoordinates);
+
+            player1ScreenCoordinates[0] = screenCoordinates[0];
+            player1ScreenCoordinates[1] = screenCoordinates[1];
+
+
+            moveCircle.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
                     moveCircle.rightMargin, moveCircle.bottomMargin);
 
-            // todo: delete the following logs later
-            Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
-                    ", maxScreenHeight = " + maxScreenHeight);
-            Log.d(TAG, "onCreate: left = " + left + ", top = " + top +
-                    ", zoom factor = " + zoomFactor);
-            Log.d(TAG, "onCreate: touchedScreenX, touchedScreenY = " + touchedScreenX + ", " + touchedScreenY);
-            Log.d(TAG, "onCreate: conversionFactor = " + conversionFactor);
-            Log.d(TAG, "onCreate: offsetX = " + offsetX);
-            if (offsetX < 0) Log.d(TAG, "onCreate: offsetX < 0");
-            Log.d(TAG, "onCreate: negativeOffsetX = " + negativeOffsetX +
-                    ", negativeOffsetY = " + negativeOffsetY);
-            Log.d(TAG, "***** onCreate: boardX = " + player1BoardX +
-                    ", boardY = " + player1BoardY + " *****"); */
+
+            return true;
+        });
+
+        gameBoardView.setOnLongClickListener(motionEvent -> {
+            int[] screenCoordinates = new int[2];
+            int[] boardCoordinates = new int[2];
+
+            screenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
+            screenCoordinates[1] = (int) motionEvent.getY();
+
+            boardCoordinates = calculateBoardCoordinates(screenCoordinates);
+
+
 
             return true;
         });
@@ -245,6 +261,33 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     int[] calculateScreenCoordinates(int[] boardCoordinates) {
         int[] screenCoordinates = new int[2];
+
+        int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
+        int maxScreenHeight = gameScreenLayout.getHeight();
+        double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // on Samsung: ~4.88
+
+        RectF rectF = gameBoardView.getZoomedRect(); // current left, top, zoom factor
+        double left = rectF.left;
+        double top = rectF.top;
+        double zoomFactor = gameBoardView.getCurrentZoom();
+
+        double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
+        int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2);
+
+        int negativeOffsetX = 0;
+
+        if (offsetX > 0) {
+            player1ScreenCoordinates[0] = (int) (player1BoardX * zoomFactor / conversionFactor) + offsetX;
+        } else {
+            negativeOffsetX = (int) (left * BOARD_MAX_X);
+            player1ScreenCoordinates[0] = (int) ((player1BoardX - negativeOffsetX) * zoomFactor / conversionFactor);
+        }
+
+        int negativeOffsetY = (int) (top * BOARD_MAX_Y);
+        player1ScreenCoordinates[1] = (int) ((player1BoardY - negativeOffsetY) * zoomFactor / conversionFactor);
+
+        screenCoordinates[0] = player1ScreenCoordinates[0];
+        screenCoordinates[1] = player1ScreenCoordinates[1];
 
         return screenCoordinates;
     }
