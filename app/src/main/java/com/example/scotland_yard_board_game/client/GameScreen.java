@@ -44,10 +44,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TextView showBoardY;
     private TextView showTransport;
 
-    private int boardX;
-    private int boardY;
+    private int touchedBoardX;
+    private int touchedBoardY;
+    private int player1BoardX;
+    private int player1BoardY;
     private int player1ScreenX;
     private int player1ScreenY;
+
+
+
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
@@ -104,41 +109,24 @@ public class GameScreen extends AppCompatActivity { // extends View {
         station[0][9] = 703;
         station[1][9] = 351; // remove until here
 
+
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
-            int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
-            int maxScreenHeight = gameScreenLayout.getHeight();
-            double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // on Samsung: ~4.88
+            int[] screenCoordinates = new int[2];
+            int[] boardCoordinates = new int[2];
 
-            int touchedScreenX = (int) motionEvent.getX(); // touched screen coordinates
-            int touchedScreenY = (int) motionEvent.getY();
+            screenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
+            screenCoordinates[1] = (int) motionEvent.getY();
 
-            RectF rectF = gameBoardView.getZoomedRect(); // current left, top, zoom factor
-            double left = rectF.left;
-            double top = rectF.top;
-            double zoomFactor = gameBoardView.getCurrentZoom();
-
-            // calculation of boardX and boardY given touchedScreenX and touchedScreenY
-            double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
-            int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
-            // int boardX;
-            int negativeOffsetX = 0;
-            if (offsetX > 0) {
-                boardX = (int) ((touchedScreenX - offsetX) * conversionFactor / zoomFactor);
-            } else {
-                negativeOffsetX = (int) (left * BOARD_MAX_X); // *** nächstes Heureka ***
-                boardX = (int) (touchedScreenX * conversionFactor / zoomFactor) + negativeOffsetX;
-            }
-            int negativeOffsetY = (int) (top * BOARD_MAX_Y);
-            boardY = (int) (touchedScreenY * conversionFactor / zoomFactor) + negativeOffsetY;
+            boardCoordinates = calculateBoardCoordinates(screenCoordinates);
+            touchedBoardX = boardCoordinates[0];
+            touchedBoardY = boardCoordinates[1];
 
             // print boardX and boardY to screen, todo: delete later
-            showBoardX.setText("X = " + boardX);
-            showBoardY.setText("Y = " + boardY);
+            showBoardX.setText("X = " + touchedBoardX);
+            showBoardY.setText("Y = " + touchedBoardY);
 
             // calculation of player1X and player1Y given board coordinates,
             // conversionFactor and zoomFactor
-            int player1X; // = 703; // board coordinates station 9
-            int player1Y; // = 351;
 
             // calculate closest distance of station
             int distance;
@@ -148,8 +136,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int closestStation = 0;
 
             for (int i = 0; i < 10; i++) {
-                deltaX = boardX - station[0][i]; // not necessary to get absolute value,
-                deltaY = boardY - station[1][i]; // because they are squared later
+                deltaX = touchedBoardX - station[0][i]; // not necessary to get absolute value,
+                deltaY = touchedBoardY - station[1][i]; // because they are squared later
 
                 distance = deltaX * deltaX + deltaY * deltaY;
                 if (distance < closestDistance) {
@@ -157,10 +145,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     closestStation = i;
                 }
             }
-            player1X = station[0][closestStation];
-            player1Y = station[1][closestStation];
+
+            player1BoardX = station[0][closestStation]; // todo
+            player1BoardY = station[1][closestStation];
 
             // calculate player1ScreenX and player1ScreenY and set circle to these coordinates
+
+            /*
             if (offsetX > 0) {
                 player1ScreenX = (int) (player1X * zoomFactor / conversionFactor) + offsetX;
             } else {
@@ -183,8 +174,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             if (offsetX < 0) Log.d(TAG, "onCreate: offsetX < 0");
             Log.d(TAG, "onCreate: negativeOffsetX = " + negativeOffsetX +
                     ", negativeOffsetY = " + negativeOffsetY);
-            Log.d(TAG, "***** onCreate: boardX = " + boardX +
-                    ", boardY = " + boardY + " *****");
+            Log.d(TAG, "***** onCreate: boardX = " + player1BoardX +
+                    ", boardY = " + player1BoardY + " *****"); */
 
             return true;
         });
@@ -204,6 +195,58 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
         
+    }
+
+    int[] calculateBoardCoordinates(int[] screenCoordinates) {
+        int[] boardCoordinates = new int[2];
+
+        int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
+        int maxScreenHeight = gameScreenLayout.getHeight();
+        double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // on Samsung: ~4.88
+
+        RectF rectF = gameBoardView.getZoomedRect(); // current left, top, zoom factor
+        double left = rectF.left;
+        double top = rectF.top;
+        double zoomFactor = gameBoardView.getCurrentZoom();
+
+        // calculation of boardX and boardY given screenCoordinates[0] and screenCoordinates[1]
+        double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
+        int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
+
+        int negativeOffsetX = 0;
+        if (offsetX > 0) {
+            boardCoordinates[0] = (int) ((screenCoordinates[0] - offsetX) * conversionFactor / zoomFactor);
+        } else {
+            negativeOffsetX = (int) (left * BOARD_MAX_X); // *** nächstes Heureka ***
+            boardCoordinates[0] = (int) (screenCoordinates[0] * conversionFactor / zoomFactor) + negativeOffsetX;
+        }
+        int negativeOffsetY = (int) (top * BOARD_MAX_Y);
+        boardCoordinates[1] = (int) (screenCoordinates[1] * conversionFactor / zoomFactor) + negativeOffsetY;
+
+        Log.d(TAG, "onCreate: maxScreenWidth = " + maxScreenWidth +
+                ", maxScreenHeight = " + maxScreenHeight);
+        Log.d(TAG, "onCreate: left = " + left + ", top = " + top +
+                ", zoom factor = " + zoomFactor);
+        Log.d(TAG, "onCreate: touchedScreenX, touchedScreenY = " +
+                screenCoordinates[0] + ", " + screenCoordinates[1]);
+        Log.d(TAG, "onCreate: conversionFactor = " + conversionFactor);
+        Log.d(TAG, "onCreate: offsetX = " + offsetX);
+        if (offsetX < 0) Log.d(TAG, "onCreate: offsetX < 0");
+        Log.d(TAG, "onCreate: negativeOffsetX = " + negativeOffsetX +
+                ", negativeOffsetY = " + negativeOffsetY);
+        Log.d(TAG, "***** onCreate: boardX = " + player1BoardX +
+                ", boardY = " + player1BoardY + " *****");
+
+        // boardCoordinates[0] = player1BoardX;
+        // boardCoordinates[1] = player1BoardY;
+
+        return boardCoordinates;
+    }
+
+    int[] calculateScreenCoordinates(int[] boardCoordinates) {
+        int[] screenCoordinates = new int[2];
+
+        return screenCoordinates;
     }
 
     // @Override // todo: @Override necessary?
