@@ -31,7 +31,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ConstraintLayout gameScreenLayout;
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
-    private ViewGroup.MarginLayoutParams moveCircle;
+    private ViewGroup.MarginLayoutParams movePlayer1;
     private Button taxiDrawButton;
     private Button busDrawButton;
     private Button undergroundDrawButton;
@@ -72,7 +72,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         journeyTableButton = findViewById(R.id.journeyTableButton);
 
         View circleView = findViewById(R.id.circle); // to move the circle (player)
-        moveCircle = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
+        movePlayer1 = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
@@ -111,8 +111,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
-            // int[] screenCoordinates = new int[2]; // todo: delete
-            // int[] boardCoordinates = new int[2];
 
             touchedScreenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
             touchedScreenCoordinates[1] = (int) motionEvent.getY();
@@ -126,9 +124,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
 
-
-            // calculation of player1X and player1Y given board coordinates,
-            // conversionFactor and zoomFactor
+            /*
+            // calculation of player1BoardCoordinates given touchedBoardCoordinates
 
             // calculate closest distance of station
             int distance;
@@ -149,9 +146,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             }
 
             player1BoardCoordinates[0] = station[0][closestStation]; // todo
-            player1BoardCoordinates[1] = station[1][closestStation];
-
-
+            player1BoardCoordinates[1] = station[1][closestStation]; */
 
 
             // *****
@@ -160,23 +155,62 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
-            moveCircle.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    moveCircle.rightMargin, moveCircle.bottomMargin);
-
+            movePlayer1.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                    movePlayer1.rightMargin, movePlayer1.bottomMargin);
             return true;
         });
 
         gameBoardView.setOnLongClickListener(motionEvent -> {
-            int[] screenCoordinates = new int[2];
-            int[] boardCoordinates = new int[2];
+            Log.d(TAG, "onCreate: onLongClick");
 
-            screenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
-            screenCoordinates[1] = (int) motionEvent.getY();
+            // info: uses touchedScreenCoordinates from .setOnTouchListener:
 
-            // boardCoordinates = calculateBoardCoordinates(screenCoordinates);
+            Log.d(TAG, "onCreate: onLongClick: touchedScreenCoordinates = " +
+                    touchedScreenCoordinates[0] + ", " + touchedScreenCoordinates[1]);
+            touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
+            Log.d(TAG, "onCreate: onLongClick: player1BoardCoordinates = " +
+                    player1BoardCoordinates[0] + ", " + player1BoardCoordinates[1]);
+
+
+
+
+            // *****
+            // calculation of player1BoardCoordinates given touchedBoardCoordinates
+            // *****
+
+            // calculate closest distance of station
+            int distance;
+            int closestDistance = 2147483647; // max of int
+            int deltaX;
+            int deltaY;
+            int closestStation = 0;
+
+            for (int i = 0; i < 10; i++) {
+                deltaX = touchedBoardCoordinates[0] - station[0][i]; // no need to get absolute value,
+                deltaY = touchedBoardCoordinates[1] - station[1][i]; // because they are squared later
+
+                distance = deltaX * deltaX + deltaY * deltaY;
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestStation = i;
+                }
+            }
+
+            player1BoardCoordinates[0] = station[0][closestStation]; // todo
+            player1BoardCoordinates[1] = station[1][closestStation];
+
+            Log.d(TAG, "onCreate: onLongClick: player1BoardCoordinates = " +
+                    player1BoardCoordinates[0] + ", " + player1BoardCoordinates[1]);
+            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
+            Log.d(TAG, "onCreate: onLongClick: player1ScreenCoordinates = " +
+                    player1ScreenCoordinates[0] + ", " + player1ScreenCoordinates[1]);
+            movePlayer1.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                    movePlayer1.rightMargin, movePlayer1.bottomMargin);
+
             return true;
         });
-        
+
+
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
             return true;
@@ -243,6 +277,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
     int[] calculateScreenCoordinates(int[] boardCoordinates) {
         int[] screenCoordinates = new int[2];
 
+        /*boardCoordinates[0] = 2504; // todo: delete
+        boardCoordinates[1] = 1077;
+        Log.d(TAG, "calculateScreenCoordinates: set boardCoordinates to station 67"); */
+
         int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
         int maxScreenHeight = gameScreenLayout.getHeight();
         double conversionFactor = (double) BOARD_MAX_Y / maxScreenHeight; // on Samsung: ~4.88
@@ -258,17 +296,14 @@ public class GameScreen extends AppCompatActivity { // extends View {
         int negativeOffsetX = 0;
 
         if (offsetX > 0) {
-            player1ScreenCoordinates[0] = (int) (player1BoardCoordinates[0] * zoomFactor / conversionFactor) + offsetX;
+            screenCoordinates[0] = (int) (boardCoordinates[0] * zoomFactor / conversionFactor) + offsetX;
         } else {
             negativeOffsetX = (int) (left * BOARD_MAX_X);
-            player1ScreenCoordinates[0] = (int) ((player1BoardCoordinates[0] - negativeOffsetX) * zoomFactor / conversionFactor);
+            screenCoordinates[0] = (int) ((boardCoordinates[0] - negativeOffsetX) * zoomFactor / conversionFactor);
         }
 
         int negativeOffsetY = (int) (top * BOARD_MAX_Y);
-        player1ScreenCoordinates[1] = (int) ((player1BoardCoordinates[1] - negativeOffsetY) * zoomFactor / conversionFactor);
-
-        screenCoordinates[0] = player1ScreenCoordinates[0];
-        screenCoordinates[1] = player1ScreenCoordinates[1];
+        screenCoordinates[1] = (int) ((boardCoordinates[1] - negativeOffsetY) * zoomFactor / conversionFactor);
 
         return screenCoordinates;
     }
