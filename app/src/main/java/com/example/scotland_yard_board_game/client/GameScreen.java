@@ -59,7 +59,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private final int MAX_BUS_NEIGHBORS = 5;
     private final int MAX_UNDERGROUND_NEIGHBORS = 4;
 
-    private int[][] station = new int[2][21]; // int[x/y][station number]
+    private int[][] station = new int[200][2]; // int[x/y][station number]
 
     private int[][] taxiNeighbors = new int[TAXI_STATIONS + 1][MAX_TAXI_NEIGHBORS]; // int[station number][neighbors]
     private int[][] busNeighbors = new int[BUS_STATIONS + 1][MAX_BUS_NEIGHBORS]; // info: station number 0 not used, so
@@ -67,6 +67,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     private ServerDatabase serverDatabase;
     private ServerStation serverStation;
+
+    int[] selectionOfStations = new int[200];
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
@@ -92,6 +94,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
+        // selectionOfStations = new int[200];
+
+
 
         // initialization of test stations, todo: remove later, replace by initialization code
         /* x- and y-coordinates of stations 1, 2, 3, 8 and 9 (0: unused)
@@ -108,6 +113,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
              */
 
         // int[][] station = new int[2][10]; // int[x/y][station number]
+        /*
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 21; j++) {
                 station[i][j] = 0;
@@ -142,7 +148,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         taxiNeighbors[9][0] = 1;
         taxiNeighbors[9][1] = 19;
         taxiNeighbors[9][2] = 29;
-
+        */
 
         // todo: remove until here
 
@@ -164,9 +170,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
         */
 
         serverDatabase = new ServerDatabase(this.getApplicationContext());
-        serverStation = serverDatabase.getStation(9);
-        Log.d(TAG, "onCreate: serverStation.getX(), .getY(): " + serverStation.getX() +
-                        ", " + serverStation.getY());
+        // serverStation = serverDatabase.getStation(9); // todo: delete later
+        // Log.d(TAG, "onCreate: serverStation.getX(), .getY(): " + serverStation.getX() +
+        //                 ", " + serverStation.getY());
 
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
@@ -208,25 +214,52 @@ public class GameScreen extends AppCompatActivity { // extends View {
             // *****
 
             // calculate closest distance of station
+            /* // todo: moved to method
             int distance;
             int closestDistance = 2147483647; // max of int
             int deltaX;
             int deltaY;
             int closestStation = 0;
 
-            for (int i = 0; i < 21; i++) {
-                deltaX = touchedBoardCoordinates[0] - station[0][i]; // no need to get absolute value,
-                deltaY = touchedBoardCoordinates[1] - station[1][i]; // because they are squared later
+            for (int i = 1; i < 200; i++) {
+                deltaX = touchedBoardCoordinates[0] - station[i][0]; // no need to get absolute value,
+                deltaY = touchedBoardCoordinates[1] - station[i][1]; // because they are squared later
 
                 distance = deltaX * deltaX + deltaY * deltaY;
                 if (distance < closestDistance) {
                     closestDistance = distance;
                     closestStation = i;
                 }
+            } */
+            /*
+            int[] selectionOfStations = new int[200];
+            selectionOfStations[0] = 0; // station 0 doesn't exist
+            selectionOfStations[0] = 0;
+            for (int i = 1; i < 200; i++) {
+                selectionOfStations[i] = serverDatabase.getStation(i).getId();
+            } */
+            /*
+            selectionOfStations[0] = 0; // station 0 doesn't exist
+            for (int i = 1; i < 200; i++) {
+                selectionOfStations[i] = serverDatabase.getStation(i).getId();
+            }
+             */
+
+            // player1BoardCoordinates = getClosestStationToTouchedBoardCoordinates(
+            //         touchedBoardCoordinates, selectionOfStationCoordinates);
+
+
+            for (int i = 1; i < 200; i++) {
+                selectionOfStations[i] = i;
             }
 
-            player1BoardCoordinates[0] = station[0][closestStation]; // todo
-            player1BoardCoordinates[1] = station[1][closestStation];
+            int player1CurrentStation = getClosestStationToTouchedBoardCoordinates(
+                    touchedBoardCoordinates, selectionOfStations);
+            player1BoardCoordinates[0] = serverDatabase.getStation(player1CurrentStation).getX();
+            player1BoardCoordinates[1] = serverDatabase.getStation(player1CurrentStation).getY();
+
+            // player1BoardCoordinates[0] = station[closestStation][0]; // todo: delete
+            // player1BoardCoordinates[1] = station[closestStation][1];
 
             Log.d(TAG, "onCreate: onLongClick: player1BoardCoordinates = " +
                     player1BoardCoordinates[0] + ", " + player1BoardCoordinates[1]);
@@ -339,11 +372,32 @@ public class GameScreen extends AppCompatActivity { // extends View {
         return screenCoordinates;
     }
 
-    int[] findClosestStationToTouchedBoardCoordinates(int[] touchedBoardCoordinates,
-                                                      int[] selectionOfStationCoordinates) {
-        int[] closestStation = new int[2];
+    int getClosestStationToTouchedBoardCoordinates(int[] touchedBoardCoordinates,
+                                                   int[] selectionOfStations) {
+        int distance;
+        int closestDistance = 2147483647; // max of int
+        int deltaX;
+        int deltaY;
+        int closestStation = 0;
+        int amountOfStations = selectionOfStations.length; // info: station 0 does not exist
+        // int[] stations = new int[amountOfStations + 1]; // todo: delete later
+        int[] stationsXCoordinates = new int[amountOfStations];
+        int[] stationsYCoordinates = new int[amountOfStations];
+        for (int i = 1; i < amountOfStations; i++) {
+            stationsXCoordinates[i] = serverDatabase.getStation(i).getX();
+            stationsYCoordinates[i] = serverDatabase.getStation(i).getY();
+        }
 
+        for (int i = 1; i < amountOfStations; i++) {
+            deltaX = touchedBoardCoordinates[0] - stationsXCoordinates[i]; // no need to get absolute value,
+            deltaY = touchedBoardCoordinates[1] - stationsYCoordinates[i]; // because they are squared later
 
+            distance = deltaX * deltaX + deltaY * deltaY;
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestStation = i;
+            }
+        }
         return closestStation;
     }
 
