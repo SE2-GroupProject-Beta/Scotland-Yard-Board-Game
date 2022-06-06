@@ -20,14 +20,26 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <!-- circle -->
+    <!-- player1 -->
     <View
-        android:id="@+id/circle"
+        android:id="@+id/player1"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
-        android:background="@drawable/circle"
+        android:background="@drawable/player1"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"

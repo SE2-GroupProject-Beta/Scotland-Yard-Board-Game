@@ -31,7 +31,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ConstraintLayout gameScreenLayout;
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
-    private ViewGroup.MarginLayoutParams movePlayer1;
+    private ViewGroup.MarginLayoutParams player1ViewGroup;
+
     private Button taxiDrawButton;
     private Button busDrawButton;
     private Button undergroundDrawButton;
@@ -49,6 +50,18 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[] player1BoardCoordinates = new int[2];
     private int[] player1ScreenCoordinates = new int[2];
 
+    private final int TAXI_STATIONS = 199;
+    private final int BUS_STATIONS = 62;
+    private final int UNDERGROUND_STATIONS = 199;
+    private final int MAX_TAXI_NEIGHBORS = 7;
+    private final int MAX_BUS_NEIGHBORS = 5;
+    private final int MAX_UNDERGROUND_NEIGHBORS = 4;
+
+    private int[][] station = new int[2][21]; // int[x/y][station number]
+
+    private int[][] taxiNeighbors = new int[TAXI_STATIONS + 1][MAX_TAXI_NEIGHBORS]; // int[station number][neighbors]
+    private int[][] busNeighbors = new int[BUS_STATIONS + 1][MAX_BUS_NEIGHBORS]; // info: station number 0 not used, so
+    private int[][] undergroundNeighbors = new int[UNDERGROUND_STATIONS + 1][MAX_UNDERGROUND_NEIGHBORS]; // 15 means 14 possible stations
 
 
 
@@ -71,8 +84,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
         journeyTableButton = findViewById(R.id.journeyTableButton);
 
-        View circleView = findViewById(R.id.circle); // to move the circle (player)
-        movePlayer1 = (ViewGroup.MarginLayoutParams) circleView.getLayoutParams();
+        View player1View = findViewById(R.id.player1); // to move the circle (player)
+        player1ViewGroup = (ViewGroup.MarginLayoutParams) player1View.getLayoutParams();
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
@@ -90,9 +103,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
             8, 402, 334
             9, 703, 351
              */
-        int[][] station = new int[2][10]; // int[x/y][station number]
+
+        // int[][] station = new int[2][10]; // int[x/y][station number]
         for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < 21; j++) {
                 station[i][j] = 0;
             }
         }
@@ -105,7 +119,29 @@ public class GameScreen extends AppCompatActivity { // extends View {
         station[0][8] = 402;
         station[1][8] = 334;
         station[0][9] = 703;
-        station[1][9] = 351; // remove until here
+        station[1][9] = 351;
+        station[0][19] = 509;
+        station[1][19] = 512;
+        station[0][20] = 874;
+        station[1][20] = 432;
+
+
+        for (int i = 0; i < TAXI_STATIONS; i++) {
+            for (int j = 0; j < MAX_TAXI_NEIGHBORS; j++) {
+                taxiNeighbors[i][j] = 0;
+            }
+        }
+
+        taxiNeighbors[1][0] = 8;
+        taxiNeighbors[1][1] = 9;
+        taxiNeighbors[8][0] = 1;
+        taxiNeighbors[8][1] = 19;
+        taxiNeighbors[9][0] = 1;
+        taxiNeighbors[9][1] = 19;
+        taxiNeighbors[9][2] = 29;
+
+
+        // todo: remove until here
 
 
 
@@ -155,8 +191,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
-            movePlayer1.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    movePlayer1.rightMargin, movePlayer1.bottomMargin);
+            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
             return true;
         });
 
@@ -185,7 +221,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             int deltaY;
             int closestStation = 0;
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 21; i++) {
                 deltaX = touchedBoardCoordinates[0] - station[0][i]; // no need to get absolute value,
                 deltaY = touchedBoardCoordinates[1] - station[1][i]; // because they are squared later
 
@@ -204,8 +240,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
             Log.d(TAG, "onCreate: onLongClick: player1ScreenCoordinates = " +
                     player1ScreenCoordinates[0] + ", " + player1ScreenCoordinates[1]);
-            movePlayer1.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    movePlayer1.rightMargin, movePlayer1.bottomMargin);
+            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
 
             return true;
         });
@@ -213,6 +249,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
+
+
             return true;
         });
 
