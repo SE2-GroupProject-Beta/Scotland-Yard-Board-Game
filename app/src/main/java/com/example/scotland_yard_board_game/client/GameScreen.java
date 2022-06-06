@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.scotland_yard_board_game.R;
+import com.example.scotland_yard_board_game.server.ServerDatabase;
+import com.example.scotland_yard_board_game.server.ServerStation;
 import com.ortiz.touchview.TouchImageView;
 
 import java.util.Objects;
@@ -63,7 +65,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[][] busNeighbors = new int[BUS_STATIONS + 1][MAX_BUS_NEIGHBORS]; // info: station number 0 not used, so
     private int[][] undergroundNeighbors = new int[UNDERGROUND_STATIONS + 1][MAX_UNDERGROUND_NEIGHBORS]; // 15 means 14 possible stations
 
-
+    private ServerDatabase serverDatabase;
+    private ServerStation serverStation;
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
@@ -144,6 +147,26 @@ public class GameScreen extends AppCompatActivity { // extends View {
         // todo: remove until here
 
 
+        // *****
+        // read data from ServerDatabase
+        // *****
+
+        /*
+        serverStation = serverDatabase.getStation(3);
+        int testX = serverStation.getX();
+        int testY = serverStation.getY();
+        Log.d(TAG, "onCreate: serverStation.getX(), .getY(): " + testX + ", " + testY); // 1816, 111
+        -----
+        this.serverDatabase = new ServerDatabase(this.context); [-> context bekommt man in der mainActivity mit getApplicationContext()]
+        ServerStation station = serverDatabase.getStation(1);
+        Log.d(TAG, String.valueOf(station.getX()));
+        die nachbarn bekommt du dann mit station.getTaxi/getUnderground usw. sind int arrays.
+        */
+
+        serverDatabase = new ServerDatabase(this.getApplicationContext());
+        serverStation = serverDatabase.getStation(9);
+        Log.d(TAG, "onCreate: serverStation.getX(), .getY(): " + serverStation.getX() +
+                        ", " + serverStation.getY());
 
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
@@ -152,37 +175,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
             touchedScreenCoordinates[1] = (int) motionEvent.getY();
 
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
-            // touchedBoardX = boardCoordinates[0];
-            // touchedBoardY = boardCoordinates[1];
 
             // print boardX and boardY to screen, todo: delete later
             showBoardX.setText("X = " + touchedBoardCoordinates[0]);
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
-
-
-            /*
-            // calculation of player1BoardCoordinates given touchedBoardCoordinates
-
-            // calculate closest distance of station
-            int distance;
-            int closestDistance = 2147483647; // max of int
-            int deltaX;
-            int deltaY;
-            int closestStation = 0;
-
-            for (int i = 0; i < 10; i++) {
-                deltaX = touchedBoardCoordinates[0] - station[0][i]; // not necessary to get absolute value,
-                deltaY = touchedBoardCoordinates[1] - station[1][i]; // because they are squared later
-
-                distance = deltaX * deltaX + deltaY * deltaY;
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    closestStation = i;
-                }
-            }
-
-            player1BoardCoordinates[0] = station[0][closestStation]; // todo
-            player1BoardCoordinates[1] = station[1][closestStation]; */
 
 
             // *****
@@ -200,14 +196,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
             Log.d(TAG, "onCreate: onLongClick");
 
             // info: uses touchedScreenCoordinates from .setOnTouchListener:
-
             Log.d(TAG, "onCreate: onLongClick: touchedScreenCoordinates = " +
                     touchedScreenCoordinates[0] + ", " + touchedScreenCoordinates[1]);
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
             Log.d(TAG, "onCreate: onLongClick: player1BoardCoordinates = " +
                     player1BoardCoordinates[0] + ", " + player1BoardCoordinates[1]);
-
-
 
 
             // *****
@@ -344,6 +337,14 @@ public class GameScreen extends AppCompatActivity { // extends View {
         screenCoordinates[1] = (int) ((boardCoordinates[1] - negativeOffsetY) * zoomFactor / conversionFactor);
 
         return screenCoordinates;
+    }
+
+    int[] findClosestStationToTouchedBoardCoordinates(int[] touchedBoardCoordinates,
+                                                      int[] selectionOfStationCoordinates) {
+        int[] closestStation = new int[2];
+
+
+        return closestStation;
     }
 
     // @Override // todo: @Override necessary?
