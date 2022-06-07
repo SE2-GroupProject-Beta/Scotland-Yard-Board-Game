@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game.server;
+package com.example.scotland_yard_board_game.common;
 
 
 import static android.content.ContentValues.TAG;
@@ -15,13 +15,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ServerDatabase {
+public class StationDatabase {
     private ArrayList<ServerStation> stationlist;
     private int[] DetectiveStart;
     private int[] MrXStart;
     private Context context;
 
-    public ServerDatabase(Context context) {
+    public StationDatabase(Context context) {
         this.context = context;
         builddatabase();
     }
@@ -86,5 +86,4 @@ public class ServerDatabase {
 
         return Start;
     }
-
 }

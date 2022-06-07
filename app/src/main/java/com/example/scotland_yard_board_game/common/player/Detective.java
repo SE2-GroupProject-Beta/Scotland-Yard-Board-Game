@@ -1,7 +1,11 @@
-package com.example.scotland_yard_board_game.server;
+package com.example.scotland_yard_board_game.common.player;
 
-public class ServerDetective implements Player {
+import com.example.scotland_yard_board_game.common.Colour;
+import com.example.scotland_yard_board_game.common.ServerStation;
+
+public class Detective implements Player {
     private int id;
+    private int conId;
     private String nickname;
     private int[] inventory = {10,8,4}; //Taxi, Bus, Underground
     private ServerStation position;
@@ -9,8 +13,9 @@ public class ServerDetective implements Player {
     private boolean turn;
     private int moves = 1;
 
-    public ServerDetective(int clientid, String nickname) {
+    public Detective(int clientid, int conId, String nickname) {
         this.id = clientid;
+        this.conId = conId;
         this.nickname = nickname;
     }
 
@@ -40,6 +45,7 @@ public class ServerDetective implements Player {
     public void setPosition(ServerStation position) {
         this.position = position;
     }
+
 
     //If item available -> use it, otherwise return false
     public boolean useItem(int itemid){
@@ -78,5 +84,9 @@ public class ServerDetective implements Player {
 
     public void setmoves(int moves) {
         this.moves = moves;
+    }
+
+    public int getConId() {
+        return conId;
     }
 }
