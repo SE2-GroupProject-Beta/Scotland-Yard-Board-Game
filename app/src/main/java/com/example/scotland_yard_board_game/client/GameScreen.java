@@ -47,11 +47,21 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TextView showBoardY;
     private TextView showTransport;
 
+    private View player1View;
+
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
     private int[] player1BoardCoordinates = new int[2];
     private int[] player1ScreenCoordinates = new int[2];
 
+    int[] selectionOfStations = new int[200];
+
+    private ServerDatabase serverDatabase;
+    private ServerStation serverStation; // todo: delete if not needed
+
+    int player1CurrentStation = 1;
+
+    /* todo: delete if not needed any more
     private final int TAXI_STATIONS = 199;
     private final int BUS_STATIONS = 62;
     private final int UNDERGROUND_STATIONS = 199;
@@ -59,16 +69,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private final int MAX_BUS_NEIGHBORS = 5;
     private final int MAX_UNDERGROUND_NEIGHBORS = 4;
 
-    private int[][] station = new int[200][2]; // int[x/y][station number]
+    private final int[][] station = new int[200][2]; // int[x/y][station number]
+    private final int[][] taxiNeighbors = new int[TAXI_STATIONS + 1][MAX_TAXI_NEIGHBORS]; // int[station number][neighbors]
+    private final int[][] busNeighbors = new int[BUS_STATIONS + 1][MAX_BUS_NEIGHBORS]; // info: station number 0 not used, so
+    private final int[][] undergroundNeighbors = new int[UNDERGROUND_STATIONS + 1][MAX_UNDERGROUND_NEIGHBORS]; // 15 means 14 possible stations
+    */
 
-    private int[][] taxiNeighbors = new int[TAXI_STATIONS + 1][MAX_TAXI_NEIGHBORS]; // int[station number][neighbors]
-    private int[][] busNeighbors = new int[BUS_STATIONS + 1][MAX_BUS_NEIGHBORS]; // info: station number 0 not used, so
-    private int[][] undergroundNeighbors = new int[UNDERGROUND_STATIONS + 1][MAX_UNDERGROUND_NEIGHBORS]; // 15 means 14 possible stations
 
-    private ServerDatabase serverDatabase;
-    private ServerStation serverStation;
-
-    int[] selectionOfStations = new int[200];
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
@@ -89,91 +96,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
         journeyTableButton = findViewById(R.id.journeyTableButton);
 
-        View player1View = findViewById(R.id.player1); // to move the circle (player)
-        player1ViewGroup = (ViewGroup.MarginLayoutParams) player1View.getLayoutParams();
-
         gameBoardView.setMaxZoom(6); // augment zoom
 
-        // selectionOfStations = new int[200];
+        player1View = findViewById(R.id.player1); // to move player1
+        player1ViewGroup = (ViewGroup.MarginLayoutParams) player1View.getLayoutParams();
 
 
 
-        // initialization of test stations, todo: remove later, replace by initialization code
-        /* x- and y-coordinates of stations 1, 2, 3, 8 and 9 (0: unused)
-            0, 0, 0
-            1, 552, 162
-            2, 1323, 104
-            3, 1816, 111
-            4, 2118, 87
-            5, 3332, 128
-            6, 3698, 132
-            7, 4072, 156
-            8, 402, 334
-            9, 703, 351
-             */
-
-        // int[][] station = new int[2][10]; // int[x/y][station number]
-        /*
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 21; j++) {
-                station[i][j] = 0;
-            }
-        }
-        station[0][1] = 552;
-        station[1][1] = 162;
-        station[0][2] = 1323;
-        station[1][2] = 104;
-        station[0][3] = 1816;
-        station[1][3] = 111;
-        station[0][8] = 402;
-        station[1][8] = 334;
-        station[0][9] = 703;
-        station[1][9] = 351;
-        station[0][19] = 509;
-        station[1][19] = 512;
-        station[0][20] = 874;
-        station[1][20] = 432;
-
-
-        for (int i = 0; i < TAXI_STATIONS; i++) {
-            for (int j = 0; j < MAX_TAXI_NEIGHBORS; j++) {
-                taxiNeighbors[i][j] = 0;
-            }
-        }
-
-        taxiNeighbors[1][0] = 8;
-        taxiNeighbors[1][1] = 9;
-        taxiNeighbors[8][0] = 1;
-        taxiNeighbors[8][1] = 19;
-        taxiNeighbors[9][0] = 1;
-        taxiNeighbors[9][1] = 19;
-        taxiNeighbors[9][2] = 29;
-        */
-
-        // todo: remove until here
-
-
-        // *****
-        // read data from ServerDatabase
-        // *****
-
-        /*
-        serverStation = serverDatabase.getStation(3);
-        int testX = serverStation.getX();
-        int testY = serverStation.getY();
-        Log.d(TAG, "onCreate: serverStation.getX(), .getY(): " + testX + ", " + testY); // 1816, 111
-        -----
-        this.serverDatabase = new ServerDatabase(this.context); [-> context bekommt man in der mainActivity mit getApplicationContext()]
-        ServerStation station = serverDatabase.getStation(1);
-        Log.d(TAG, String.valueOf(station.getX()));
-        die nachbarn bekommt du dann mit station.getTaxi/getUnderground usw. sind int arrays.
-        */
-
+        // initialize ServerDatabase
         serverDatabase = new ServerDatabase(this.getApplicationContext());
-        // serverStation = serverDatabase.getStation(9); // todo: delete later
-        // Log.d(TAG, "onCreate: serverStation.getX(), .getY(): " + serverStation.getX() +
-        //                 ", " + serverStation.getY());
-
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
 
@@ -186,11 +117,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showBoardX.setText("X = " + touchedBoardCoordinates[0]);
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
-
-            // *****
             // calculate player1ScreenCoordinates and set circle to these coordinates
-            // *****
-
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
             player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
@@ -199,67 +126,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
         });
 
         gameBoardView.setOnLongClickListener(motionEvent -> {
-            Log.d(TAG, "onCreate: onLongClick");
 
             // info: uses touchedScreenCoordinates from .setOnTouchListener:
-            Log.d(TAG, "onCreate: onLongClick: touchedScreenCoordinates = " +
-                    touchedScreenCoordinates[0] + ", " + touchedScreenCoordinates[1]);
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
-            Log.d(TAG, "onCreate: onLongClick: player1BoardCoordinates = " +
-                    player1BoardCoordinates[0] + ", " + player1BoardCoordinates[1]);
 
+            selectionOfStations = getAllStations(); // for testing purposes
 
-            // *****
-            // calculation of player1BoardCoordinates given touchedBoardCoordinates
-            // *****
-
-            // calculate closest distance of station
-            /* // todo: moved to method
-            int distance;
-            int closestDistance = 2147483647; // max of int
-            int deltaX;
-            int deltaY;
-            int closestStation = 0;
-
-            for (int i = 1; i < 200; i++) {
-                deltaX = touchedBoardCoordinates[0] - station[i][0]; // no need to get absolute value,
-                deltaY = touchedBoardCoordinates[1] - station[i][1]; // because they are squared later
-
-                distance = deltaX * deltaX + deltaY * deltaY;
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    closestStation = i;
-                }
-            } */
-            /*
-            int[] selectionOfStations = new int[200];
-            selectionOfStations[0] = 0; // station 0 doesn't exist
-            selectionOfStations[0] = 0;
-            for (int i = 1; i < 200; i++) {
-                selectionOfStations[i] = serverDatabase.getStation(i).getId();
-            } */
-            /*
-            selectionOfStations[0] = 0; // station 0 doesn't exist
-            for (int i = 1; i < 200; i++) {
-                selectionOfStations[i] = serverDatabase.getStation(i).getId();
-            }
-             */
-
-            // player1BoardCoordinates = getClosestStationToTouchedBoardCoordinates(
-            //         touchedBoardCoordinates, selectionOfStationCoordinates);
-
-
-            for (int i = 1; i < 200; i++) {
-                selectionOfStations[i] = i;
-            }
-
-            int player1CurrentStation = getClosestStationToTouchedBoardCoordinates(
-                    touchedBoardCoordinates, selectionOfStations);
+            player1CurrentStation = getClosestStationToTouchedBoardCoordinates(
+                                                touchedBoardCoordinates, selectionOfStations);
             player1BoardCoordinates[0] = serverDatabase.getStation(player1CurrentStation).getX();
             player1BoardCoordinates[1] = serverDatabase.getStation(player1CurrentStation).getY();
-
-            // player1BoardCoordinates[0] = station[closestStation][0]; // todo: delete
-            // player1BoardCoordinates[1] = station[closestStation][1];
 
             Log.d(TAG, "onCreate: onLongClick: player1BoardCoordinates = " +
                     player1BoardCoordinates[0] + ", " + player1BoardCoordinates[1]);
@@ -272,10 +148,19 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
 
+        /* // todo: try to get the moving after releasing of finger captured
+        gameBoardView.setOnGenericMotionListener((view, motionEvent) -> {  // setOnSystemUiVisibilityChangeListener(view -> {
+            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
+            return true;
+        }); */
 
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
-
+            int[] taxiNeighbors = getNeighborStationsFromGivenStation(player1CurrentStation);
+            for (int i = 0; i < taxiNeighbors.length; i++) {
+                Log.d(TAG, "taxiNeighbor " + i + " = " + taxiNeighbors[i]);
+            }
 
             return true;
         });
@@ -400,6 +285,27 @@ public class GameScreen extends AppCompatActivity { // extends View {
         }
         return closestStation;
     }
+
+    int[] getPlayerStationsFromTouchCoordinates(int[] coordinates) {
+        int[] playerStations = new int[2]; // change to amount of players
+
+        return playerStations;
+    };
+
+    int[] getNeighborStationsFromGivenStation(int station) { // todo: add means of transport
+        return serverDatabase.getStation(station).getTaxi();
+    }
+
+    int[] getAllStations() { // todo: delete later
+        int[] allStations = new int[200];
+        // select all Stations for testing purposes
+        for (int i = 1; i < 200; i++) {
+            allStations[i] = i;
+        }
+        return allStations;
+    }
+
+
 
     // @Override // todo: @Override necessary?
     public boolean onMenuItemClick(MenuItem item) {
