@@ -51,14 +51,18 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     private ViewGroup.MarginLayoutParams taxiNeighborViewGroup;
     private View taxiNeighbor;
+    private int[] taxiNeighbors;
+
+
+    private int[][] taxiNeighborsBoardCoordinates0 = new int[7][2]; // 7 = max number of taxi neighbors
+    private int[][] taxiNeighborsScreenCoordinates0 = new int[7][2];
 
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
     private int[] player1BoardCoordinates = new int[2];
     private int[] player1ScreenCoordinates = new int[2];
 
-    private int[][] taxiNeighborsBoardCoordinates = new int[7][2]; // 7 = max number of taxi neighbors
-    private int[][] taxiNeighborsScreenCoordinates = new int[7][2];
+
 
     private int[] selectionOfStations = new int[200];
 
@@ -134,8 +138,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
 
             taxiNeighborViewGroup.setMargins(
-                    taxiNeighborsScreenCoordinates[0][0] - 25,
-                    taxiNeighborsScreenCoordinates[0][1] - 25,
+                    taxiNeighborsScreenCoordinates0[0][0] - 25,
+                    taxiNeighborsScreenCoordinates0[0][1] - 25,
                     taxiNeighborViewGroup.rightMargin,
                     taxiNeighborViewGroup.bottomMargin);
 
@@ -171,17 +175,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
-            int[] taxiNeighbors = getNeighborStationsFromGivenStation(player1CurrentStation);
+            taxiNeighbors = getNeighborStationsFromGivenStation(player1CurrentStation);
             for (int i = 0; i < taxiNeighbors.length; i++) {
                 Log.d(TAG, "taxiNeighbor " + i + " = " + taxiNeighbors[i]);
-                taxiNeighborsBoardCoordinates[0][0] = serverDatabase.getStation(taxiNeighbors[i]).getX();
-                taxiNeighborsBoardCoordinates[0][1] = serverDatabase.getStation(taxiNeighbors[i]).getY();
-
-                taxiNeighborsScreenCoordinates[0] = calculateScreenCoordinates(taxiNeighborsBoardCoordinates[0]);
-
+                taxiNeighborsBoardCoordinates0[0][0] = serverDatabase.getStation(taxiNeighbors[i]).getX();
+                taxiNeighborsBoardCoordinates0[0][1] = serverDatabase.getStation(taxiNeighbors[i]).getY();
+                taxiNeighborsScreenCoordinates0[0] = calculateScreenCoordinates(taxiNeighborsBoardCoordinates0[0]);
                 taxiNeighborViewGroup.setMargins(
-                        taxiNeighborsScreenCoordinates[0][0] - 25,
-                        taxiNeighborsScreenCoordinates[0][1] - 25,
+                        taxiNeighborsScreenCoordinates0[0][0] - 25,
+                        taxiNeighborsScreenCoordinates0[0][1] - 25,
                             taxiNeighborViewGroup.rightMargin,
                             taxiNeighborViewGroup.bottomMargin);
             }
