@@ -1,13 +1,10 @@
 package com.example.scotland_yard_board_game.client;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.annotation.SuppressLint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,9 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.example.scotland_yard_board_game.R;
-import com.example.scotland_yard_board_game.server.ServerDatabase;
-import com.example.scotland_yard_board_game.server.ServerStation;
+import com.example.scotland_yard_board_game.common.StationDatabase;
+import com.example.scotland_yard_board_game.common.ServerStation;
 import com.ortiz.touchview.TouchImageView;
 
 import java.util.Objects;
@@ -86,7 +86,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     private int[] selectionOfStations = new int[200];
 
-    private ServerDatabase serverDatabase;
+    private StationDatabase serverDatabase;
     private ServerStation serverStation; // todo: delete if not needed
 
     int player1CurrentStation = 1;
@@ -106,7 +106,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         //nickname on GameScreen
         hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
-        hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
+        // hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
         hostNameOut.setText(hostString);                            //setText to value of hostString variable
 
         showBoardX = findViewById(R.id.showBoardX);
@@ -173,7 +173,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
 
         // initialize ServerDatabase
-        serverDatabase = new ServerDatabase(this.getApplicationContext());
+        serverDatabase = new StationDatabase(this.getApplicationContext());
 
 
 
