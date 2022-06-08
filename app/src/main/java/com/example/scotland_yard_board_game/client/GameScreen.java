@@ -37,6 +37,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
 
+    //nickname
+    TextView hostNameOut;
+    String hostString;
+
+    //ticket count (adjust maximum)
+    int taxiTickets = 10;
+
     private Button taxiDrawButton;
     private Button busDrawButton;
     private Button undergroundDrawButton;
@@ -96,9 +103,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
         gameScreenLayout = findViewById(R.id.gameScreenLayout);
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
+
+        //nickname on GameScreen
+        hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
+        hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
+        hostNameOut.setText(hostString);                            //setText to value of hostString variable
+
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
         showTransport = findViewById(R.id.showTransport);
+      
         taxiDrawButton = findViewById(R.id.taxiDrawButton);
         busDrawButton = findViewById(R.id.busDrawButton);
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
@@ -505,4 +519,18 @@ public class GameScreen extends AppCompatActivity { // extends View {
     public void cJTBClicked(View v) {
         journeyTableLayout.setVisibility(View.GONE);
     }
+
+    //method to decrease taxi count value
+    public void decreaseTaxiCount(View view){
+
+        taxiTickets = taxiTickets -1;
+        display(taxiTickets);
+    }
+
+    //method to display current taxi count value on textView
+    private void display(int number){
+        TextView displayTaxi = (TextView) findViewById(R.id.taxiTicketView1);
+        displayTaxi.setText("" + number);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game.server;
+package com.example.scotland_yard_board_game.common;
 
 public class ServerStation {
    private int id;

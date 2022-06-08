@@ -1,7 +1,11 @@
-package com.example.scotland_yard_board_game.server;
+package com.example.scotland_yard_board_game.common.player;
 
-public class ServerMrX implements Player {
+import com.example.scotland_yard_board_game.common.Colour;
+import com.example.scotland_yard_board_game.common.ServerStation;
+
+public class MrX implements Player {
     private int id;
+    private int conId;
     private String nickname;
     private int[] inventory = {2,0}; //Double move, Black Tickets
     private ServerStation position;
@@ -9,8 +13,9 @@ public class ServerMrX implements Player {
     private boolean turn;
     private int moves =1;
 
-    public ServerMrX(int clientid, String nickname) {
+    public MrX(int clientid, int conId, String nickname) {
         this.id = clientid;
+        this.conId = conId;
         this.nickname = nickname;
     }
 
@@ -79,5 +84,9 @@ public class ServerMrX implements Player {
 
     public void setmoves(int moves) {
         this.moves = moves;
+    }
+
+    public int getConId() {
+        return conId;
     }
 }
