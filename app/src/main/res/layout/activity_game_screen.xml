@@ -20,30 +20,116 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <!-- circle -->
+    <!-- player1 -->
     <View
-        android:id="@+id/circle"
+        android:id="@+id/player1"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
-        android:background="@drawable/circle"
+        android:background="@drawable/player1"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
         tools:visibility="visible" />
 
+    <!-- taxi neighbors -->
+    <View
+        android:id="@+id/taxi_neighbor0"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor7"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor1"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor2"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor3"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor4"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor4"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor5"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor5"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/taxi_neighbor6"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/taxi_neighbor6"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+
     <TextView
         android:id="@+id/showBoardX"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="#373737"
         android:hint="Board X"
         android:textColor="@android:color/holo_orange_light"
         android:textColorHint="@android:color/holo_orange_light"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,15 +137,28 @@
         android:id="@+id/showBoardY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
         android:background="#373737"
         android:hint="Board Y"
         android:textColor="@android:color/holo_orange_light"
         android:textColorHint="@android:color/holo_orange_light"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/showBoardX" />
+
+    <TextView
+        android:id="@+id/showTransport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:background="#373737"
+        android:hint="Taxi"
+        android:textColor="@android:color/holo_orange_light"
+        android:textColorHint="@android:color/holo_orange_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showBoardY" />
     <!--
     <LinearLayout
         android:id="@+id/station1"
@@ -544,6 +643,8 @@
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
