@@ -205,6 +205,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
         busNeighborMarginLayoutParams[2] = (MarginLayoutParams) busNeighbor2View.getLayoutParams();
         busNeighborMarginLayoutParams[3] = (MarginLayoutParams) busNeighbor3View.getLayoutParams();
         busNeighborMarginLayoutParams[4] = (MarginLayoutParams) busNeighbor4View.getLayoutParams();
+        /*
+        for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
+            busNeighborStations[i] = 0;
+        } */
+
 
         // initialize ServerDatabase
         serverDatabase = new StationDatabase(this.getApplicationContext());
@@ -225,8 +230,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
             // calculate player1ScreenCoordinates and set circle to these coordinates
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
+            placeDrawables();
+            /* todo: delete later
             player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
+                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin); */
 
             return true;
         });
@@ -244,9 +251,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
             player1BoardCoordinates[1] = serverDatabase.getStation(player1CurrentStation).getY();
 
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
-            /* todo: delete (?)
-            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin); */
 
             return true;
         });
@@ -285,12 +289,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showTransport.setText("Bus");
             clearAllNeighborStations();
             busNeighborStations = getBusNeighborStationsFromGivenStation(player1CurrentStation);
+            placeDrawables();
+
 
             for (int i = 0; i < busNeighborStations.length; i++) {
                 Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
                 busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
                 busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
                 busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
+
                 busNeighborMarginLayoutParams[i].setMargins(
                         busNeighborsScreenCoordinates[i][0] - 25,
                         busNeighborsScreenCoordinates[i][1] - 25,
@@ -321,6 +328,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     taxiNeighborMarginLayoutParams[i].bottomMargin);
         }
         for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
+            // busNeighborStations[i] = 0;
             busNeighborsScreenCoordinates[i][0] = -100;
             busNeighborsScreenCoordinates[i][1] = -100;
             busNeighborMarginLayoutParams[i].setMargins(
@@ -331,6 +339,24 @@ public class GameScreen extends AppCompatActivity { // extends View {
         }
 
 
+    }
+
+    void placeDrawables() {
+        player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
+        /*
+        for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
+            Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
+            busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
+            busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
+            busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
+
+            busNeighborMarginLayoutParams[i].setMargins(
+                    busNeighborsScreenCoordinates[i][0] - 25,
+                    busNeighborsScreenCoordinates[i][1] - 25,
+                    busNeighborMarginLayoutParams[i].rightMargin,
+                    busNeighborMarginLayoutParams[i].bottomMargin);
+        } */
     }
 
     int[] calculateBoardCoordinates(int[] screenCoordinates) {
