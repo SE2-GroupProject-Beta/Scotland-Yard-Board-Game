@@ -23,7 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scotland_yard_board_game.R;
 import com.example.scotland_yard_board_game.common.StationDatabase;
-import com.example.scotland_yard_board_game.common.ServerStation;
+import com.example.scotland_yard_board_game.common.Station;
 import com.ortiz.touchview.TouchImageView;
 
 import java.util.Objects;
@@ -87,7 +87,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[] selectionOfStations = new int[200];
 
     private StationDatabase serverDatabase;
-    private ServerStation serverStation; // todo: delete if not needed
+    private Station station; // todo: delete if not needed
 
     int player1CurrentStation = 1;
 

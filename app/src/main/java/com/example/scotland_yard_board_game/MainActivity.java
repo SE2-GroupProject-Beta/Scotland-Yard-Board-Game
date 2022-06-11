@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.example.scotland_yard_board_game.client.ClientStart;
 import com.example.scotland_yard_board_game.server.ServerStart;
 
 import java.io.IOException;
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         try {
-            ServerStart start = new ServerStart(getApplicationContext());
+            ServerStart server = new ServerStart(getApplicationContext());
+            ClientStart client = new ClientStart(getApplicationContext(),true);
         } catch (IOException e) {
             e.printStackTrace();
         }
