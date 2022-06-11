@@ -90,7 +90,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private View busNeighbor2View;
     private View busNeighbor3View;
     private View busNeighbor4View;
-
     private int[] busNeighborStations;
 
     private int[][] busNeighborsBoardCoordinates = new int[BUS_NEIGHBORS_MAX][2];
@@ -374,18 +373,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
         Log.d(TAG, "***** onCreate: boardX = " + player1BoardCoordinates[0] +
                 ", boardY = " + player1BoardCoordinates[1] + " *****");
 
-        // boardCoordinates[0] = 1; // player1BoardX;
-        // boardCoordinates[1] = 2; // player1BoardY;
-
         return boardCoordinates;
     }
 
     int[] calculateScreenCoordinates(int[] boardCoordinates) {
         int[] screenCoordinates = new int[2];
-
-        /*boardCoordinates[0] = 2504; // todo: delete
-        boardCoordinates[1] = 1077;
-        Log.d(TAG, "calculateScreenCoordinates: set boardCoordinates to station 67"); */
 
         int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
         int maxScreenHeight = gameScreenLayout.getHeight();
