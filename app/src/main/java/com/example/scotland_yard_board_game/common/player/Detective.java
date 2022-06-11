@@ -1,17 +1,21 @@
 package com.example.scotland_yard_board_game.common.player;
 
 import com.example.scotland_yard_board_game.common.Colour;
-import com.example.scotland_yard_board_game.common.ServerStation;
+import com.example.scotland_yard_board_game.common.Station;
 
 public class Detective implements Player {
     private int id;
     private int conId;
     private String nickname;
     private int[] inventory = {10,8,4}; //Taxi, Bus, Underground
-    private ServerStation position;
+    private Station position;
     private Colour colour;
     private boolean turn;
     private int moves = 1;
+
+    //Kryonet
+    public Detective() {
+    }
 
     public Detective(int clientid, int conId, String nickname) {
         this.id = clientid;
@@ -42,7 +46,7 @@ public class Detective implements Player {
         return false;
     }
 
-    public void setPosition(ServerStation position) {
+    public void setPosition(Station position) {
         this.position = position;
     }
 

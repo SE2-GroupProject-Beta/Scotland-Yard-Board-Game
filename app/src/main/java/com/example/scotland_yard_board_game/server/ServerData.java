@@ -7,11 +7,13 @@ import android.util.Log;
 
 import com.esotericsoftware.kryonet.Server;
 import com.example.scotland_yard_board_game.common.Colour;
-import com.example.scotland_yard_board_game.common.ServerStation;
-import com.example.scotland_yard_board_game.common.messages.ColourTaken;
-import com.example.scotland_yard_board_game.common.messages.InvalidMove;
-import com.example.scotland_yard_board_game.common.messages.JourneyTable;
-import com.example.scotland_yard_board_game.common.messages.PlayerList;
+import com.example.scotland_yard_board_game.common.Station;
+import com.example.scotland_yard_board_game.common.messages.GameStart;
+import com.example.scotland_yard_board_game.common.messages.fromserver.ColourConfirmed;
+import com.example.scotland_yard_board_game.common.messages.fromserver.ColourTaken;
+import com.example.scotland_yard_board_game.common.messages.fromserver.InvalidMove;
+import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
+import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
 import com.example.scotland_yard_board_game.common.player.Detective;
 import com.example.scotland_yard_board_game.common.player.MrX;
 import com.example.scotland_yard_board_game.common.player.Player;
@@ -19,22 +21,21 @@ import com.example.scotland_yard_board_game.common.StationDatabase;
 
 import java.util.ArrayList;
 
-public class GameData {
+public class ServerData {
 
     private Context context;
     private Server server;
     private StationDatabase stationDatabase;
-    private ArrayList<Player> Clients;
+    private ArrayList<Player> Clients = new ArrayList<Player>(6);
     private final int min_players = 2;
-    private final int max_players = 4;
-    private final int max_mrx = 1;
+    private final int max_players = 6;
     private boolean started = false;
     private PlayerList playerList = new PlayerList();
     private JourneyTable journeyTable = new JourneyTable();
     //private int [][] journeyTable = new int[24][2];
     private int mrxturn = 0;
 
-    public GameData(Context context, Server server) {
+    public ServerData(Context context, Server server) {
         this.context = context;
         this.server = server;
         journeyTable.journeyTable = new int[24][2];
@@ -44,7 +45,7 @@ public class GameData {
         for (int a: testStart) {
             Log.d(TAG, String.valueOf(a));
         }
-        ServerStation station = stationDatabase.getStation(1);
+        Station station = stationDatabase.getStation(1);
         Log.d(TAG, String.valueOf(station.getX()));
     }
 
@@ -62,6 +63,7 @@ public class GameData {
         for (Player a: Clients) {
             if(a.getConId() == conid ){
                 a.setColour(colour);
+                server.sendToTCP(conid, new ColourConfirmed());
                 updatePlayerList();
             }
         }
@@ -126,7 +128,7 @@ public class GameData {
 
     //On game start distribute starting points
     public void gameStart() {
-        if(Clients.size() == min_players){
+        if(Clients.size() >= min_players){
             started = true;
             int[] startpoints = stationDatabase.getRandomStart(Clients.size());
             int index = 1;
@@ -140,6 +142,7 @@ public class GameData {
                 }
             }
          updatePlayerList();
+         server.sendToAllTCP(new GameStart());
         }
 
 
@@ -151,12 +154,15 @@ public class GameData {
     }
 
     public void disconnectPlayer(int conid) {
-        for (Player a: Clients){
-            if(a.getConId() == conid){
-                Clients.remove(a.getId());
+        if(!Clients.isEmpty()){
+            for (Player a: Clients){
+                if(a.getConId() == conid){
+                    Clients.remove(a.getId());
+                }
             }
+            updatePlayerList();
         }
-        updatePlayerList();
+
     }
 
 }

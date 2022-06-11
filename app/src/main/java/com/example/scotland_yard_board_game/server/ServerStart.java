@@ -14,16 +14,17 @@ import java.io.IOException;
 public class ServerStart {
     private final Server server;
     private Context context;
-    private GameData gameData;
+    private ServerData serverData;
 
     public ServerStart(Context context) throws IOException {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         server = new Server();
-        gameData = new GameData(context,server);
+        serverData = new ServerData(context,server);
 
         KryoRegister.registerClasses(server.getKryo());
+        server.addListener(new ServerListener(server,serverData));
 
         server.start();
         server.bind(54555, 54777);

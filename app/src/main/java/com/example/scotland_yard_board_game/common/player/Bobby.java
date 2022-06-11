@@ -1,13 +1,13 @@
 package com.example.scotland_yard_board_game.common.player;
 
 import com.example.scotland_yard_board_game.common.Colour;
-import com.example.scotland_yard_board_game.common.ServerStation;
+import com.example.scotland_yard_board_game.common.Station;
 
 // TODO: 5/1/2022 Clarify implementation in terms of how bobbys move
 public class Bobby {
     private int id;
     private String nickname;
-    private ServerStation position;
+    private Station position;
     private Colour colour = Colour.RAINBOW;
     private boolean turn;
 
@@ -16,7 +16,7 @@ public class Bobby {
         this.nickname = nickname;
     }
     
-    public void setPosition(ServerStation position) {
+    public void setPosition(Station position) {
         this.position = position;
     }
     

@@ -6,20 +6,20 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.example.scotland_yard_board_game.common.Colour;
-import com.example.scotland_yard_board_game.common.messages.DetectiveNickname;
+import com.example.scotland_yard_board_game.common.messages.fromclient.DetectiveNickname;
 import com.example.scotland_yard_board_game.common.messages.GameStart;
-import com.example.scotland_yard_board_game.common.messages.Move;
-import com.example.scotland_yard_board_game.common.messages.MrXNickname;
-import com.example.scotland_yard_board_game.common.messages.PlayerConnected;
-import com.example.scotland_yard_board_game.common.messages.ServerFull;
+import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
+import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickname;
+import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerConnected;
+import com.example.scotland_yard_board_game.common.messages.fromserver.ServerFull;
 
 public class ServerListener extends Listener {
         private final Server server;
-        private GameData gameData;
+        private ServerData serverData;
 
-        public ServerListener(Server server, GameData gameData) {
+        public ServerListener(Server server, ServerData serverData) {
             this.server = server;
-            this.gameData = gameData;
+            this.serverData = serverData;
 
         }
 
@@ -28,7 +28,7 @@ public class ServerListener extends Listener {
             Log.info("Player connected: " + connection.toString() +
                     " from endpoint " + connection.getRemoteAddressTCP().toString());
 
-            if (gameData.connectPlayer()) {
+            if (serverData.connectPlayer()) {
                 Log.info("Player " + connection.toString() + "joined the server.");
                 connection.sendTCP(new PlayerConnected());
             } else {
@@ -43,7 +43,7 @@ public class ServerListener extends Listener {
 
             // keep KeepAlive messages from spamming the log
             if (!(object instanceof FrameworkMessage.KeepAlive)) {
-                Log.info("Message received from " + connection.toString() +
+                Log.info("Message received from Client " + connection.toString() +
                         " at endpoint " + connection.getRemoteAddressTCP().toString() +
                         "; message class = " + object.getClass().getTypeName());
             }
@@ -51,29 +51,29 @@ public class ServerListener extends Listener {
             if (object instanceof DetectiveNickname) {
                 DetectiveNickname name = (DetectiveNickname) object;
                 Log.debug("Detective " + connection.getID() + ": " + name.nickname + "joined the game");
-                gameData.joinPlayer(connection.getID(), name.nickname, 1);
+                serverData.joinPlayer(connection.getID(), name.nickname, 1);
             } else if (object instanceof MrXNickname) {
                 MrXNickname name = (MrXNickname) object;
                 Log.debug("MrX " + connection.getID() + ": " + name.nickname + "joined the game");
-                gameData.joinPlayer(connection.getID(), name.nickname, 0);
+                serverData.joinPlayer(connection.getID(), name.nickname, 0);
             } else if (object instanceof GameStart) {
                 Log.debug(connection.getID() + "game started");
-                gameData.gameStart();
+                serverData.gameStart();
             } else if (object instanceof Move){
                 Move move = (Move) object;
                 Log.debug("Moving " + connection.getID() + "to stationid " + move.station);
-                gameData.move(connection.getID(), move.station, move.type, move.mrx);
+                serverData.move(connection.getID(), move.station, move.type, move.mrx);
             } else if (object instanceof Colour) {
                 Colour colour = (Colour) object;
                 Log.debug("Player " + connection.getID() + "selected colour " + colour);
-                gameData.playercolour(colour,connection.getID());
+                serverData.playercolour(colour,connection.getID());
             }
         }
 
         @Override
         public void disconnected (Connection connection) {
             Log.info("Player disconnected");
-            gameData.disconnectPlayer(connection.getID());
+            serverData.disconnectPlayer(connection.getID());
         }
 }
 

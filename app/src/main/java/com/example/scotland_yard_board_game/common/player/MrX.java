@@ -1,17 +1,22 @@
 package com.example.scotland_yard_board_game.common.player;
 
 import com.example.scotland_yard_board_game.common.Colour;
-import com.example.scotland_yard_board_game.common.ServerStation;
+import com.example.scotland_yard_board_game.common.Station;
 
 public class MrX implements Player {
     private int id;
     private int conId;
     private String nickname;
     private int[] inventory = {2,0}; //Double move, Black Tickets
-    private ServerStation position;
+    private Station position;
     private Colour colour = Colour.TRANSPARENT ;
     private boolean turn;
     private int moves =1;
+
+    //Kryonet
+    public MrX() {
+    }
+
 
     public MrX(int clientid, int conId, String nickname) {
         this.id = clientid;
@@ -24,7 +29,7 @@ public class MrX implements Player {
         this.inventory[1] = NumDetectives;
     }
 
-    public void setPosition(ServerStation position) {
+    public void setPosition(Station position) {
         this.position = position;
     }
 
