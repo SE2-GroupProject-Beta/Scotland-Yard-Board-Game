@@ -18,17 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.animation.TimeAnimator.TimeListener;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scotland_yard_board_game.R;
 import com.example.scotland_yard_board_game.common.StationDatabase;
-import com.example.scotland_yard_board_game.common.Station;
+import com.example.scotland_yard_board_game.common.ServerStation;
 import com.ortiz.touchview.TouchImageView;
 
 import java.util.Objects;
-
-// todo: Koordinaten korrigieren Punkt 154
 
 public class GameScreen extends AppCompatActivity { // extends View {
     private static final String TAG = "GameScreen";
@@ -36,6 +36,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ConstraintLayout gameScreenLayout;
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
+    private TimeListener timeListener;
 
     //nickname
     TextView hostNameOut;
@@ -52,12 +53,13 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
     private final int TAXI_NEIGHBORS_MAX = 7;
+    private final int BUS_NEIGHBORS_MAX = 5;
+    private final int UNDERGROUND_NEIGHBORS_MAX = 4;
+
 
     private TextView showBoardX; // todo: delete before production release
     private TextView showBoardY;
     private TextView showTransport;
-
-    Thread boardDrawingThread; // todo: delete later if not necessary
 
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
@@ -68,8 +70,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private MarginLayoutParams player1ViewGroup;
     private View player1View;
 
-
-    private MarginLayoutParams[] taxiNeighborMarginLayoutParams = new MarginLayoutParams[7]; // max of 7 neighbors
+    private MarginLayoutParams[] taxiNeighborMarginLayoutParams = new MarginLayoutParams[TAXI_NEIGHBORS_MAX];
     private View taxiNeighbor0View; // sorry for violation of 'dry'...
     private View taxiNeighbor1View;
     private View taxiNeighbor2View;
@@ -79,17 +80,30 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private View taxiNeighbor6View;
     private int[] taxiNeighborStations;
 
+    private int[][] taxiNeighborsBoardCoordinates = new int[TAXI_NEIGHBORS_MAX][2];
+    private int[][] taxiNeighborsScreenCoordinates = new int[TAXI_NEIGHBORS_MAX][2];
 
-    private int[][] taxiNeighborsBoardCoordinates = new int[7][2]; // 7 = max number of taxi neighbors
-    private int[][] taxiNeighborsScreenCoordinates = new int[7][2];
+
+    private MarginLayoutParams[] busNeighborMarginLayoutParams = new MarginLayoutParams[BUS_NEIGHBORS_MAX];
+    private View busNeighbor0View;
+    private View busNeighbor1View;
+    private View busNeighbor2View;
+    private View busNeighbor3View;
+    private View busNeighbor4View;
+
+    private int[] busNeighborStations;
+
+    private int[][] busNeighborsBoardCoordinates = new int[BUS_NEIGHBORS_MAX][2];
+    private int[][] busNeighborsScreenCoordinates = new int[BUS_NEIGHBORS_MAX][2];
+
 
 
     private int[] selectionOfStations = new int[200];
 
     private StationDatabase serverDatabase;
-    private Station station; // todo: delete if not needed
+    private ServerStation serverStation; // todo: delete if not needed
 
-    int player1CurrentStation = 1;
+    int player1CurrentStation = 1; // todo: initialize players coming from lobby
 
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
@@ -153,6 +167,17 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         }); */
 
+        // timeListener.onTimeUpdate((a, b) -> {});
+        /*
+        timeListener = (timeAnimator, l, l1) -> { // todo: working?
+            Log.d(TAG, "running...");
+            taxiNeighborMarginLayoutParams[0].setMargins(
+                    taxiNeighborsScreenCoordinates[0][0] - 25,
+                    taxiNeighborsScreenCoordinates[0][1] - 25,
+                    taxiNeighborMarginLayoutParams[0].rightMargin,
+                    taxiNeighborMarginLayoutParams[0].bottomMargin);
+        }; */
+
         player1View = findViewById(R.id.player1); // to move player1
         player1ViewGroup = (MarginLayoutParams) player1View.getLayoutParams();
 
@@ -171,6 +196,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
         taxiNeighborMarginLayoutParams[5] = (MarginLayoutParams) taxiNeighbor5View.getLayoutParams();
         taxiNeighborMarginLayoutParams[6] = (MarginLayoutParams) taxiNeighbor6View.getLayoutParams();
 
+        busNeighbor0View = findViewById(R.id.bus_neighbor0);
+        busNeighbor1View = findViewById(R.id.bus_neighbor1);
+        busNeighbor2View = findViewById(R.id.bus_neighbor2);
+        busNeighbor3View = findViewById(R.id.bus_neighbor3);
+        busNeighbor4View = findViewById(R.id.bus_neighbor4);
+        busNeighborMarginLayoutParams[0] = (MarginLayoutParams) busNeighbor0View.getLayoutParams();
+        busNeighborMarginLayoutParams[1] = (MarginLayoutParams) busNeighbor1View.getLayoutParams();
+        busNeighborMarginLayoutParams[2] = (MarginLayoutParams) busNeighbor2View.getLayoutParams();
+        busNeighborMarginLayoutParams[3] = (MarginLayoutParams) busNeighbor3View.getLayoutParams();
+        busNeighborMarginLayoutParams[4] = (MarginLayoutParams) busNeighbor4View.getLayoutParams();
 
         // initialize ServerDatabase
         serverDatabase = new StationDatabase(this.getApplicationContext());
@@ -220,8 +255,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
-            taxiNeighborStations = getNeighborStationsFromGivenStation(player1CurrentStation);
-
+            clearAllNeighborStations();
+            taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(player1CurrentStation);
+            /*
             for (int i = taxiNeighborStations.length; i < TAXI_NEIGHBORS_MAX; i++) { // clear former station values that are
                 taxiNeighborsScreenCoordinates[i][0] = -100; // higher than taxiNeighborStation.length
                 taxiNeighborsScreenCoordinates[i][1] = -100;
@@ -230,7 +266,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
                         taxiNeighborsScreenCoordinates[i][1] - 25,
                         taxiNeighborMarginLayoutParams[i].rightMargin,
                         taxiNeighborMarginLayoutParams[i].bottomMargin);
-            }
+            } */
+
             for (int i = 0; i < taxiNeighborStations.length; i++) {
                 Log.d(TAG, "taxiNeighbor " + i + " = " + taxiNeighborStations[i]);
                 taxiNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(taxiNeighborStations[i]).getX();
@@ -242,19 +279,58 @@ public class GameScreen extends AppCompatActivity { // extends View {
                         taxiNeighborMarginLayoutParams[i].rightMargin,
                         taxiNeighborMarginLayoutParams[i].bottomMargin);
             }
-
             return true;
         });
 
         busDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Bus");
+            clearAllNeighborStations();
+            busNeighborStations = getBusNeighborStationsFromGivenStation(player1CurrentStation);
+
+            for (int i = 0; i < busNeighborStations.length; i++) {
+                Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
+                busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
+                busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
+                busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
+                busNeighborMarginLayoutParams[i].setMargins(
+                        busNeighborsScreenCoordinates[i][0] - 25,
+                        busNeighborsScreenCoordinates[i][1] - 25,
+                        busNeighborMarginLayoutParams[i].rightMargin,
+                        busNeighborMarginLayoutParams[i].bottomMargin);
+            }
             return true;
+
         });
 
         undergroundDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Underground");
             return true;
         });
+
+
+
+    }
+
+    void clearAllNeighborStations() {
+        for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
+            taxiNeighborsScreenCoordinates[i][0] = -100;
+            taxiNeighborsScreenCoordinates[i][1] = -100;
+            taxiNeighborMarginLayoutParams[i].setMargins(
+                    taxiNeighborsScreenCoordinates[i][0] - 25,
+                    taxiNeighborsScreenCoordinates[i][1] - 25,
+                    taxiNeighborMarginLayoutParams[i].rightMargin,
+                    taxiNeighborMarginLayoutParams[i].bottomMargin);
+        }
+        for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
+            busNeighborsScreenCoordinates[i][0] = -100;
+            busNeighborsScreenCoordinates[i][1] = -100;
+            busNeighborMarginLayoutParams[i].setMargins(
+                    busNeighborsScreenCoordinates[i][0] - 25,
+                    busNeighborsScreenCoordinates[i][1] - 25,
+                    busNeighborMarginLayoutParams[i].rightMargin,
+                    busNeighborMarginLayoutParams[i].bottomMargin);
+        }
+
 
     }
 
@@ -375,8 +451,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     ;
 
-    int[] getNeighborStationsFromGivenStation(int station) { // todo: add means of transport
+    int[] getTaxiNeighborStationsFromGivenStation(int station) {
         return serverDatabase.getStation(station).getTaxi();
+    }
+
+    int[] getBusNeighborStationsFromGivenStation(int station) {
+        return serverDatabase.getStation(station).getBus();
+    }
+
+    int[] getUndergroundNeighborStationsFromGivenStation(int station) {
+        return serverDatabase.getStation(station).getUnderground();
     }
 
     int[] getAllStations() { // todo: delete later

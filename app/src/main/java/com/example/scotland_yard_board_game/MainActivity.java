@@ -33,11 +33,6 @@ public class MainActivity extends AppCompatActivity {
             Intent ActivityAsync = new Intent(this, com.example.scotland_yard_board_game.sideProjects.ActivityAsync.class);
             startActivity(ActivityAsync);
         });
-        Button goToDraw = findViewById(R.id.goToDraw);
-        goToDraw.setOnClickListener(view -> {
-            Intent DrawTest = new Intent(this, com.example.scotland_yard_board_game.sideProjects.DrawTest.class);
-            startActivity(DrawTest);
-        });
 
         try {
             ServerStart server = new ServerStart(getApplicationContext());
