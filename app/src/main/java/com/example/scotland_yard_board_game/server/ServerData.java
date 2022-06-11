@@ -26,10 +26,9 @@ public class ServerData {
     private Context context;
     private Server server;
     private StationDatabase stationDatabase;
-    private ArrayList<Player> Clients = new ArrayList<Player>(4);
+    private ArrayList<Player> Clients = new ArrayList<Player>(6);
     private final int min_players = 2;
-    private final int max_players = 4;
-    private final int max_mrx = 1;
+    private final int max_players = 6;
     private boolean started = false;
     private PlayerList playerList = new PlayerList();
     private JourneyTable journeyTable = new JourneyTable();

@@ -3,6 +3,7 @@ package com.example.scotland_yard_board_game.client;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
@@ -14,6 +15,7 @@ import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickna
 import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
 import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
+import com.example.scotland_yard_board_game.common.player.MrX;
 import com.example.scotland_yard_board_game.common.player.Player;
 
 import java.net.InetAddress;
@@ -24,9 +26,8 @@ public class ClientData {
     private Context context;
     private Client client;
     private StationDatabase stationDatabase;
-    private ArrayList<Player> Players;
+    private ArrayList<Player> Players = new ArrayList<Player>(6);
     private boolean started = false;
-    private PlayerList playerList = new PlayerList();
     private JourneyTable journeyTable = new JourneyTable();
     //private int [][] journeyTable = new int[24][2];
     private int ownturn = 0;

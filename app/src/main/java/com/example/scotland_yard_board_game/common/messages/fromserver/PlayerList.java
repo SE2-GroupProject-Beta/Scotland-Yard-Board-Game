@@ -5,7 +5,7 @@ import com.example.scotland_yard_board_game.common.player.Player;
 import java.util.ArrayList;
 
 public class PlayerList {
-    public ArrayList<Player> Players = new ArrayList<Player>(4);
+    public ArrayList<Player> Players = new ArrayList<Player>(6);
 
     public PlayerList() {
     }
