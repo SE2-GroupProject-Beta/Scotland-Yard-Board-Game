@@ -3,7 +3,6 @@ package com.example.scotland_yard_board_game.client;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
@@ -15,7 +14,6 @@ import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickna
 import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
 import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
-import com.example.scotland_yard_board_game.common.player.MrX;
 import com.example.scotland_yard_board_game.common.player.Player;
 
 import java.net.InetAddress;
@@ -31,7 +29,7 @@ public class ClientData {
     private JourneyTable journeyTable = new JourneyTable();
     //private int [][] journeyTable = new int[24][2];
     private int ownturn = 0;
-    private boolean mrx;
+    private boolean mrx; // todo: what is mrx? (Frage von Klemens)
     private String[] nicknames = new String[6];
     private GameScreen gameScreen;
 
@@ -114,10 +112,11 @@ public class ClientData {
     }
 
     //Server validates move -> sends updated player list back
+
     public void validateMove(int Stationid, int type){
         Move move = new Move();
         move.type = type; move.station = Stationid; move.mrx = mrx;
-        client.sendTCP(move);
+        // client.sendTCP(move); // todo: NullPointerException
     }
 
     public void invalidMove() {

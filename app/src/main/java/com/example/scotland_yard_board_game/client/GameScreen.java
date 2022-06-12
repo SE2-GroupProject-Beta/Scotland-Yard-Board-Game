@@ -23,6 +23,7 @@ import android.animation.TimeAnimator.TimeListener;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.esotericsoftware.kryonet.Client;
 import com.example.scotland_yard_board_game.R;
 
 import com.example.scotland_yard_board_game.common.Station;
@@ -41,6 +42,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
     private TimeListener timeListener;
+
+    private Client client;
+    private ClientData clientData;
 
     //nickname
     TextView hostNameOut;
@@ -132,6 +136,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         gameScreenLayout = findViewById(R.id.gameScreenLayout);
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
+
 
         //nickname on GameScreen
 
@@ -357,6 +362,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
 
+      
         confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
 
             clientData.validateMove(8, 0); // todo change to real values
@@ -368,7 +374,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
     void setclientData(ClientData data){
         this.clientData = data;
     }
-
 
     void clearAllNeighborStations() {
         for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
