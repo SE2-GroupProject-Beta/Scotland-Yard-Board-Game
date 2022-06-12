@@ -23,15 +23,14 @@ import android.animation.TimeAnimator.TimeListener;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.esotericsoftware.kryonet.Client;
 import com.example.scotland_yard_board_game.R;
 
 import com.example.scotland_yard_board_game.common.Station;
 import com.example.scotland_yard_board_game.common.StationDatabase;
 
-import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class GameScreen extends AppCompatActivity { // extends View {
@@ -41,6 +40,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
     private TimeListener timeListener;
+
+    private Client client;
+    private ClientData clientData;
 
     //nickname
     TextView hostNameOut;
@@ -53,6 +55,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private Button busDrawButton;
     private Button undergroundDrawButton;
     private Button journeyTableButton;
+    private Button confirmButton;
 
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
@@ -94,12 +97,20 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private View busNeighbor2View;
     private View busNeighbor3View;
     private View busNeighbor4View;
-
     private int[] busNeighborStations;
 
     private int[][] busNeighborsBoardCoordinates = new int[BUS_NEIGHBORS_MAX][2];
     private int[][] busNeighborsScreenCoordinates = new int[BUS_NEIGHBORS_MAX][2];
 
+    private MarginLayoutParams[] undergroundNeighborMarginLayoutParams = new MarginLayoutParams[UNDERGROUND_NEIGHBORS_MAX];
+    private View undergroundNeighbor0View;
+    private View undergroundNeighbor1View;
+    private View undergroundNeighbor2View;
+    private View undergroundNeighbor3View;
+    private int[] undergroundNeighborStations;
+
+    private int[][] undergroundNeighborsBoardCoordinates = new int[UNDERGROUND_NEIGHBORS_MAX][2];
+    private int[][] undergroundNeighborsScreenCoordinates = new int[UNDERGROUND_NEIGHBORS_MAX][2];
 
 
     private int[] selectionOfStations = new int[200];
@@ -110,7 +121,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     int player1CurrentStation = 1; // todo: initialize players coming from lobby
 
-    ClientData clientData;
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
     @Override
@@ -124,7 +134,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
-        //nickname on GameScreen
+        clientData = new ClientData(this, client, true);       //nickname on GameScreen
+
         hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
         // hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
         hostNameOut.setText(hostString);                            //setText to value of hostString variable
@@ -137,16 +148,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
         busDrawButton = findViewById(R.id.busDrawButton);
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
         journeyTableButton = findViewById(R.id.journeyTableButton);
+        confirmButton = findViewById(R.id.confirmButton);
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
-
-        try {
-            ServerStart server = new ServerStart(getApplicationContext());
-            ClientStart client = new ClientStart(getApplicationContext(),true, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         /* todo: implement listener/thread to draw bord after 100 ms
         boardDrawingThread = new Thread() {
@@ -220,6 +225,16 @@ public class GameScreen extends AppCompatActivity { // extends View {
         busNeighborMarginLayoutParams[3] = (MarginLayoutParams) busNeighbor3View.getLayoutParams();
         busNeighborMarginLayoutParams[4] = (MarginLayoutParams) busNeighbor4View.getLayoutParams();
 
+        undergroundNeighbor0View = findViewById(R.id.underground_neighbor0);
+        undergroundNeighbor1View = findViewById(R.id.underground_neighbor1);
+        undergroundNeighbor2View = findViewById(R.id.underground_neighbor2);
+        undergroundNeighbor3View = findViewById(R.id.underground_neighbor3);
+        undergroundNeighborMarginLayoutParams[0] = (MarginLayoutParams) undergroundNeighbor0View.getLayoutParams();
+        undergroundNeighborMarginLayoutParams[1] = (MarginLayoutParams) undergroundNeighbor1View.getLayoutParams();
+        undergroundNeighborMarginLayoutParams[2] = (MarginLayoutParams) undergroundNeighbor2View.getLayoutParams();
+        undergroundNeighborMarginLayoutParams[3] = (MarginLayoutParams) undergroundNeighbor3View.getLayoutParams();
+
+
         // initialize ServerDatabase
         serverDatabase = new StationDatabase(this.getApplicationContext());
 
@@ -239,8 +254,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
             // calculate player1ScreenCoordinates and set circle to these coordinates
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
+            placeDrawables();
+            /* todo: delete later
             player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
+                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin); */
 
             return true;
         });
@@ -258,9 +275,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
             player1BoardCoordinates[1] = serverDatabase.getStation(player1CurrentStation).getY();
 
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
-            /* todo: delete (?)
-            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin); */
 
             return true;
         });
@@ -299,12 +313,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showTransport.setText("Bus");
             clearAllNeighborStations();
             busNeighborStations = getBusNeighborStationsFromGivenStation(player1CurrentStation);
+            placeDrawables();
+
 
             for (int i = 0; i < busNeighborStations.length; i++) {
                 Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
                 busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
                 busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
                 busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
+
                 busNeighborMarginLayoutParams[i].setMargins(
                         busNeighborsScreenCoordinates[i][0] - 25,
                         busNeighborsScreenCoordinates[i][1] - 25,
@@ -312,21 +329,37 @@ public class GameScreen extends AppCompatActivity { // extends View {
                         busNeighborMarginLayoutParams[i].bottomMargin);
             }
             return true;
-
         });
 
         undergroundDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Underground");
+            clearAllNeighborStations();
+            undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(player1CurrentStation);
+            placeDrawables();
+
+            for (int i = 0; i < undergroundNeighborStations.length; i++) {
+                Log.d(TAG, "busNeighbor " + i + " = " + undergroundNeighborStations[i]);
+                undergroundNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(undergroundNeighborStations[i]).getX();
+                undergroundNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(undergroundNeighborStations[i]).getY();
+                undergroundNeighborsScreenCoordinates[i] = calculateScreenCoordinates(undergroundNeighborsBoardCoordinates[i]);
+
+                undergroundNeighborMarginLayoutParams[i].setMargins(
+                        undergroundNeighborsScreenCoordinates[i][0] - 25,
+                        undergroundNeighborsScreenCoordinates[i][1] - 25,
+                        undergroundNeighborMarginLayoutParams[i].rightMargin,
+                        undergroundNeighborMarginLayoutParams[i].bottomMargin);
+            }
             return true;
         });
 
+        confirmButton.setOnTouchListener((view, motionEvent) -> {
+            clientData.validateMove(1, 1, true); // todo change to real values
 
-
+            return true;
+        });
     }
 
-    void setclientData(ClientData data){
-        this.clientData = data;
-    }
+
 
     void clearAllNeighborStations() {
         for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
@@ -347,8 +380,33 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     busNeighborMarginLayoutParams[i].rightMargin,
                     busNeighborMarginLayoutParams[i].bottomMargin);
         }
+        for (int i = 0; i < UNDERGROUND_NEIGHBORS_MAX; i++) {
+            undergroundNeighborsScreenCoordinates[i][0] = -100;
+            undergroundNeighborsScreenCoordinates[i][1] = -100;
+            undergroundNeighborMarginLayoutParams[i].setMargins(
+                    undergroundNeighborsScreenCoordinates[i][0] - 25,
+                    undergroundNeighborsScreenCoordinates[i][1] - 25,
+                    undergroundNeighborMarginLayoutParams[i].rightMargin,
+                    undergroundNeighborMarginLayoutParams[i].bottomMargin);
+        }
+    }
 
+    void placeDrawables() {
+        player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
+                player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
+        /*
+        for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
+            Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
+            busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
+            busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
+            busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
 
+            busNeighborMarginLayoutParams[i].setMargins(
+                    busNeighborsScreenCoordinates[i][0] - 25,
+                    busNeighborsScreenCoordinates[i][1] - 25,
+                    busNeighborMarginLayoutParams[i].rightMargin,
+                    busNeighborMarginLayoutParams[i].bottomMargin);
+        } */
     }
 
     int[] calculateBoardCoordinates(int[] screenCoordinates) {
@@ -391,18 +449,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
         Log.d(TAG, "***** onCreate: boardX = " + player1BoardCoordinates[0] +
                 ", boardY = " + player1BoardCoordinates[1] + " *****");
 
-        // boardCoordinates[0] = 1; // player1BoardX;
-        // boardCoordinates[1] = 2; // player1BoardY;
-
         return boardCoordinates;
     }
 
     int[] calculateScreenCoordinates(int[] boardCoordinates) {
         int[] screenCoordinates = new int[2];
-
-        /*boardCoordinates[0] = 2504; // todo: delete
-        boardCoordinates[1] = 1077;
-        Log.d(TAG, "calculateScreenCoordinates: set boardCoordinates to station 67"); */
 
         int maxScreenWidth = gameScreenLayout.getWidth(); // screen size
         int maxScreenHeight = gameScreenLayout.getHeight();
