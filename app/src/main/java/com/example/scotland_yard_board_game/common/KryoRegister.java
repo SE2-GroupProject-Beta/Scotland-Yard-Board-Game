@@ -39,6 +39,7 @@ public class KryoRegister {
         kryo.register(MrX.class);
         kryo.register(Detective.class);
         kryo.register(int[].class);
+        kryo.register(Station.class);
     }
 
 }

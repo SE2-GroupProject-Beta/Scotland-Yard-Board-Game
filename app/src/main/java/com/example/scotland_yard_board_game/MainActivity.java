@@ -34,12 +34,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(ActivityAsync);
         });
 
-        try {
-            ServerStart server = new ServerStart(getApplicationContext());
-            ClientStart client = new ClientStart(getApplicationContext(),true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
 
     }

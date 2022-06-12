@@ -16,12 +16,12 @@ public class ClientStart {
     private Context context;
     private ClientData clientData;
 
-    public ClientStart(Context context, boolean mrx) throws IOException {
+    public ClientStart(Context context, boolean mrx, GameScreen gameScreen) throws IOException {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         client = new Client();
-        clientData = new ClientData(context,client,mrx);
+        clientData = new ClientData(context,client,mrx,gameScreen);
 
         KryoRegister.registerClasses(client.getKryo());
 

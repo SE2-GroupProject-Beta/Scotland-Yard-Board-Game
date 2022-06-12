@@ -33,11 +33,14 @@ public class ClientData {
     private int ownturn = 0;
     private boolean mrx;
     private String[] nicknames = new String[6];
+    private GameScreen gameScreen;
 
-    public ClientData(Context context, Client client, boolean mrx) {
+    public ClientData(Context context, Client client, boolean mrx, GameScreen gameScreen) {
         this.context = context;
         this.client = client;
         this.mrx = mrx;
+        this.gameScreen = gameScreen;
+        gameScreen.setclientData(this);
         journeyTable.journeyTable = new int[24][2];
 
         this.stationDatabase = new StationDatabase(this.context);
@@ -111,7 +114,7 @@ public class ClientData {
     }
 
     //Server validates move -> sends updated player list back
-    public void validateMove(int Stationid, int type, boolean mrx){
+    public void validateMove(int Stationid, int type){
         Move move = new Move();
         move.type = type; move.station = Stationid; move.mrx = mrx;
         client.sendTCP(move);

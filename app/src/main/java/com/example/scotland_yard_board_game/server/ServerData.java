@@ -116,6 +116,7 @@ public class ServerData {
         }
         if(type == 0){
             Clients.add(new MrX(playerId, conid, nickname));
+            Clients.get(0).setPosition(stationDatabase.getStation(1));
         }else {
             Clients.add(new Detective(playerId, conid, nickname));
         }

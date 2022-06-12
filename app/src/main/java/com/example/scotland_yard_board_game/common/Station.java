@@ -10,6 +10,9 @@ public class Station {
    private int[] underground;
    private int[] ferry;
 
+    public Station() {
+    }
+
     public Station(int id, int x, int y, int[] taxi, int[] bus, int[] underground, int[] ferry) {
         this.id = id;
         this.x = x;
