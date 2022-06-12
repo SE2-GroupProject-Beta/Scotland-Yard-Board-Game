@@ -92,10 +92,12 @@ public class ServerData {
                         journeyTable.journeyTable[mrxturn][1] = Stationid;
                         server.sendToAllTCP(journeyTable);
                     }
+                } else {
+                    server.sendToTCP(conid,new InvalidMove());
                 }
             }
         }
-        server.sendToTCP(conid,new InvalidMove());
+
     }
 
     //Connect player if space in lobby and game not started
@@ -116,6 +118,7 @@ public class ServerData {
         }
         if(type == 0){
             Clients.add(new MrX(playerId, conid, nickname));
+            Clients.get(0).setPosition(stationDatabase.getStation(1));
         }else {
             Clients.add(new Detective(playerId, conid, nickname));
         }
