@@ -23,6 +23,7 @@ import android.animation.TimeAnimator.TimeListener;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.esotericsoftware.kryonet.Client;
 import com.example.scotland_yard_board_game.R;
 
 import com.example.scotland_yard_board_game.common.Station;
@@ -40,6 +41,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ConstraintLayout journeyTableLayout;
     private TimeListener timeListener;
 
+    private Client client;
+    private ClientData clientData;
+
     //nickname
     TextView hostNameOut;
     String hostString;
@@ -51,6 +55,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private Button busDrawButton;
     private Button undergroundDrawButton;
     private Button journeyTableButton;
+    private Button confirmButton;
 
     private final int BOARD_MAX_X = 4368;
     private final int BOARD_MAX_Y = 3312;
@@ -129,7 +134,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
-        //nickname on GameScreen
+        clientData = new ClientData(this, client, true);       //nickname on GameScreen
+
         hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
         // hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
         hostNameOut.setText(hostString);                            //setText to value of hostString variable
@@ -142,6 +148,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         busDrawButton = findViewById(R.id.busDrawButton);
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
         journeyTableButton = findViewById(R.id.journeyTableButton);
+        confirmButton = findViewById(R.id.confirmButton);
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
@@ -344,7 +351,15 @@ public class GameScreen extends AppCompatActivity { // extends View {
             }
             return true;
         });
+
+        confirmButton.setOnTouchListener((view, motionEvent) -> {
+            clientData.validateMove(1, 1, true); // todo change to real values
+
+            return true;
+        });
     }
+
+
 
     void clearAllNeighborStations() {
         for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
