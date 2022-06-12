@@ -23,14 +23,15 @@ import android.animation.TimeAnimator.TimeListener;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.esotericsoftware.kryonet.Client;
 import com.example.scotland_yard_board_game.R;
 
 import com.example.scotland_yard_board_game.common.Station;
 import com.example.scotland_yard_board_game.common.StationDatabase;
 
+import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class GameScreen extends AppCompatActivity { // extends View {
@@ -40,9 +41,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
     private TimeListener timeListener;
-
-    private Client client;
-    private ClientData clientData;
 
     //nickname
     TextView hostNameOut;
@@ -118,6 +116,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private StationDatabase serverDatabase;
     private Station serverStation; // todo: delete if not needed
 
+    ClientData clientData;
 
     int player1CurrentStation = 1; // todo: initialize players coming from lobby
 
@@ -134,7 +133,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
-        clientData = new ClientData(this, client, true);       //nickname on GameScreen
+        //nickname on GameScreen
 
         hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
         // hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
@@ -152,6 +151,12 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
+        try {
+            ServerStart server = new ServerStart(getApplicationContext());
+            ClientStart client = new ClientStart(getApplicationContext(),true, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         /* todo: implement listener/thread to draw bord after 100 ms
         boardDrawingThread = new Thread() {
@@ -352,13 +357,17 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
 
-        confirmButton.setOnTouchListener((view, motionEvent) -> {
-            clientData.validateMove(1, 1, true); // todo change to real values
+        confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
 
-            return true;
+            clientData.validateMove(8, 0); // todo change to real values
+
+
         });
     }
 
+    void setclientData(ClientData data){
+        this.clientData = data;
+    }
 
 
     void clearAllNeighborStations() {

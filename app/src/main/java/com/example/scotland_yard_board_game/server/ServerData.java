@@ -92,10 +92,12 @@ public class ServerData {
                         journeyTable.journeyTable[mrxturn][1] = Stationid;
                         server.sendToAllTCP(journeyTable);
                     }
+                } else {
+                    server.sendToTCP(conid,new InvalidMove());
                 }
             }
         }
-        server.sendToTCP(conid,new InvalidMove());
+
     }
 
     //Connect player if space in lobby and game not started
