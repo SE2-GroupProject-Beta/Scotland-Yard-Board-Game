@@ -25,8 +25,8 @@
         android:id="@+id/player1"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
         android:background="@drawable/player1"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
@@ -38,9 +38,9 @@
         android:id="@+id/taxi_neighbor0"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor0"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -51,9 +51,9 @@
         android:id="@+id/taxi_neighbor1"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor1"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -63,9 +63,9 @@
         android:id="@+id/taxi_neighbor2"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor2"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -75,9 +75,9 @@
         android:id="@+id/taxi_neighbor3"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor3"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -87,9 +87,9 @@
         android:id="@+id/taxi_neighbor4"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor4"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -99,9 +99,9 @@
         android:id="@+id/taxi_neighbor5"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor5"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -111,21 +111,22 @@
         android:id="@+id/taxi_neighbor6"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/taxi_neighbor6"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/taxi_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
         tools:visibility="visible" />
 
+    <!-- bus neighbors -->
     <View
         android:id="@+id/bus_neighbor0"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="-100dp"
         android:layout_marginTop="-100dp"
-        android:background="@drawable/taxi_neighbor0"
+        android:background="@drawable/bus_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -137,40 +138,92 @@
         android:layout_height="20dp"
         android:layout_marginLeft="-100dp"
         android:layout_marginTop="-100dp"
-        android:background="@drawable/taxi_neighbor0"
+        android:background="@drawable/bus_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
         tools:visibility="visible" />
+
     <View
         android:id="@+id/bus_neighbor2"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="-100dp"
         android:layout_marginTop="-100dp"
-        android:background="@drawable/taxi_neighbor0"
+        android:background="@drawable/bus_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
         tools:visibility="visible" />
+
     <View
         android:id="@+id/bus_neighbor3"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="-100dp"
         android:layout_marginTop="-100dp"
-        android:background="@drawable/taxi_neighbor0"
+        android:background="@drawable/bus_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
         tools:visibility="visible" />
+
     <View
         android:id="@+id/bus_neighbor4"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="-100dp"
         android:layout_marginTop="-100dp"
-        android:background="@drawable/taxi_neighbor0"
+        android:background="@drawable/bus_neighbor"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <!-- underground neighbors -->
+    <View
+        android:id="@+id/underground_neighbor0"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/underground_neighbor"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/underground_neighbor1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/underground_neighbor"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/underground_neighbor2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/underground_neighbor"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/underground_neighbor3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/underground_neighbor"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
@@ -290,17 +343,17 @@
             android:backgroundTint="#FFEB3B"
             android:text="@string/taxiButton"
             android:textColor="#000000"
-            android:textSize="10sp" />
+            android:textSize="9sp" />
 
         <Button
             android:id="@+id/busDrawButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#009688"
+            android:backgroundTint="#22EE22"
             android:text="@string/busButton"
             android:textColor="#000000"
-            android:textSize="10sp" />
-
+            android:textSize="9sp" />
+            <!-- color was "#009688" -->
         <Button
             android:id="@+id/undergroundDrawButton"
             android:layout_width="match_parent"
@@ -308,24 +361,25 @@
             android:backgroundTint="#E91E1E"
             android:text="@string/undergroundButton"
             android:textColor="#000000"
-            android:textSize="10sp" />
+            android:textSize="9sp" />
 
         <Button
             android:id="@+id/journeyTableButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#E91E63"
+            android:backgroundTint="#8F8B89"
             android:onClick="jTBClicked"
             android:text="@string/journeyTableButton"
-            android:textColor="#000000"
-            android:textSize="10sp" />
+            android:textColor="#FFFFFF"
+            android:textSize="9sp" />
 
         <Button
             android:id="@+id/confirmButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#E91E63"
-            android:text="Confirm" />
+            android:text="Confirm"
+            android:textSize="9sp" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
