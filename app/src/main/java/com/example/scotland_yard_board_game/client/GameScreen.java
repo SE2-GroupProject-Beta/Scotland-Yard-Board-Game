@@ -43,9 +43,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private ConstraintLayout journeyTableLayout;
     private TimeListener timeListener;
 
-    private Client client;
-    private ClientData clientData;
-
     //nickname
     TextView hostNameOut;
     String hostString;

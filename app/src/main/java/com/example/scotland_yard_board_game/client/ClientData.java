@@ -29,7 +29,7 @@ public class ClientData {
     private JourneyTable journeyTable = new JourneyTable();
     //private int [][] journeyTable = new int[24][2];
     private int ownturn = 0;
-    private boolean mrx; // todo: what is mrx? (Frage von Klemens)
+    private boolean mrx;
     private String[] nicknames = new String[6];
     private GameScreen gameScreen;
 
@@ -116,7 +116,7 @@ public class ClientData {
     public void validateMove(int Stationid, int type){
         Move move = new Move();
         move.type = type; move.station = Stationid; move.mrx = mrx;
-        // client.sendTCP(move); // todo: NullPointerException
+        client.sendTCP(move);
     }
 
     public void invalidMove() {
