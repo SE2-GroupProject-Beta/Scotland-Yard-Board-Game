@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.example.scotland_yard_board_game.server.ServerThread;
-import com.example.scotland_yard_board_game.sideProjects.ActivityAsync;
-import com.example.scotland_yard_board_game.sideProjects.DrawTest;
+import com.example.scotland_yard_board_game.client.ClientStart;
+import com.example.scotland_yard_board_game.server.ServerStart;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,14 +33,9 @@ public class MainActivity extends AppCompatActivity {
             Intent ActivityAsync = new Intent(this, com.example.scotland_yard_board_game.sideProjects.ActivityAsync.class);
             startActivity(ActivityAsync);
         });
-        Button goToDraw = findViewById(R.id.goToDraw);
-        goToDraw.setOnClickListener(view -> {
-            Intent DrawTest = new Intent(this, com.example.scotland_yard_board_game.sideProjects.DrawTest.class);
-            startActivity(DrawTest);
-        });
 
-        Thread serverthread = new ServerThread(getApplicationContext());
-        serverthread.start();
+
+
 
     }
 }
