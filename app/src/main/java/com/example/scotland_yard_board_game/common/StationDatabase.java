@@ -1,4 +1,4 @@
-package com.example.scotland_yard_board_game.server;
+package com.example.scotland_yard_board_game.common;
 
 
 import static android.content.ContentValues.TAG;
@@ -15,13 +15,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ServerDatabase {
-    private ArrayList<ServerStation> stationlist;
+public class StationDatabase {
+    private ArrayList<Station> stationlist;
     private int[] DetectiveStart;
     private int[] MrXStart;
     private Context context;
 
-    public ServerDatabase(Context context) {
+    public StationDatabase(Context context) {
         this.context = context;
         builddatabase();
     }
@@ -44,13 +44,13 @@ public class ServerDatabase {
         }
         //Use gson library to convert String to Station objects
         Gson gson = new Gson();
-        Type StationListType = new TypeToken<ArrayList<ServerStation>>(){}.getType();
+        Type StationListType = new TypeToken<ArrayList<Station>>(){}.getType();
         this.stationlist = gson.fromJson(json, StationListType);
         Log.d(TAG,"Stations loaded Sucessfully!");
     }
 
-    public ServerStation getStation(int id){
-        for (ServerStation a: stationlist) {
+    public Station getStation(int id){
+        for (Station a: stationlist) {
           if( a.getId() == id){
               return a;
           }
@@ -86,5 +86,4 @@ public class ServerDatabase {
 
         return Start;
     }
-
 }

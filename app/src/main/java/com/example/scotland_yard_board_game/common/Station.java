@@ -1,6 +1,6 @@
-package com.example.scotland_yard_board_game.server;
+package com.example.scotland_yard_board_game.common;
 
-public class ServerStation {
+public class Station {
    private int id;
    private int x;
    private int y;
@@ -10,7 +10,10 @@ public class ServerStation {
    private int[] underground;
    private int[] ferry;
 
-    public ServerStation(int id, int x, int y, int[] taxi, int[] bus, int[] underground, int[] ferry) {
+    public Station() {
+    }
+
+    public Station(int id, int x, int y, int[] taxi, int[] bus, int[] underground, int[] ferry) {
         this.id = id;
         this.x = x;
         this.y = y;
