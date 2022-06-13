@@ -365,7 +365,7 @@
 
         <Button
             android:id="@+id/journeyTableButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#8F8B89"
             android:onClick="jTBClicked"
@@ -446,6 +446,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.195" />
 
+        <!-- outdated
         <Button
             android:id="@+id/decreaseTaxiTicket"
             android:layout_width="115dp"
@@ -458,6 +459,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.044" />
+        -->
 
         <LinearLayout
             android:id="@+id/turnTableLayout"
@@ -480,64 +482,56 @@
                     android:id="@+id/turnView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#000000"
+                    android:background="#CDCDCD"
                     android:text="Turn 1" />
 
                 <TextView
                     android:id="@+id/turnView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 2" />
 
                 <TextView
                     android:id="@+id/turnView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 3" />
 
                 <TextView
                     android:id="@+id/turnView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 4" />
 
                 <TextView
                     android:id="@+id/turnView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 5" />
 
                 <TextView
                     android:id="@+id/turnView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 6" />
 
                 <TextView
                     android:id="@+id/turnView7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 7" />
 
                 <TextView
                     android:id="@+id/turnView8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 8" />
             </LinearLayout>
 
@@ -551,64 +545,56 @@
                     android:id="@+id/turnView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 9" />
 
                 <TextView
                     android:id="@+id/turnView10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 10" />
 
                 <TextView
                     android:id="@+id/turnView11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 11" />
 
                 <TextView
                     android:id="@+id/turnView12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 12" />
 
                 <TextView
                     android:id="@+id/turnView13"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 13" />
 
                 <TextView
                     android:id="@+id/turnView14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 14" />
 
                 <TextView
                     android:id="@+id/turnView15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 15" />
 
                 <TextView
                     android:id="@+id/turnView16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 16" />
             </LinearLayout>
 
@@ -622,64 +608,56 @@
                     android:id="@+id/turnView17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 17" />
 
                 <TextView
                     android:id="@+id/turnView18"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 18" />
 
                 <TextView
                     android:id="@+id/turnView19"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 19" />
 
                 <TextView
                     android:id="@+id/turnView20"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 20" />
 
                 <TextView
                     android:id="@+id/turnView21"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 21" />
 
                 <TextView
                     android:id="@+id/turnView22"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 22" />
 
                 <TextView
                     android:id="@+id/turnView23"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 23" />
 
                 <TextView
                     android:id="@+id/turnView24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#000000"
-                    android:backgroundTint="#CDCDCD"
+                    android:background="#CDCDCD"
                     android:text="Turn 24" />
             </LinearLayout>
         </LinearLayout>
@@ -749,6 +727,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="10" />
+
+                    <TextView
+                        android:id="@+id/busTicketView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="10" />
+
+                    <TextView
+                        android:id="@+id/undergroundTicketView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="8" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -756,7 +746,19 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <TextView
+        android:id="@+id/currentTurnView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turn 1"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.962"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.938" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
