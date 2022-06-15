@@ -80,9 +80,18 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[] player1BoardCoordinates = new int[2];
     private int[] player1ScreenCoordinates = new int[2];
 
-
-    private MarginLayoutParams player1ViewGroup;
+    private View player0View;
+    private MarginLayoutParams player0ViewGroup;
     private View player1View;
+    private MarginLayoutParams player1ViewGroup;
+    private View player2View;
+    private MarginLayoutParams player2ViewGroup;
+    private View player3View;
+    private MarginLayoutParams player3ViewGroup;
+    private View player4View;
+    private MarginLayoutParams player4ViewGroup;
+    private View player5View;
+    private MarginLayoutParams player5ViewGroup;
 
     private MarginLayoutParams[] taxiNeighborMarginLayoutParams = new MarginLayoutParams[TAXI_NEIGHBORS_MAX];
     private View taxiNeighbor0View; // sorry for violation of 'dry'...
@@ -211,8 +220,19 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     taxiNeighborMarginLayoutParams[0].bottomMargin);
         }; */
 
-        player1View = findViewById(R.id.player1); // to move player1
+        player0View = findViewById(R.id.player0); // to move players
+        player0ViewGroup = (MarginLayoutParams) player0View.getLayoutParams();
+        player1View = findViewById(R.id.player1);
         player1ViewGroup = (MarginLayoutParams) player1View.getLayoutParams();
+        player2View = findViewById(R.id.player2);
+        player2ViewGroup = (MarginLayoutParams) player2View.getLayoutParams();
+        player3View = findViewById(R.id.player3);
+        player3ViewGroup = (MarginLayoutParams) player3View.getLayoutParams();
+        player4View = findViewById(R.id.player4);
+        player4ViewGroup = (MarginLayoutParams) player4View.getLayoutParams();
+        player5View = findViewById(R.id.player5);
+        player5ViewGroup = (MarginLayoutParams) player5View.getLayoutParams();
+
 
         taxiNeighbor0View = findViewById(R.id.taxi_neighbor0); // :( 'dry' again
         taxiNeighbor1View = findViewById(R.id.taxi_neighbor1);
