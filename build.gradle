@@ -12,7 +12,9 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "3.3"
+    // id 'com.android.application' version '7.2.0' apply false // todo: from Fabian
+    // id 'com.android.library' version '7.2.0' apply false // todo: from Fabian
+    id "org.sonarqube" version "3.3" // todo: change to app.build.gradle?
 }
 
 sonarqube {

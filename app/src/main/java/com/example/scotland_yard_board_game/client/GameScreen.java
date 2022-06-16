@@ -23,7 +23,6 @@ import android.animation.TimeAnimator.TimeListener;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.esotericsoftware.kryonet.Client;
 import com.example.scotland_yard_board_game.R;
 
 import com.example.scotland_yard_board_game.common.Station;
@@ -31,8 +30,6 @@ import com.example.scotland_yard_board_game.common.StationDatabase;
 
 import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -77,8 +74,22 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
+
+
+    private int[] player0BoardCoordinates = new int[2];
+    private int[] player0ScreenCoordinates = new int[2];
     private int[] player1BoardCoordinates = new int[2];
     private int[] player1ScreenCoordinates = new int[2];
+    private int[] player2BoardCoordinates = new int[2];
+    private int[] player2ScreenCoordinates = new int[2];
+    private int[] player3BoardCoordinates = new int[2];
+    private int[] player3ScreenCoordinates = new int[2];
+    private int[] player4BoardCoordinates = new int[2];
+    private int[] player4ScreenCoordinates = new int[2];
+    private int[] player5BoardCoordinates = new int[2];
+    private int[] player5ScreenCoordinates = new int[2];
+
+    private int activePlayer;
 
     private View player0View;
     private MarginLayoutParams player0ViewGroup;
@@ -161,7 +172,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
         showTransport = findViewById(R.id.showTransport);
-      
+
         taxiDrawButton = findViewById(R.id.taxiDrawButton);
         busDrawButton = findViewById(R.id.busDrawButton);
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
@@ -172,7 +183,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         try {
             ServerStart server = new ServerStart(getApplicationContext());
-            ClientStart client = new ClientStart(getApplicationContext(),true, this);
+            ClientStart client = new ClientStart(getApplicationContext(), true, this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -233,6 +244,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         player5View = findViewById(R.id.player5);
         player5ViewGroup = (MarginLayoutParams) player5View.getLayoutParams();
 
+        activePlayer = 0;
 
         taxiNeighbor0View = findViewById(R.id.taxi_neighbor0); // :( 'dry' again
         taxiNeighbor1View = findViewById(R.id.taxi_neighbor1);
@@ -269,30 +281,32 @@ public class GameScreen extends AppCompatActivity { // extends View {
         undergroundNeighborMarginLayoutParams[2] = (MarginLayoutParams) undergroundNeighbor2View.getLayoutParams();
         undergroundNeighborMarginLayoutParams[3] = (MarginLayoutParams) undergroundNeighbor3View.getLayoutParams();
 
-
         // initialize ServerDatabase
         serverDatabase = new StationDatabase(this.getApplicationContext());
-
 
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
 
             touchedScreenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
             touchedScreenCoordinates[1] = (int) motionEvent.getY();
-
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
             // print boardX and boardY to screen, todo: delete later
             showBoardX.setText("X = " + touchedBoardCoordinates[0]);
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
-            // calculate player1ScreenCoordinates and set circle to these coordinates
-            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
 
-            placeDrawables();
-            /* todo: delete later
-            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin); */
+            getPlayerBoardCoordinates();
+
+            // calculate player1ScreenCoordinates and set circle to these coordinates
+            player0ScreenCoordinates = calculateScreenCoordinates(player0BoardCoordinates);
+            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
+            player2ScreenCoordinates = calculateScreenCoordinates(player2BoardCoordinates);
+            player3ScreenCoordinates = calculateScreenCoordinates(player3BoardCoordinates);
+            player4ScreenCoordinates = calculateScreenCoordinates(player4BoardCoordinates);
+            player5ScreenCoordinates = calculateScreenCoordinates(player5BoardCoordinates);
+
+            placePlayers();
 
             return true;
         });
@@ -349,7 +363,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showTransport.setText("Bus");
             clearAllNeighborStations();
             busNeighborStations = getBusNeighborStationsFromGivenStation(player1CurrentStation);
-            placeDrawables();
+            placePlayers();
 
 
             for (int i = 0; i < busNeighborStations.length; i++) {
@@ -372,7 +386,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showTransport.setText("Underground");
             clearAllNeighborStations();
             undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(player1CurrentStation);
-            placeDrawables();
+            placePlayers();
 
             for (int i = 0; i < undergroundNeighborStations.length; i++) {
                 Log.d(TAG, "busNeighbor " + i + " = " + undergroundNeighborStations[i]);
@@ -390,31 +404,31 @@ public class GameScreen extends AppCompatActivity { // extends View {
             return true;
         });
 
-      
+
         confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
 
             //clientData.validateMove(8, 0); // todo change to real values
             //int id = view.getId();
-            switch(chosenTransport){
+            switch (chosenTransport) {
                 case 1:     //taxi chosen
                     //change turnView background color
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#FFEB3B"));
-                    taxiTickets = taxiTickets -1; //decrease taxi tickets
+                    taxiTickets = taxiTickets - 1; //decrease taxi tickets
                     displayTaxi(taxiTickets);         //display current taxi tickets
                     Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#22EE22"));
-                    busTickets = busTickets -1;
+                    busTickets = busTickets - 1;
                     displayBus(busTickets);
                     Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#E91E1E"));
-                    undergroundTickets = undergroundTickets -1;
+                    undergroundTickets = undergroundTickets - 1;
                     displayUnderground(undergroundTickets);
                     Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
                     break;
@@ -423,7 +437,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         });
     }
 
-    void setclientData(ClientData data){
+    void setclientData(ClientData data) {
         this.clientData = data;
     }
 
@@ -457,9 +471,37 @@ public class GameScreen extends AppCompatActivity { // extends View {
         }
     }
 
-    void placeDrawables() {
+    void getPlayerBoardCoordinates() {
+        // todo: get player coordinates from server, delete starting points
+        player0BoardCoordinates[0] = 1579;
+        player0BoardCoordinates[1] = 332;
+        player1BoardCoordinates[0] = 1601;
+        player1BoardCoordinates[1] = 721;
+        player2BoardCoordinates[0] = 779;
+        player2BoardCoordinates[1] = 1089;
+        player3BoardCoordinates[0] = 2253;
+        player3BoardCoordinates[1] = 1441;
+        player4BoardCoordinates[0] = 4017;
+        player4BoardCoordinates[1] = 2227;
+        player5BoardCoordinates[0] = 2867;
+        player5BoardCoordinates[1] = 2317;
+
+
+    }
+
+    void placePlayers() {
+        player0ViewGroup.setMargins(player0ScreenCoordinates[0] - 25, player0ScreenCoordinates[1] - 25,
+                player0ViewGroup.rightMargin, player0ViewGroup.bottomMargin);
         player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
                 player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
+        player2ViewGroup.setMargins(player2ScreenCoordinates[0] - 25, player2ScreenCoordinates[1] - 25,
+                player2ViewGroup.rightMargin, player2ViewGroup.bottomMargin);
+        player3ViewGroup.setMargins(player3ScreenCoordinates[0] - 25, player3ScreenCoordinates[1] - 25,
+                player3ViewGroup.rightMargin, player3ViewGroup.bottomMargin);
+        player4ViewGroup.setMargins(player4ScreenCoordinates[0] - 25, player4ScreenCoordinates[1] - 25,
+                player4ViewGroup.rightMargin, player4ViewGroup.bottomMargin);
+        player5ViewGroup.setMargins(player5ScreenCoordinates[0] - 25, player5ScreenCoordinates[1] - 25,
+                player5ViewGroup.rightMargin, player5ViewGroup.bottomMargin);
         /*
         for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
             Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
@@ -607,8 +649,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
     }
 
 
-
-
     // @Override // todo: @Override necessary?
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
@@ -747,17 +787,17 @@ public class GameScreen extends AppCompatActivity { // extends View {
     }*/
 
     //method to display current taxi count value on textView
-    private void displayTaxi(int number){
+    private void displayTaxi(int number) {
         TextView displayTaxi = (TextView) findViewById(R.id.taxiTicketView1);
         displayTaxi.setText("" + number);
     }
 
-    private void displayBus(int number){
+    private void displayBus(int number) {
         TextView displayBus = (TextView) findViewById(R.id.busTicketView1);
         displayBus.setText("" + number);
     }
 
-    private void displayUnderground(int number){
+    private void displayUnderground(int number) {
         TextView displayUnderground = (TextView) findViewById(R.id.undergroundTicketView1);
         displayUnderground.setText("" + number);
     }
