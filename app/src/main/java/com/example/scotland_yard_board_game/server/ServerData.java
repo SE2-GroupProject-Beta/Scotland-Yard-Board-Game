@@ -118,7 +118,7 @@ public class ServerData {
         }
         if(type == 0){
             Clients.add(new MrX(playerId, conid, nickname));
-            Clients.get(0).setPosition(stationDatabase.getStation(1));
+           // Clients.get(0).setPosition(stationDatabase.getStation(1));
         }else {
             Clients.add(new Detective(playerId, conid, nickname));
         }
@@ -131,7 +131,7 @@ public class ServerData {
 
     //On game start distribute starting points
     public void gameStart() {
-        if(Clients.size() >= min_players){
+        if(/*Clients.size() >= min_players*/ true){
             started = true;
             int[] startpoints = stationDatabase.getRandomStart(Clients.size());
             int index = 1;

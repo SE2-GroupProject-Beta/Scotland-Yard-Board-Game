@@ -33,6 +33,9 @@ public class MrX implements Player {
         this.position = position;
     }
 
+    public Station getPosition() {
+        return position;
+    }
 
     public boolean validmove(int stationid, int type) {
         int[] neighbours = this.position.getNeighbours(type);

@@ -91,6 +91,7 @@ public class ClientData {
     //Handles what happens if server sends game started
     public void gameStarted(){
         started = true;
+        Log.d(TAG, String.valueOf(Players.get(0).getPosition().getId()));
         // TODO: 6/11/2022 implement 
     }
     
@@ -155,7 +156,9 @@ public class ClientData {
         // TODO: 6/9/2022 what to do if server full
     }
 
-
+    public void startGame(){
+        client.sendTCP(new GameStart());
+    }
 
 
 }
