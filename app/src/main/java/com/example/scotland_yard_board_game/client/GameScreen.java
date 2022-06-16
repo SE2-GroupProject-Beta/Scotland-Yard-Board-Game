@@ -32,6 +32,8 @@ import com.example.scotland_yard_board_game.common.StationDatabase;
 import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -49,6 +51,12 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     //ticket count (adjust maximum)
     int taxiTickets = 10;
+    int busTickets = 10;
+    int undergroundTickets = 8;
+
+    //mode of transportation on journey table
+    private int chosenTransport; //variable for mode of transport
+    TextView turnView; //variable for transportation marker
 
     private Button taxiDrawButton;
     private Button busDrawButton;
@@ -313,6 +321,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
                         taxiNeighborMarginLayoutParams[i].rightMargin,
                         taxiNeighborMarginLayoutParams[i].bottomMargin);
             }
+            chosenTransport = 1;
             return true;
         });
 
@@ -335,6 +344,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
                         busNeighborMarginLayoutParams[i].rightMargin,
                         busNeighborMarginLayoutParams[i].bottomMargin);
             }
+            chosenTransport = 2;
             return true;
         });
 
@@ -356,14 +366,39 @@ public class GameScreen extends AppCompatActivity { // extends View {
                         undergroundNeighborMarginLayoutParams[i].rightMargin,
                         undergroundNeighborMarginLayoutParams[i].bottomMargin);
             }
+            chosenTransport = 3;
             return true;
         });
 
       
         confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
 
-            clientData.validateMove(8, 0); // todo change to real values
-
+            //clientData.validateMove(8, 0); // todo change to real values
+            //int id = view.getId();
+            switch(chosenTransport){
+                case 1:     //taxi chosen
+                    //change turnView background color
+                    turnView = findViewById(R.id.turnView1);
+                    turnView.setBackgroundColor(Color.parseColor("#FFEB3B"));
+                    taxiTickets = taxiTickets -1; //decrease taxi tickets
+                    displayTaxi(taxiTickets);         //display current taxi tickets
+                    Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    turnView = findViewById(R.id.turnView1);
+                    turnView.setBackgroundColor(Color.parseColor("#22EE22"));
+                    busTickets = busTickets -1;
+                    displayBus(busTickets);
+                    Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    turnView = findViewById(R.id.turnView1);
+                    turnView.setBackgroundColor(Color.parseColor("#E91E1E"));
+                    undergroundTickets = undergroundTickets -1;
+                    displayUnderground(undergroundTickets);
+                    Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
         });
     }
@@ -683,17 +718,27 @@ public class GameScreen extends AppCompatActivity { // extends View {
         journeyTableLayout.setVisibility(View.GONE);
     }
 
+    /* outdated
     //method to decrease taxi count value
     public void decreaseTaxiCount(View view){
 
         taxiTickets = taxiTickets -1;
         display(taxiTickets);
-    }
+    }*/
 
     //method to display current taxi count value on textView
-    private void display(int number){
+    private void displayTaxi(int number){
         TextView displayTaxi = (TextView) findViewById(R.id.taxiTicketView1);
         displayTaxi.setText("" + number);
     }
 
+    private void displayBus(int number){
+        TextView displayBus = (TextView) findViewById(R.id.busTicketView1);
+        displayBus.setText("" + number);
+    }
+
+    private void displayUnderground(int number){
+        TextView displayUnderground = (TextView) findViewById(R.id.undergroundTicketView1);
+        displayUnderground.setText("" + number);
+    }
 }
