@@ -246,7 +246,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         player5View = findViewById(R.id.player5);
         player5ViewGroup = (MarginLayoutParams) player5View.getLayoutParams();
 
-        activePlayer = 0;
+        activePlayer = 3;
         initializePlayerBoardCoordinates();
         placePlayers();
 
@@ -450,8 +450,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
         player1BoardCoordinates[1] = 721;
         player2BoardCoordinates[0] = 779;
         player2BoardCoordinates[1] = 1089;
-        player3BoardCoordinates[0] = 2253;
-        player3BoardCoordinates[1] = 1441;
+        player3BoardCoordinates[0] = 2504; // active at start (station 67)
+        player3BoardCoordinates[1] = 1077;
         player4BoardCoordinates[0] = 4017;
         player4BoardCoordinates[1] = 2227;
         player5BoardCoordinates[0] = 2867;
