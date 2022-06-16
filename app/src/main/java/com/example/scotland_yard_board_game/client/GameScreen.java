@@ -316,19 +316,40 @@ public class GameScreen extends AppCompatActivity { // extends View {
         });
 
         gameBoardView.setOnLongClickListener(motionEvent -> {
-
             // info: uses touchedScreenCoordinates from .setOnTouchListener:
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
-            selectionOfStations = getAllStations(); // for testing purposes
+            // selectionOfStations = getAllStations(); // for testing purposes
+            /*
+            int closestStation = getClosestStationToTouchedBoardCoordinates(
+                    touchedBoardCoordinates, taxiNeighborStations);
+            chosenStation = closestStation; // todo: put into one line
 
-            player1CurrentStation = getClosestStationToTouchedBoardCoordinates(
-                    touchedBoardCoordinates, selectionOfStations);
+            confirmButton.setText("Go to " + chosenStation); */
+
+            // player1CurrentStation = getClosestStationToTouchedBoardCoordinates(
+            //         touchedBoardCoordinates, selectionOfStations);
+            /*
             player1BoardCoordinates[0] = serverDatabase.getStation(player1CurrentStation).getX();
             player1BoardCoordinates[1] = serverDatabase.getStation(player1CurrentStation).getY();
 
-            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
+            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates); */
+            int closestStation = 1;
+            if (chosenTransport == 1) {
+                closestStation = getClosestStationToTouchedBoardCoordinates(
+                        touchedBoardCoordinates, taxiNeighborStations);
+            } else if (chosenTransport == 2) {
+                closestStation = getClosestStationToTouchedBoardCoordinates(
+                        touchedBoardCoordinates, busNeighborStations);
+            } else if (chosenTransport == 3) {
+                closestStation = getClosestStationToTouchedBoardCoordinates(
+                        touchedBoardCoordinates, undergroundNeighborStations);
+            }
+            chosenStation = closestStation;
+            Log.d(TAG, "onLongClickListener, chosen transport: " + chosenTransport);
+            Log.d(TAG, "onLongClickListener, closest station: " + closestStation);
 
+            confirmButton.setText("Go to " + chosenStation);
             return true;
         });
 
@@ -347,6 +368,11 @@ public class GameScreen extends AppCompatActivity { // extends View {
             taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(currentStation);
             placePlayers();
 
+            /*
+            int closestStation = getClosestStationToTouchedBoardCoordinates(
+                    touchedBoardCoordinates, taxiNeighborStations);
+            chosenStation = closestStation; // todo: put into one line
+            confirmButton.setText("Go to " + chosenStation); */
             return true;
         });
 
@@ -469,10 +495,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     int getCurrentStation(int activePlayer) {
         if (activePlayer == 0) {
-            // todo: complete
+            // todo: complete code with .getStation() or .getPosition()
         }
 
-        return serverDatabase.getStation(67).getId();
+        return serverDatabase.getStation(67).getId(); // todo: return real value
     }
 
 
@@ -615,22 +641,27 @@ public class GameScreen extends AppCompatActivity { // extends View {
         int deltaY;
         int closestStation = 0;
         int amountOfStations = selectionOfStations.length; // info: station 0 does not exist
+        Log.d(TAG, "getClosestStationToTouchedBoardCoordinates: amountOfStations = " + amountOfStations);
         // int[] stations = new int[amountOfStations + 1]; // todo: delete later
         int[] stationsXCoordinates = new int[amountOfStations];
         int[] stationsYCoordinates = new int[amountOfStations];
-        for (int i = 1; i < amountOfStations; i++) {
+        for (int i = 0; i < amountOfStations; i++) {
+            /*
             stationsXCoordinates[i] = serverDatabase.getStation(i).getX();
-            stationsYCoordinates[i] = serverDatabase.getStation(i).getY();
+            stationsYCoordinates[i] = serverDatabase.getStation(i).getY(); */
+            stationsXCoordinates[i] = serverDatabase.getStation(selectionOfStations[i]).getX();
+            stationsYCoordinates[i] = serverDatabase.getStation(selectionOfStations[i]).getY();
         }
 
-        for (int i = 1; i < amountOfStations; i++) {
+        for (int i = 0; i < amountOfStations; i++) {
             deltaX = touchedBoardCoordinates[0] - stationsXCoordinates[i]; // no need to get absolute value,
             deltaY = touchedBoardCoordinates[1] - stationsYCoordinates[i]; // because they are squared later
 
             distance = deltaX * deltaX + deltaY * deltaY;
             if (distance < closestDistance) {
                 closestDistance = distance;
-                closestStation = i;
+                closestStation = selectionOfStations[i];
+                Log.d(TAG, "getClosestStationToTouchedBoardCoordinates: loop closestStation = " + closestStation);
             }
         }
         return closestStation;
