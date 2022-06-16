@@ -372,7 +372,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
       
         confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
-
+            clientData.gameStart();
             //clientData.validateMove(8, 0); // todo change to real values
             //int id = view.getId();
             switch(chosenTransport){
