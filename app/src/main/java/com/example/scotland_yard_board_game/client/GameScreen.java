@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.Objects;
 
-public class GameScreen extends AppCompatActivity { // extends View {
+public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener { // extends View {
     private static final String TAG = "GameScreen";
 
     private ConstraintLayout gameScreenLayout;
@@ -57,6 +58,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
     //mode of transportation on journey table
     private int chosenTransport; //variable for mode of transport
     TextView turnView; //variable for transportation marker
+    //int list [] = new int[24];
+    String[] var = {"turnView1", "turnView2", "turnView3"};
+
+    private int turnCounter = 1; //turn count view
 
     private Button taxiDrawButton;
     private Button busDrawButton;
@@ -378,20 +383,26 @@ public class GameScreen extends AppCompatActivity { // extends View {
             switch(chosenTransport){
                 case 1:     //taxi chosen
                     //change turnView background color
+                    //for(int i = 0; i < list.length; i++){
+                    for(String name : var){
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#FFEB3B"));
                     taxiTickets = taxiTickets -1; //decrease taxi tickets
                     displayTaxi(taxiTickets);         //display current taxi tickets
                     Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "" + var, Toast.LENGTH_SHORT).show();
+                    //list[i] = (i+1);
+                    }
                     break;
-                case 2:
+
+                case 2:     //bus chosen
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#22EE22"));
                     busTickets = busTickets -1;
                     displayBus(busTickets);
                     Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
                     break;
-                case 3:
+                case 3:     //underground chosen
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#E91E1E"));
                     undergroundTickets = undergroundTickets -1;
@@ -399,6 +410,9 @@ public class GameScreen extends AppCompatActivity { // extends View {
                     Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
                     break;
             }
+            //increase turnCounter on "confirm"
+            turnCounter = turnCounter +1;
+            displayTurnCount(turnCounter);
 
         });
     }
@@ -586,23 +600,21 @@ public class GameScreen extends AppCompatActivity { // extends View {
         return allStations;
     }
 
-
-
-
-    // @Override // todo: @Override necessary?
+    //display PopupMenu on button click
+    public void showPopup(View v){
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.popup_menu);
+        popup.show();
+    }
+    //what happens for each option selected from Mr. X' abilities
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.itemTaxi:
-                Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
+            case R.id.itemBlackTicket:
+                Toast.makeText(this, "Black Ticket selected", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.itemBus:
-                Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.itemUnderground:
-                Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.itemFerry:
-                Toast.makeText(this, "Ferry selected", Toast.LENGTH_SHORT).show();
+            case R.id.itemDoubleTurn:
+                Toast.makeText(this, "Double Turn selected", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return false;
@@ -740,5 +752,10 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private void displayUnderground(int number){
         TextView displayUnderground = (TextView) findViewById(R.id.undergroundTicketView1);
         displayUnderground.setText("" + number);
+    }
+
+    private void displayTurnCount(int number){
+        TextView displayTurnCount = (TextView) findViewById(R.id.currentTurnView);
+        displayTurnCount.setText("Turn " + number);
     }
 }
