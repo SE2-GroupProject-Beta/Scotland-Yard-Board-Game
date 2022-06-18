@@ -92,6 +92,9 @@ public class ClientData {
     public void gameStarted(){
         started = true;
         Log.d(TAG, String.valueOf(Players.get(0).getPosition().getId()));
+
+        gameScreen.updatePlayerBoardCoordinates(Players);
+
         // TODO: 6/11/2022 implement 
     }
     
@@ -127,6 +130,9 @@ public class ClientData {
     public void updatePlayers(PlayerList list){
         this.Players = list.Players;
         updateNicknames();
+        if (started) {
+            gameScreen.updatePlayerBoardCoordinates(Players);
+        }
     }
 
     public void updateJourneyTable(JourneyTable jtable) {
@@ -161,4 +167,7 @@ public class ClientData {
     }
 
 
+    public ArrayList<Player> getPlayers() {
+        return Players;
+    }
 }
