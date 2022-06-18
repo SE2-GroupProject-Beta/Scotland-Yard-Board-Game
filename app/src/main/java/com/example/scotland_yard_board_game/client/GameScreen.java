@@ -23,7 +23,6 @@ import android.animation.TimeAnimator.TimeListener;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.esotericsoftware.kryonet.Client;
 import com.example.scotland_yard_board_game.R;
 
 import com.example.scotland_yard_board_game.common.Station;
@@ -31,8 +30,6 @@ import com.example.scotland_yard_board_game.common.StationDatabase;
 
 import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -55,7 +52,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
     int undergroundTickets = 8;
 
     //mode of transportation on journey table
-    private int chosenTransport; //variable for mode of transport
+    private int chosenStation; // variable for chosen station for confirmButton
+    private int chosenTransport; // variable for mode of transport for confirmButton
     TextView turnView; //variable for transportation marker
 
     private Button taxiDrawButton;
@@ -64,7 +62,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private Button journeyTableButton;
     private Button confirmButton;
 
-    private final int BOARD_MAX_X = 4368;
+    private final int BOARD_MAX_X = 4368; // pixel coordinates of board
     private final int BOARD_MAX_Y = 3312;
     private final int TAXI_NEIGHBORS_MAX = 7;
     private final int BUS_NEIGHBORS_MAX = 5;
@@ -77,14 +75,38 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
+
+
+    private int[] player0BoardCoordinates = new int[2];
+    private int[] player0ScreenCoordinates = new int[2];
     private int[] player1BoardCoordinates = new int[2];
     private int[] player1ScreenCoordinates = new int[2];
+    private int[] player2BoardCoordinates = new int[2];
+    private int[] player2ScreenCoordinates = new int[2];
+    private int[] player3BoardCoordinates = new int[2];
+    private int[] player3ScreenCoordinates = new int[2];
+    private int[] player4BoardCoordinates = new int[2];
+    private int[] player4ScreenCoordinates = new int[2];
+    private int[] player5BoardCoordinates = new int[2];
+    private int[] player5ScreenCoordinates = new int[2];
 
+    private int activePlayer;
 
-    private MarginLayoutParams player1ViewGroup;
+    private View player0View;
+    private MarginLayoutParams player0ViewGroup;
     private View player1View;
+    private MarginLayoutParams player1ViewGroup;
+    private View player2View;
+    private MarginLayoutParams player2ViewGroup;
+    private View player3View;
+    private MarginLayoutParams player3ViewGroup;
+    private View player4View;
+    private MarginLayoutParams player4ViewGroup;
+    private View player5View;
+    private MarginLayoutParams player5ViewGroup;
 
-    private MarginLayoutParams[] taxiNeighborMarginLayoutParams = new MarginLayoutParams[TAXI_NEIGHBORS_MAX];
+    private MarginLayoutParams[] taxiNeighborMarginLayoutParams =
+            new MarginLayoutParams[TAXI_NEIGHBORS_MAX];
     private View taxiNeighbor0View; // sorry for violation of 'dry'...
     private View taxiNeighbor1View;
     private View taxiNeighbor2View;
@@ -97,8 +119,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[][] taxiNeighborsBoardCoordinates = new int[TAXI_NEIGHBORS_MAX][2];
     private int[][] taxiNeighborsScreenCoordinates = new int[TAXI_NEIGHBORS_MAX][2];
 
-
-    private MarginLayoutParams[] busNeighborMarginLayoutParams = new MarginLayoutParams[BUS_NEIGHBORS_MAX];
+    private MarginLayoutParams[] busNeighborMarginLayoutParams =
+            new MarginLayoutParams[BUS_NEIGHBORS_MAX];
     private View busNeighbor0View;
     private View busNeighbor1View;
     private View busNeighbor2View;
@@ -109,7 +131,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[][] busNeighborsBoardCoordinates = new int[BUS_NEIGHBORS_MAX][2];
     private int[][] busNeighborsScreenCoordinates = new int[BUS_NEIGHBORS_MAX][2];
 
-    private MarginLayoutParams[] undergroundNeighborMarginLayoutParams = new MarginLayoutParams[UNDERGROUND_NEIGHBORS_MAX];
+    private MarginLayoutParams[] undergroundNeighborMarginLayoutParams =
+            new MarginLayoutParams[UNDERGROUND_NEIGHBORS_MAX];
     private View undergroundNeighbor0View;
     private View undergroundNeighbor1View;
     private View undergroundNeighbor2View;
@@ -127,7 +150,8 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     ClientData clientData;
 
-    int player1CurrentStation = 1; // todo: initialize players coming from lobby
+    // int player1CurrentStation = 1; // todo: initialize players coming from lobby
+    int currentStation; //  = 1;
 
 
     @SuppressLint("ClickableViewAccessibility") // todo: remove later?
@@ -152,7 +176,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
         showTransport = findViewById(R.id.showTransport);
-      
+
         taxiDrawButton = findViewById(R.id.taxiDrawButton);
         busDrawButton = findViewById(R.id.busDrawButton);
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
@@ -163,56 +187,27 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         try {
             ServerStart server = new ServerStart(getApplicationContext());
-            ClientStart client = new ClientStart(getApplicationContext(),true, this);
+            ClientStart client = new ClientStart(getApplicationContext(), true, this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        /* todo: implement listener/thread to draw bord after 100 ms
-        boardDrawingThread = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (!boardDrawingThread.isInterrupted()) {
-                        Thread.sleep(100);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d(TAG, "running...");
-                                taxiNeighborMarginLayoutParams[0].setMargins(
-                                        taxiNeighborsScreenCoordinates[0][0] - 25,
-                                        taxiNeighborsScreenCoordinates[0][1] - 25,
-                                        taxiNeighborMarginLayoutParams[0].rightMargin,
-                                        taxiNeighborMarginLayoutParams[0].bottomMargin);
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        }; */
-
-        /* // todo: try to get the moving after releasing of finger captured
-        gameBoardView.setOnGenericMotionListener((view, motionEvent) -> {  // setOnSystemUiVisibilityChangeListener(view -> {
-            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
-            return true;
-        }); */
-
-        // timeListener.onTimeUpdate((a, b) -> {});
-        /*
-        timeListener = (timeAnimator, l, l1) -> { // todo: working?
-            Log.d(TAG, "running...");
-            taxiNeighborMarginLayoutParams[0].setMargins(
-                    taxiNeighborsScreenCoordinates[0][0] - 25,
-                    taxiNeighborsScreenCoordinates[0][1] - 25,
-                    taxiNeighborMarginLayoutParams[0].rightMargin,
-                    taxiNeighborMarginLayoutParams[0].bottomMargin);
-        }; */
-
-        player1View = findViewById(R.id.player1); // to move player1
+        player0View = findViewById(R.id.player0); // to move players
+        player0ViewGroup = (MarginLayoutParams) player0View.getLayoutParams();
+        player1View = findViewById(R.id.player1);
         player1ViewGroup = (MarginLayoutParams) player1View.getLayoutParams();
+        player2View = findViewById(R.id.player2);
+        player2ViewGroup = (MarginLayoutParams) player2View.getLayoutParams();
+        player3View = findViewById(R.id.player3);
+        player3ViewGroup = (MarginLayoutParams) player3View.getLayoutParams();
+        player4View = findViewById(R.id.player4);
+        player4ViewGroup = (MarginLayoutParams) player4View.getLayoutParams();
+        player5View = findViewById(R.id.player5);
+        player5ViewGroup = (MarginLayoutParams) player5View.getLayoutParams();
+
+        activePlayer = 3;
+        initializePlayerBoardCoordinates();
+        placePlayers(); // todo: doesn't place the players from here yet
 
         taxiNeighbor0View = findViewById(R.id.taxi_neighbor0); // :( 'dry' again
         taxiNeighbor1View = findViewById(R.id.taxi_neighbor1);
@@ -249,162 +244,130 @@ public class GameScreen extends AppCompatActivity { // extends View {
         undergroundNeighborMarginLayoutParams[2] = (MarginLayoutParams) undergroundNeighbor2View.getLayoutParams();
         undergroundNeighborMarginLayoutParams[3] = (MarginLayoutParams) undergroundNeighbor3View.getLayoutParams();
 
-
         // initialize ServerDatabase
         serverDatabase = new StationDatabase(this.getApplicationContext());
-
-
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
 
             touchedScreenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
             touchedScreenCoordinates[1] = (int) motionEvent.getY();
-
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
             // print boardX and boardY to screen, todo: delete later
             showBoardX.setText("X = " + touchedBoardCoordinates[0]);
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
-            // calculate player1ScreenCoordinates and set circle to these coordinates
-            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
+            getPlayerBoardCoordinates();
 
-            placeDrawables();
-            /* todo: delete later
-            player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
-                    player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin); */
+            // calculate player1ScreenCoordinates and set circle to these coordinates
+            player0ScreenCoordinates = calculateScreenCoordinates(player0BoardCoordinates);
+            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
+            player2ScreenCoordinates = calculateScreenCoordinates(player2BoardCoordinates);
+            player3ScreenCoordinates = calculateScreenCoordinates(player3BoardCoordinates);
+            player4ScreenCoordinates = calculateScreenCoordinates(player4BoardCoordinates);
+            player5ScreenCoordinates = calculateScreenCoordinates(player5BoardCoordinates);
+
+            placePlayers();
 
             return true;
         });
 
         gameBoardView.setOnLongClickListener(motionEvent -> {
-
-            // info: uses touchedScreenCoordinates from .setOnTouchListener:
+            // info: uses touchedScreenCoordinates from .setOnTouchListener
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
-            selectionOfStations = getAllStations(); // for testing purposes
+            int closestStation = 1;
+            if (chosenTransport == 1) {
+                closestStation = getClosestStationToTouchedBoardCoordinates(
+                        touchedBoardCoordinates, taxiNeighborStations);
+            } else if (chosenTransport == 2) {
+                closestStation = getClosestStationToTouchedBoardCoordinates(
+                        touchedBoardCoordinates, busNeighborStations);
+            } else if (chosenTransport == 3) {
+                closestStation = getClosestStationToTouchedBoardCoordinates(
+                        touchedBoardCoordinates, undergroundNeighborStations);
+            }
+            chosenStation = closestStation;
+            Log.d(TAG, "onLongClickListener, chosen transport: " + chosenTransport);
+            Log.d(TAG, "onLongClickListener, closest station: " + closestStation);
 
-            player1CurrentStation = getClosestStationToTouchedBoardCoordinates(
-                    touchedBoardCoordinates, selectionOfStations);
-            player1BoardCoordinates[0] = serverDatabase.getStation(player1CurrentStation).getX();
-            player1BoardCoordinates[1] = serverDatabase.getStation(player1CurrentStation).getY();
-
-            player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
-
+            confirmButton.setText("Go to " + chosenStation);
             return true;
         });
 
-
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
-            clearAllNeighborStations();
-            taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(player1CurrentStation);
-            /*
-            for (int i = taxiNeighborStations.length; i < TAXI_NEIGHBORS_MAX; i++) { // clear former station values that are
-                taxiNeighborsScreenCoordinates[i][0] = -100; // higher than taxiNeighborStation.length
-                taxiNeighborsScreenCoordinates[i][1] = -100;
-                taxiNeighborMarginLayoutParams[i].setMargins(
-                        taxiNeighborsScreenCoordinates[i][0] - 25,
-                        taxiNeighborsScreenCoordinates[i][1] - 25,
-                        taxiNeighborMarginLayoutParams[i].rightMargin,
-                        taxiNeighborMarginLayoutParams[i].bottomMargin);
-            } */
-
-            for (int i = 0; i < taxiNeighborStations.length; i++) {
-                Log.d(TAG, "taxiNeighbor " + i + " = " + taxiNeighborStations[i]);
-                taxiNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(taxiNeighborStations[i]).getX();
-                taxiNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(taxiNeighborStations[i]).getY();
-                taxiNeighborsScreenCoordinates[i] = calculateScreenCoordinates(taxiNeighborsBoardCoordinates[i]);
-                taxiNeighborMarginLayoutParams[i].setMargins(
-                        taxiNeighborsScreenCoordinates[i][0] - 25,
-                        taxiNeighborsScreenCoordinates[i][1] - 25,
-                        taxiNeighborMarginLayoutParams[i].rightMargin,
-                        taxiNeighborMarginLayoutParams[i].bottomMargin);
-            }
             chosenTransport = 1;
+            clearAllNeighborStations();
+
+            currentStation = getCurrentStation(activePlayer);
+            taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(currentStation);
+            placePlayers();
+
             return true;
         });
 
         busDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Bus");
-            clearAllNeighborStations();
-            busNeighborStations = getBusNeighborStationsFromGivenStation(player1CurrentStation);
-            placeDrawables();
-
-
-            for (int i = 0; i < busNeighborStations.length; i++) {
-                Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
-                busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
-                busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
-                busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
-
-                busNeighborMarginLayoutParams[i].setMargins(
-                        busNeighborsScreenCoordinates[i][0] - 25,
-                        busNeighborsScreenCoordinates[i][1] - 25,
-                        busNeighborMarginLayoutParams[i].rightMargin,
-                        busNeighborMarginLayoutParams[i].bottomMargin);
-            }
             chosenTransport = 2;
+            clearAllNeighborStations();
+
+            currentStation = getCurrentStation(activePlayer);
+            busNeighborStations = getBusNeighborStationsFromGivenStation(currentStation);
+            placePlayers();
+
             return true;
         });
 
         undergroundDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Underground");
-            clearAllNeighborStations();
-            undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(player1CurrentStation);
-            placeDrawables();
-
-            for (int i = 0; i < undergroundNeighborStations.length; i++) {
-                Log.d(TAG, "busNeighbor " + i + " = " + undergroundNeighborStations[i]);
-                undergroundNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(undergroundNeighborStations[i]).getX();
-                undergroundNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(undergroundNeighborStations[i]).getY();
-                undergroundNeighborsScreenCoordinates[i] = calculateScreenCoordinates(undergroundNeighborsBoardCoordinates[i]);
-
-                undergroundNeighborMarginLayoutParams[i].setMargins(
-                        undergroundNeighborsScreenCoordinates[i][0] - 25,
-                        undergroundNeighborsScreenCoordinates[i][1] - 25,
-                        undergroundNeighborMarginLayoutParams[i].rightMargin,
-                        undergroundNeighborMarginLayoutParams[i].bottomMargin);
-            }
             chosenTransport = 3;
+            clearAllNeighborStations();
+
+            currentStation = getCurrentStation(activePlayer);
+            undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(currentStation);
+            placePlayers();
+
             return true;
         });
 
-      
+
         confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
 
             clientData.gameStart();
             //clientData.validateMove(8, 0); // todo change to real values
             //int id = view.getId();
-            switch(chosenTransport){
-                case 1:     //taxi chosen
+            switch (chosenTransport) {
+                case 1: //taxi chosen
                     //change turnView background color
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#FFEB3B"));
-                    taxiTickets = taxiTickets -1; //decrease taxi tickets
+                    taxiTickets = taxiTickets - 1; //decrease taxi tickets
                     displayTaxi(taxiTickets);         //display current taxi tickets
-                    Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Go to station " + chosenStation +
+                            " by taxi", Toast.LENGTH_SHORT).show();
                     break;
-                case 2:
+                case 2: // bus chosen
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#22EE22"));
-                    busTickets = busTickets -1;
+                    busTickets = busTickets - 1;
                     displayBus(busTickets);
-                    Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Go to station " + chosenStation +
+                            " by bus", Toast.LENGTH_SHORT).show();
                     break;
-                case 3:
+                case 3: // underground chosen
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#E91E1E"));
-                    undergroundTickets = undergroundTickets -1;
+                    undergroundTickets = undergroundTickets - 1;
                     displayUnderground(undergroundTickets);
-                    Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Go to station " + chosenStation +
+                            " by underground", Toast.LENGTH_SHORT).show();
                     break;
             }
-
         });
     }
 
-    void setclientData(ClientData data){
+    void setclientData(ClientData data) {
         this.clientData = data;
     }
 
@@ -438,22 +401,92 @@ public class GameScreen extends AppCompatActivity { // extends View {
         }
     }
 
-    void placeDrawables() {
+    void initializePlayerBoardCoordinates() {
+        // todo: get player coordinates from server, delete this method
+        player0BoardCoordinates[0] = 552;
+        player0BoardCoordinates[1] = 162;
+        player1BoardCoordinates[0] = 1601;
+        player1BoardCoordinates[1] = 721;
+        player2BoardCoordinates[0] = 779;
+        player2BoardCoordinates[1] = 1089;
+        player3BoardCoordinates[0] = 2504; // active at start (station 67)
+        player3BoardCoordinates[1] = 1077;
+        player4BoardCoordinates[0] = 4017;
+        player4BoardCoordinates[1] = 2227;
+        player5BoardCoordinates[0] = 2867;
+        player5BoardCoordinates[1] = 2317;
+    }
+
+    void getPlayerBoardCoordinates() {
+        // todo: get player coordinates from server
+
+    }
+
+    int getCurrentStation(int activePlayer) {
+        if (activePlayer == 0) {
+            // todo: complete code with .getStation() or .getPosition()
+        }
+
+        return serverDatabase.getStation(67).getId(); // todo: return real value
+    }
+
+
+    void placePlayers() {
+        player0ViewGroup.setMargins(player0ScreenCoordinates[0] - 25, player0ScreenCoordinates[1] - 25,
+                player0ViewGroup.rightMargin, player0ViewGroup.bottomMargin);
         player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
                 player1ViewGroup.rightMargin, player1ViewGroup.bottomMargin);
-        /*
-        for (int i = 0; i < BUS_NEIGHBORS_MAX; i++) {
-            Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
-            busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
-            busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
-            busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
+        player2ViewGroup.setMargins(player2ScreenCoordinates[0] - 25, player2ScreenCoordinates[1] - 25,
+                player2ViewGroup.rightMargin, player2ViewGroup.bottomMargin);
+        player3ViewGroup.setMargins(player3ScreenCoordinates[0] - 25, player3ScreenCoordinates[1] - 25,
+                player3ViewGroup.rightMargin, player3ViewGroup.bottomMargin);
+        player4ViewGroup.setMargins(player4ScreenCoordinates[0] - 25, player4ScreenCoordinates[1] - 25,
+                player4ViewGroup.rightMargin, player4ViewGroup.bottomMargin);
+        player5ViewGroup.setMargins(player5ScreenCoordinates[0] - 25, player5ScreenCoordinates[1] - 25,
+                player5ViewGroup.rightMargin, player5ViewGroup.bottomMargin);
 
-            busNeighborMarginLayoutParams[i].setMargins(
-                    busNeighborsScreenCoordinates[i][0] - 25,
-                    busNeighborsScreenCoordinates[i][1] - 25,
-                    busNeighborMarginLayoutParams[i].rightMargin,
-                    busNeighborMarginLayoutParams[i].bottomMargin);
-        } */
+        if (chosenTransport == 1) {
+            taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(currentStation); // todo: change to currentStation
+            for (int i = 0; i < taxiNeighborStations.length; i++) {
+                Log.d(TAG, "taxiNeighbor " + i + " = " + taxiNeighborStations[i]);
+                taxiNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(taxiNeighborStations[i]).getX();
+                taxiNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(taxiNeighborStations[i]).getY();
+                taxiNeighborsScreenCoordinates[i] = calculateScreenCoordinates(taxiNeighborsBoardCoordinates[i]);
+                taxiNeighborMarginLayoutParams[i].setMargins(
+                        taxiNeighborsScreenCoordinates[i][0] - 25,
+                        taxiNeighborsScreenCoordinates[i][1] - 25,
+                        taxiNeighborMarginLayoutParams[i].rightMargin,
+                        taxiNeighborMarginLayoutParams[i].bottomMargin);
+            }
+        } else if (chosenTransport == 2) {
+            busNeighborStations = getBusNeighborStationsFromGivenStation(currentStation);
+            for (int i = 0; i < busNeighborStations.length; i++) {
+                Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
+                busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
+                busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
+                busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
+
+                busNeighborMarginLayoutParams[i].setMargins(
+                        busNeighborsScreenCoordinates[i][0] - 25,
+                        busNeighborsScreenCoordinates[i][1] - 25,
+                        busNeighborMarginLayoutParams[i].rightMargin,
+                        busNeighborMarginLayoutParams[i].bottomMargin);
+            }
+        } else if (chosenTransport == 3) {
+            undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(currentStation);
+            for (int i = 0; i < undergroundNeighborStations.length; i++) {
+                Log.d(TAG, "busNeighbor " + i + " = " + undergroundNeighborStations[i]);
+                undergroundNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(undergroundNeighborStations[i]).getX();
+                undergroundNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(undergroundNeighborStations[i]).getY();
+                undergroundNeighborsScreenCoordinates[i] = calculateScreenCoordinates(undergroundNeighborsBoardCoordinates[i]);
+
+                undergroundNeighborMarginLayoutParams[i].setMargins(
+                        undergroundNeighborsScreenCoordinates[i][0] - 25,
+                        undergroundNeighborsScreenCoordinates[i][1] - 25,
+                        undergroundNeighborMarginLayoutParams[i].rightMargin,
+                        undergroundNeighborMarginLayoutParams[i].bottomMargin);
+            }
+        }
     }
 
     int[] calculateBoardCoordinates(int[] screenCoordinates) {
@@ -537,22 +570,25 @@ public class GameScreen extends AppCompatActivity { // extends View {
         int deltaY;
         int closestStation = 0;
         int amountOfStations = selectionOfStations.length; // info: station 0 does not exist
+        Log.d(TAG, "getClosestStationToTouchedBoardCoordinates: amountOfStations = " + amountOfStations);
         // int[] stations = new int[amountOfStations + 1]; // todo: delete later
         int[] stationsXCoordinates = new int[amountOfStations];
         int[] stationsYCoordinates = new int[amountOfStations];
-        for (int i = 1; i < amountOfStations; i++) {
-            stationsXCoordinates[i] = serverDatabase.getStation(i).getX();
-            stationsYCoordinates[i] = serverDatabase.getStation(i).getY();
+        for (int i = 0; i < amountOfStations; i++) {
+            stationsXCoordinates[i] = serverDatabase.getStation(selectionOfStations[i]).getX();
+            stationsYCoordinates[i] = serverDatabase.getStation(selectionOfStations[i]).getY();
         }
 
-        for (int i = 1; i < amountOfStations; i++) {
+        for (int i = 0; i < amountOfStations; i++) {
             deltaX = touchedBoardCoordinates[0] - stationsXCoordinates[i]; // no need to get absolute value,
             deltaY = touchedBoardCoordinates[1] - stationsYCoordinates[i]; // because they are squared later
 
             distance = deltaX * deltaX + deltaY * deltaY;
             if (distance < closestDistance) {
                 closestDistance = distance;
-                closestStation = i;
+                closestStation = selectionOfStations[i];
+                Log.d(TAG, "getClosestStationToTouchedBoardCoordinates: loop closestStation = " +
+                        closestStation);
             }
         }
         return closestStation;
@@ -563,8 +599,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
         return playerStations;
     }
-
-    ;
 
     int[] getTaxiNeighborStationsFromGivenStation(int station) {
         return serverDatabase.getStation(station).getTaxi();
@@ -586,8 +620,6 @@ public class GameScreen extends AppCompatActivity { // extends View {
         }
         return allStations;
     }
-
-
 
 
     // @Override // todo: @Override necessary?
@@ -719,26 +751,18 @@ public class GameScreen extends AppCompatActivity { // extends View {
         journeyTableLayout.setVisibility(View.GONE);
     }
 
-    /* outdated
-    //method to decrease taxi count value
-    public void decreaseTaxiCount(View view){
-
-        taxiTickets = taxiTickets -1;
-        display(taxiTickets);
-    }*/
-
     //method to display current taxi count value on textView
-    private void displayTaxi(int number){
+    private void displayTaxi(int number) {
         TextView displayTaxi = (TextView) findViewById(R.id.taxiTicketView1);
         displayTaxi.setText("" + number);
     }
 
-    private void displayBus(int number){
+    private void displayBus(int number) {
         TextView displayBus = (TextView) findViewById(R.id.busTicketView1);
         displayBus.setText("" + number);
     }
 
-    private void displayUnderground(int number){
+    private void displayUnderground(int number) {
         TextView displayUnderground = (TextView) findViewById(R.id.undergroundTicketView1);
         displayUnderground.setText("" + number);
     }
