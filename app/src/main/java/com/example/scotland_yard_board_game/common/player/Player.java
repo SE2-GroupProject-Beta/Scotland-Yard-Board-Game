@@ -7,7 +7,6 @@ import com.example.scotland_yard_board_game.common.Station;
 
         int getId();
         String getNickname();
-        int[][] getPlayerNeighbours();
         boolean useItem(int itemid);
         void setPosition(Station position);
         Colour getColour();
