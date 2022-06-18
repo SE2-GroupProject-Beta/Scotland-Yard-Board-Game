@@ -144,6 +144,7 @@ public class ClientData {
         for (Player a : Players){
             nicknames[a.getId()] = a.getNickname();
         }
+
     }
 
     public String[] getNicknames(){

@@ -16,6 +16,8 @@ public class LobbyScreen extends AppCompatActivity {
     String hostString;
     TextView hostNameIn;
 
+    ClientData clientData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,9 @@ public class LobbyScreen extends AppCompatActivity {
         hostNameIn = (TextView) findViewById(R.id.player1View);
     }
 
+    void displayNicknames(){
+
+    }
 
     //method with intent to transition to GameScreen (add method to onClick in LobbyScreen.xml)
     public void goGameScreen(View view){
