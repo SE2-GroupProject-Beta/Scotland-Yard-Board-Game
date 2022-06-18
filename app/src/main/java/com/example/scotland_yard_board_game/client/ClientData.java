@@ -92,6 +92,9 @@ public class ClientData {
     public void gameStarted(){
         started = true;
         Log.d(TAG, String.valueOf(Players.get(0).getPosition().getId()));
+
+        gameScreen.updatePlayerBoardCoordinates(Players);
+
         // TODO: 6/11/2022 implement 
     }
     
@@ -141,6 +144,7 @@ public class ClientData {
         for (Player a : Players){
             nicknames[a.getId()] = a.getNickname();
         }
+
     }
 
     public String[] getNicknames(){
