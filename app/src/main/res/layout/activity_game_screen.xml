@@ -20,7 +20,19 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <!-- player1 -->
+    <!-- players -->
+    <View
+        android:id="@+id/player0"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/player0"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
     <View
         android:id="@+id/player1"
         android:layout_width="25dp"
@@ -28,6 +40,54 @@
         android:layout_marginLeft="-100dp"
         android:layout_marginTop="-100dp"
         android:background="@drawable/player1"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/player2"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/player2"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/player3"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/player3"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/player4"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/player4"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
+        app:layout_constraintTop_toTopOf="@id/gameScreenLayout"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/player5"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginTop="-100dp"
+        android:background="@drawable/player5"
         android:visibility="visible"
         app:layout_constraintLeft_toLeftOf="@id/gameScreenLayout"
         app:layout_constraintTop_toTopOf="@id/gameScreenLayout"

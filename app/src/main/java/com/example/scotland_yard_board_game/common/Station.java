@@ -54,6 +54,7 @@ public class Station {
     public int[] getNeighbours(int type){
         int[] neighbours;
         switch(type){
+
             case 0: return neighbours = taxi;
             case 1: return neighbours = bus;
             case 2: return neighbours = underground;

@@ -16,5 +16,6 @@ import com.example.scotland_yard_board_game.common.Station;
         int getmoves ();
         void setmoves (int moves);
         int getConId();
+        Station getPosition();
     }
 

@@ -50,6 +50,9 @@ public class Detective implements Player {
         this.position = position;
     }
 
+    public Station getPosition() {
+        return position;
+    }
 
     //If item available -> use it, otherwise return false
     public boolean useItem(int itemid){

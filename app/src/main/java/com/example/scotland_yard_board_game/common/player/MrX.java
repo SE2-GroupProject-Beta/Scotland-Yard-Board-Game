@@ -9,9 +9,9 @@ public class MrX implements Player {
     private String nickname;
     private int[] inventory = {2,0}; //Double move, Black Tickets
     private Station position;
-    private Colour colour = Colour.TRANSPARENT ;
+    private Colour colour = Colour.BLUE; // Colour.TRANSPARENT ; // todo: change to transparent later
     private boolean turn;
-    private int moves =1;
+    private int moves = 1;
 
     //Kryonet
     public MrX() {
@@ -33,6 +33,9 @@ public class MrX implements Player {
         this.position = position;
     }
 
+    public Station getPosition() {
+        return position;
+    }
 
     public boolean validmove(int stationid, int type) {
         int[] neighbours = this.position.getNeighbours(type);
