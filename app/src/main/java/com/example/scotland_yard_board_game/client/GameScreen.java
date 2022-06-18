@@ -58,8 +58,10 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     //mode of transportation on journey table
     private int chosenTransport; //variable for mode of transport
     TextView turnView; //variable for transportation marker
-    //int list [] = new int[24];
-    String[] var = {"turnView1", "turnView2", "turnView3"};
+
+    //check if blackTicket was used (Mr. X Abilities)
+    boolean blackTicket = false;
+    int blackTicketCount = 3;
 
     private int turnCounter = 1; //turn count view
 
@@ -379,42 +381,147 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
 
             //clientData.validateMove(8, 0); // todo change to real values
-            //int id = view.getId();
             switch(chosenTransport){
                 case 1:     //taxi chosen
-                    //change turnView background color
-                    //for(int i = 0; i < list.length; i++){
-                    for(String name : var){
-                    turnView = findViewById(R.id.turnView1);
-                    turnView.setBackgroundColor(Color.parseColor("#FFEB3B"));
-                    taxiTickets = taxiTickets -1; //decrease taxi tickets
-                    displayTaxi(taxiTickets);         //display current taxi tickets
-                    Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(this, "" + var, Toast.LENGTH_SHORT).show();
-                    //list[i] = (i+1);
+                    if(!blackTicket) {
+                        //change turnView background color
+                        changeBackground("#FFEB3B");
+                        taxiTickets = taxiTickets - 1; //decrease taxi tickets
+                        displayTaxi(taxiTickets);         //display current taxi tickets
+                        Toast.makeText(this, "Taxi selected", Toast.LENGTH_SHORT).show();
                     }
+                    blackTicket = false;
                     break;
 
                 case 2:     //bus chosen
-                    turnView = findViewById(R.id.turnView1);
-                    turnView.setBackgroundColor(Color.parseColor("#22EE22"));
-                    busTickets = busTickets -1;
-                    displayBus(busTickets);
-                    Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
+                    if(!blackTicket) {
+                        changeBackground("#22EE22");
+                        busTickets = busTickets - 1;
+                        displayBus(busTickets);
+                        Toast.makeText(this, "Bus selected", Toast.LENGTH_SHORT).show();
+                    }
+                    blackTicket = false;
                     break;
                 case 3:     //underground chosen
-                    turnView = findViewById(R.id.turnView1);
-                    turnView.setBackgroundColor(Color.parseColor("#E91E1E"));
-                    undergroundTickets = undergroundTickets -1;
-                    displayUnderground(undergroundTickets);
-                    Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
+                    if(!blackTicket) {
+                        changeBackground("#E91E1E");
+                        undergroundTickets = undergroundTickets - 1;
+                        displayUnderground(undergroundTickets);
+                        Toast.makeText(this, "Underground selected", Toast.LENGTH_SHORT).show();
+                    }
+                    blackTicket = false;
                     break;
             }
+
             //increase turnCounter on "confirm"
             turnCounter = turnCounter +1;
             displayTurnCount(turnCounter);
+            displayBlackTicketCount(blackTicketCount);
 
         });
+    }
+
+    //method set JourneyTable view backgrounds
+    void changeBackground(String color){
+
+        switch(turnCounter){
+            case 1:
+                turnView = findViewById(R.id.turnView1);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 2:
+                turnView = findViewById(R.id.turnView2);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 3:
+                turnView = findViewById(R.id.turnView3);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 4:
+                turnView = findViewById(R.id.turnView4);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 5:
+                turnView = findViewById(R.id.turnView5);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 6:
+                turnView = findViewById(R.id.turnView6);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 7:
+                turnView = findViewById(R.id.turnView7);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 8:
+                turnView = findViewById(R.id.turnView8);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 9:
+                turnView = findViewById(R.id.turnView9);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 10:
+                turnView = findViewById(R.id.turnView10);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 11:
+                turnView = findViewById(R.id.turnView11);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 12:
+                turnView = findViewById(R.id.turnView12);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 13:
+                turnView = findViewById(R.id.turnView13);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 14:
+                turnView = findViewById(R.id.turnView14);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 15:
+                turnView = findViewById(R.id.turnView15);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 16:
+                turnView = findViewById(R.id.turnView16);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 17:
+                turnView = findViewById(R.id.turnView17);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 18:
+                turnView = findViewById(R.id.turnView18);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 19:
+                turnView = findViewById(R.id.turnView19);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 20:
+                turnView = findViewById(R.id.turnView20);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 21:
+                turnView = findViewById(R.id.turnView21);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 22:
+                turnView = findViewById(R.id.turnView22);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 23:
+                turnView = findViewById(R.id.turnView23);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+            case 24:
+                turnView = findViewById(R.id.turnView24);
+                turnView.setBackgroundColor(Color.parseColor(color));
+                break;
+        }
     }
 
     void setclientData(ClientData data){
@@ -611,7 +718,14 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.itemBlackTicket:
-                Toast.makeText(this, "Black Ticket selected", Toast.LENGTH_SHORT).show();
+                //check if there are any blackTickets remaining
+                if(0 < blackTicketCount) {
+                    blackTicket = true;
+                    blackTicketCount = blackTicketCount -1;
+                    Toast.makeText(this, "Black Ticket selected", Toast.LENGTH_SHORT).show();
+                } else{
+                    Toast.makeText(this, "No Black Tickets remaining", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.itemDoubleTurn:
                 Toast.makeText(this, "Double Turn selected", Toast.LENGTH_SHORT).show();
@@ -757,5 +871,10 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private void displayTurnCount(int number){
         TextView displayTurnCount = (TextView) findViewById(R.id.currentTurnView);
         displayTurnCount.setText("Turn " + number);
+    }
+
+    private void displayBlackTicketCount(int number){
+        TextView displayTurnCount = (TextView) findViewById(R.id.blackTicketCountView);
+        displayTurnCount.setText("" + number);
     }
 }
