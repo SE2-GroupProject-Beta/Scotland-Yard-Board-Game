@@ -28,10 +28,13 @@ import com.example.scotland_yard_board_game.R;
 import com.example.scotland_yard_board_game.common.Station;
 import com.example.scotland_yard_board_game.common.StationDatabase;
 
+import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
+import com.example.scotland_yard_board_game.common.player.Player;
 import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class GameScreen extends AppCompatActivity { // extends View {
@@ -76,6 +79,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
 
+    Player[] players;
 
     private int[] player0BoardCoordinates = new int[2];
     private int[] player0ScreenCoordinates = new int[2];
@@ -147,8 +151,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
 
     private StationDatabase serverDatabase;
     private Station serverStation; // todo: delete if not needed
-
-    ClientData clientData;
+    private ClientData clientData;
 
     // int player1CurrentStation = 1; // todo: initialize players coming from lobby
     int currentStation; //  = 1;
@@ -205,7 +208,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
         player5View = findViewById(R.id.player5);
         player5ViewGroup = (MarginLayoutParams) player5View.getLayoutParams();
 
-        activePlayer = 3;
+        activePlayer = 0;
         initializePlayerBoardCoordinates();
         placePlayers(); // todo: doesn't place the players from here yet
 
@@ -257,7 +260,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
             showBoardX.setText("X = " + touchedBoardCoordinates[0]);
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
-            getPlayerBoardCoordinates();
+            // getPlayerBoardCoordinates();
 
             // calculate player1ScreenCoordinates and set circle to these coordinates
             player0ScreenCoordinates = calculateScreenCoordinates(player0BoardCoordinates);
@@ -332,13 +335,14 @@ public class GameScreen extends AppCompatActivity { // extends View {
         });
 
 
-        confirmButton.setOnClickListener((view) -> { //changed because ontouch listener was sending twice
+        confirmButton.setOnClickListener((view) -> {
 
-            clientData.gameStart();
-            //clientData.validateMove(8, 0); // todo change to real values
-            //int id = view.getId();
+            clientData.gameStart(); // todo: why gameStart() here? -> onCreate?
+            clientData.validateMove(chosenStation, chosenTransport);
+
+            int id = view.getId(); // todo: is this used?
             switch (chosenTransport) {
-                case 1: //taxi chosen
+                case 1: // taxi chosen
                     //change turnView background color
                     turnView = findViewById(R.id.turnView1);
                     turnView.setBackgroundColor(Color.parseColor("#FFEB3B"));
@@ -364,6 +368,7 @@ public class GameScreen extends AppCompatActivity { // extends View {
                             " by underground", Toast.LENGTH_SHORT).show();
                     break;
             }
+            placePlayers();
         });
     }
 
@@ -417,8 +422,39 @@ public class GameScreen extends AppCompatActivity { // extends View {
         player5BoardCoordinates[1] = 2317;
     }
 
-    void getPlayerBoardCoordinates() {
+    void updatePlayerBoardCoordinates(ArrayList<Player> playerList) {
         // todo: get player coordinates from server
+
+        for (Player player : playerList) { // not beautiful, but it works...
+            switch (player.getId()) {
+                case 0:
+                    player0BoardCoordinates[0] = player.getPosition().getX();
+                    player0BoardCoordinates[1] = player.getPosition().getY();
+                    break;
+                case 1:
+                    player1BoardCoordinates[0] = player.getPosition().getX();
+                    player1BoardCoordinates[1] = player.getPosition().getY();
+                    break;
+                case 2:
+                    player2BoardCoordinates[0] = player.getPosition().getX();
+                    player2BoardCoordinates[1] = player.getPosition().getY();
+                    break;
+                case 3:
+                    player3BoardCoordinates[0] = player.getPosition().getX();
+                    player3BoardCoordinates[1] = player.getPosition().getY();
+                    break;
+                case 4:
+                    player4BoardCoordinates[0] = player.getPosition().getX();
+                    player4BoardCoordinates[1] = player.getPosition().getY();
+                    break;
+                case 5:
+                    player5BoardCoordinates[0] = player.getPosition().getX();
+                    player5BoardCoordinates[1] = player.getPosition().getY();
+                    break;
+            }
+        }
+
+        placePlayers();
 
     }
 
@@ -426,8 +462,12 @@ public class GameScreen extends AppCompatActivity { // extends View {
         if (activePlayer == 0) {
             // todo: complete code with .getStation() or .getPosition()
         }
+        ArrayList<Player> playerArray = clientData.getPlayers();
 
-        return serverDatabase.getStation(67).getId(); // todo: return real value
+
+
+        return playerArray.get(0).getPosition().getId();
+        // return serverDatabase.getStation(67).getId(); // todo: return real value
     }
 
 
