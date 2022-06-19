@@ -40,15 +40,16 @@ import java.util.Objects;
 
 public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener { // extends View {
     private static final String TAG = "GameScreen";
+    //public static ClientData clientData; TODO: REMOVE
 
     private ConstraintLayout gameScreenLayout;
     private TouchImageView gameBoardView;
     private ConstraintLayout journeyTableLayout;
     private TimeListener timeListener;
 
-    //nickname
-    TextView hostNameOut;
-    String hostString;
+    //nickname variable
+    TextView MrXNameGameView; //Mr.X
+    TextView player2NameGameView; //detective/player 1
 
     //ticket count (adjust maximum)
     int taxiTickets = 10;
@@ -158,7 +159,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
     private StationDatabase serverDatabase;
     private Station serverStation; // todo: delete if not needed
-    private ClientData clientData;
+    static ClientData clientData;  //needed to be static
 
     // int player1CurrentStation = 1; // todo: initialize players coming from lobby
     int currentStation; //  = 1;
@@ -176,12 +177,23 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
+        //set clientData to GameScreen
+        clientData.setGameScreen(this);
+        //Send start game signal
+        clientData.gameStart();
 
+        //assign nickname variable to TextView for display
+        MrXNameGameView = findViewById(R.id.MrXNameGameView); //Mr. X
+        player2NameGameView = findViewById(R.id.player2NameGameView); //detective/player 1
+        //call display method "displayNicknames"
+        displayNicknames(clientData.getNicknames());
+
+        /* outdated TODO: DELETE
         //nickname on GameScreen
-
         hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
         // hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
         hostNameOut.setText(hostString);                            //setText to value of hostString variable
+         */
 
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
@@ -195,12 +207,14 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         gameBoardView.setMaxZoom(6); // augment zoom
 
+        //TODO: DELETE
+        /* ServerStart moved to HostNicknameScreen
         try {
             ServerStart server = new ServerStart(getApplicationContext());
             ClientStart client = new ClientStart(getApplicationContext(), true, this);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         player0View = findViewById(R.id.player0); // to move players
         player0ViewGroup = (MarginLayoutParams) player0View.getLayoutParams();
@@ -341,10 +355,13 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             return true;
         });
 
-        confirmButton.setOnClickListener((view) -> {    
+        confirmButton.setOnClickListener((view) -> {
+            /* moved
             clientData.gameStart(); // todo: why gameStart() here? -> onCreate?
+            */
             clientData.validateMove(chosenStation, chosenTransport);
-          
+
+
             switch(chosenTransport){
                 case 1:     //taxi chosen
                     if(!blackTicket) {
@@ -490,11 +507,11 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                 break;
         }
     }
-
+/* TODO
     void setclientData(ClientData data) {
         this.clientData = data;
     }
-
+*/
     void clearAllNeighborStations() {
         for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
             taxiNeighborsScreenCoordinates[i][0] = -100;
@@ -941,5 +958,19 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private void displayBlackTicketCount(int number){
         TextView displayTurnCount = (TextView) findViewById(R.id.blackTicketCountView);
         displayTurnCount.setText("" + number);
+    }
+
+    //method called to display nicknames on GameScreen
+    void displayNicknames(String[] nicknames) {
+        for (int i = 0; i < nicknames.length; i++) {
+            switch (i) {
+                case 0:
+                    MrXNameGameView.setText(nicknames[i]);
+                    break;
+                case 1:
+                    player2NameGameView.setText(nicknames[i]);
+                    break;
+            }
+        }
     }
 }

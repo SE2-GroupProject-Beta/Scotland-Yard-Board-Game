@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class ClientData {
 
-    private Context context;
+    //private Context context;
     private Client client;
     private StationDatabase stationDatabase;
     private ArrayList<Player> Players = new ArrayList<Player>(6);
@@ -32,16 +32,17 @@ public class ClientData {
     private boolean mrx;
     private String[] nicknames = new String[6];
     private GameScreen gameScreen;
+    private LobbyScreen lobbyScreen;
 
-    public ClientData(Context context, Client client, boolean mrx, GameScreen gameScreen) {
-        this.context = context;
+    public ClientData(Context context, Client client, boolean mrx) { //GameScreen gameScreen
+        //this.context = context;
         this.client = client;
         this.mrx = mrx;
-        this.gameScreen = gameScreen;
-        gameScreen.setclientData(this);
+        //this.gameScreen = gameScreen;
+        //gameScreen.setclientData(this);
         journeyTable.journeyTable = new int[24][2];
 
-        this.stationDatabase = new StationDatabase(this.context);
+        this.stationDatabase = new StationDatabase(context); //this.
     }
 
 
@@ -65,9 +66,8 @@ public class ClientData {
     }
 
     // Player sends his nickname
-    public void setNickname() {
-        // TODO: 6/11/2022 Game needs to promt for nickname
-        String nickname = "test";
+    public void setNickname(String nickname) {
+        //prompt for nickname
        if(mrx){
            MrXNickname name = new MrXNickname();
            name.nickname = nickname;
@@ -144,7 +144,13 @@ public class ClientData {
         for (Player a : Players){
             nicknames[a.getId()] = a.getNickname();
         }
-
+        //display nicknames while game has not started yet
+        if(lobbyScreen!=null && !started){
+            lobbyScreen.displayNicknames(nicknames);
+        }
+        if(gameScreen!=null){
+            gameScreen.displayNicknames(nicknames);
+        }
     }
 
     public String[] getNicknames(){
@@ -170,5 +176,17 @@ public class ClientData {
 
     public ArrayList<Player> getPlayers() {
         return Players;
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
+
+    public void setLobbyScreen(LobbyScreen lobbyScreen) {
+        this.lobbyScreen = lobbyScreen;
+    }
+
+    public StationDatabase getStationDatabase() {
+        return stationDatabase;
     }
 }
