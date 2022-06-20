@@ -1,5 +1,7 @@
 package com.example.scotland_yard_board_game.client;
 
+import static android.content.ContentValues.TAG;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
@@ -11,11 +13,13 @@ import com.example.scotland_yard_board_game.common.messages.GameStart;
 import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
 import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickname;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ColourTaken;
+import com.example.scotland_yard_board_game.common.messages.fromserver.EndTurn;
 import com.example.scotland_yard_board_game.common.messages.fromserver.InvalidMove;
 import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerConnected;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ServerFull;
+import com.example.scotland_yard_board_game.common.messages.fromserver.StartTurn;
 
 public class ClientListener extends Listener {
         private final Client client;
@@ -47,12 +51,16 @@ public class ClientListener extends Listener {
                 JourneyTable jtable = (JourneyTable) object;
                 clientData.updateJourneyTable(jtable);
             } else if (object instanceof PlayerConnected) {
-                clientData.setNickname();
+                Log.debug(TAG,"Connection successfull");
             } else if (object instanceof PlayerList) {
                 PlayerList list = (PlayerList) object;
                 clientData.updatePlayers(list);
             } else if (object instanceof GameStart) {
                 clientData.gameStarted();
+            } else if (object instanceof StartTurn) {
+                clientData.startTurn();
+            } else if (object instanceof EndTurn) {
+                clientData.endTurn();
             }
 
 

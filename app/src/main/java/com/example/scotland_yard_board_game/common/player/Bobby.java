@@ -3,7 +3,7 @@ package com.example.scotland_yard_board_game.common.player;
 import com.example.scotland_yard_board_game.common.Colour;
 import com.example.scotland_yard_board_game.common.Station;
 
-// TODO: 5/1/2022 Clarify implementation in terms of how bobbys move
+// this class is unused
 public class Bobby {
     private int id;
     private String nickname;

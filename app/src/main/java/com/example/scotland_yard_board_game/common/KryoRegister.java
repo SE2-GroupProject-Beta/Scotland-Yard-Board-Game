@@ -4,14 +4,17 @@ import com.esotericsoftware.kryo.Kryo;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ColourTaken;
 import com.example.scotland_yard_board_game.common.messages.fromclient.DetectiveNickname;
 import com.example.scotland_yard_board_game.common.messages.GameStart;
+import com.example.scotland_yard_board_game.common.messages.fromserver.EndTurn;
 import com.example.scotland_yard_board_game.common.messages.fromserver.InvalidMove;
 import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
 import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
 import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickname;
+import com.example.scotland_yard_board_game.common.messages.fromserver.NameTaken;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerConnected;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerJoined;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ServerFull;
+import com.example.scotland_yard_board_game.common.messages.fromserver.StartTurn;
 import com.example.scotland_yard_board_game.common.player.Detective;
 import com.example.scotland_yard_board_game.common.player.MrX;
 
@@ -41,6 +44,9 @@ public class KryoRegister {
         kryo.register(int[].class);
         kryo.register(Station.class);
         kryo.register(int[][].class);
+        kryo.register(StartTurn.class);
+        kryo.register(EndTurn.class);
+        kryo.register(NameTaken.class);
     }
 
 }

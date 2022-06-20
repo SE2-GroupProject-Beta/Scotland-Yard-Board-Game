@@ -21,27 +21,23 @@ import java.util.ArrayList;
 
 public class ClientData {
 
-    private Context context;
     private Client client;
     private StationDatabase stationDatabase;
-    private ArrayList<Player> Players = new ArrayList<Player>(6);
+    private ArrayList<Player> Players = new ArrayList<>(6);
     private boolean started = false;
     private JourneyTable journeyTable = new JourneyTable();
-    //private int [][] journeyTable = new int[24][2];
-    private int ownturn = 0;
+    private boolean ownturn = false;
     private boolean mrx;
     private String[] nicknames = new String[6];
     private GameScreen gameScreen;
+    private LobbyScreen lobbyScreen;
 
-    public ClientData(Context context, Client client, boolean mrx, GameScreen gameScreen) {
-        this.context = context;
+    public ClientData(Context context, Client client, boolean mrx) {
         this.client = client;
         this.mrx = mrx;
-        this.gameScreen = gameScreen;
-        gameScreen.setclientData(this);
         journeyTable.journeyTable = new int[24][2];
 
-        this.stationDatabase = new StationDatabase(this.context);
+        this.stationDatabase = new StationDatabase(context);
     }
 
 
@@ -65,9 +61,7 @@ public class ClientData {
     }
 
     // Player sends his nickname
-    public void setNickname() {
-        // TODO: 6/11/2022 Game needs to promt for nickname
-        String nickname = "test";
+    public void setNickname(String nickname) {
        if(mrx){
            MrXNickname name = new MrXNickname();
            name.nickname = nickname;
@@ -80,8 +74,6 @@ public class ClientData {
 
     }
 
-
-    // TODO: 6/9/2022 handle game start
     //Sends GameStart message to server
     public void gameStart() {
             started = true;
@@ -97,7 +89,6 @@ public class ClientData {
 
         // TODO: 6/11/2022 implement 
     }
-    
 
     //Player chooses colour -> server checks if available
     public void chooseColour (Colour colour){
@@ -108,15 +99,12 @@ public class ClientData {
     }
 
 
-
-    //todo
     public boolean useItem(int itemid){ //will be used for mrx double turn
         // TODO: 6/9/2022 implement for mrx -> after turns are implemented
         return false;
     }
 
     //Server validates move -> sends updated player list back
-
     public void validateMove(int Stationid, int type){
         Move move = new Move();
         move.type = type; move.station = Stationid; move.mrx = mrx;
@@ -144,11 +132,22 @@ public class ClientData {
         for (Player a : Players){
             nicknames[a.getId()] = a.getNickname();
         }
+        if(lobbyScreen!=null && !started){
+            lobbyScreen.displayNicknames(nicknames);
+        }
 
     }
 
     public String[] getNicknames(){
         return nicknames;
+    }
+
+    public void startTurn(){
+        ownturn = true;
+    }
+
+    public void endTurn(){
+        ownturn = false;
     }
 
     public void disconnectPlayer() {
@@ -163,12 +162,19 @@ public class ClientData {
         // TODO: 6/9/2022 what to do if server full
     }
 
-    public void startGame(){
-        client.sendTCP(new GameStart());
-    }
-
-
     public ArrayList<Player> getPlayers() {
         return Players;
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
+
+    public void setLobbyScreen(LobbyScreen lobbyScreen) {
+        this.lobbyScreen = lobbyScreen;
+    }
+
+    public StationDatabase getStationDatabase() {
+        return stationDatabase;
     }
 }
