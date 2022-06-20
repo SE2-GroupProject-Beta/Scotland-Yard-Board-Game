@@ -23,11 +23,10 @@ public class ClientData {
 
     private Client client;
     private StationDatabase stationDatabase;
-    private ArrayList<Player> Players = new ArrayList<Player>(6);
+    private ArrayList<Player> Players = new ArrayList<>(6);
     private boolean started = false;
     private JourneyTable journeyTable = new JourneyTable();
-    //private int [][] journeyTable = new int[24][2];
-    private int ownturn = 0;
+    private boolean ownturn = false;
     private boolean mrx;
     private String[] nicknames = new String[6];
     private GameScreen gameScreen;
@@ -75,8 +74,6 @@ public class ClientData {
 
     }
 
-
-    // TODO: 6/9/2022 handle game start
     //Sends GameStart message to server
     public void gameStart() {
             started = true;
@@ -92,7 +89,6 @@ public class ClientData {
 
         // TODO: 6/11/2022 implement 
     }
-    
 
     //Player chooses colour -> server checks if available
     public void chooseColour (Colour colour){
@@ -103,15 +99,12 @@ public class ClientData {
     }
 
 
-
-    //todo
     public boolean useItem(int itemid){ //will be used for mrx double turn
         // TODO: 6/9/2022 implement for mrx -> after turns are implemented
         return false;
     }
 
     //Server validates move -> sends updated player list back
-
     public void validateMove(int Stationid, int type){
         Move move = new Move();
         move.type = type; move.station = Stationid; move.mrx = mrx;
@@ -126,7 +119,7 @@ public class ClientData {
         this.Players = list.Players;
         updateNicknames();
         if (started) {
-           // gameScreen.updatePlayerBoardCoordinates(Players);
+            gameScreen.updatePlayerBoardCoordinates(Players);
         }
     }
 
@@ -149,6 +142,14 @@ public class ClientData {
         return nicknames;
     }
 
+    public void startTurn(){
+        ownturn = true;
+    }
+
+    public void endTurn(){
+        ownturn = false;
+    }
+
     public void disconnectPlayer() {
         // TODO: 6/9/2022 decide how disconnecting is handled
     }
@@ -160,11 +161,6 @@ public class ClientData {
     public void serverFull() {
         // TODO: 6/9/2022 what to do if server full
     }
-
-    public void startGame(){
-        client.sendTCP(new GameStart());
-    }
-
 
     public ArrayList<Player> getPlayers() {
         return Players;

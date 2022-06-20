@@ -267,6 +267,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             // getPlayerBoardCoordinates();
 
             // calculate player1ScreenCoordinates and set circle to these coordinates
+            //todo needs to be also triggered by updatePlayerBoardCoordinates
             player0ScreenCoordinates = calculateScreenCoordinates(player0BoardCoordinates);
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
             player2ScreenCoordinates = calculateScreenCoordinates(player2BoardCoordinates);
@@ -382,7 +383,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             displayBlackTicketCount(blackTicketCount);
 
         });
-
     }
 
     //method set JourneyTable view backgrounds

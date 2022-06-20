@@ -13,11 +13,13 @@ import com.example.scotland_yard_board_game.common.messages.GameStart;
 import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
 import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickname;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ColourTaken;
+import com.example.scotland_yard_board_game.common.messages.fromserver.EndTurn;
 import com.example.scotland_yard_board_game.common.messages.fromserver.InvalidMove;
 import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerConnected;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ServerFull;
+import com.example.scotland_yard_board_game.common.messages.fromserver.StartTurn;
 
 public class ClientListener extends Listener {
         private final Client client;
@@ -55,6 +57,10 @@ public class ClientListener extends Listener {
                 clientData.updatePlayers(list);
             } else if (object instanceof GameStart) {
                 clientData.gameStarted();
+            } else if (object instanceof StartTurn) {
+                clientData.startTurn();
+            } else if (object instanceof EndTurn) {
+                clientData.endTurn();
             }
 
 

@@ -39,8 +39,6 @@ public class Detective implements Player {
                     case 2:
                         return useItem(2);
                 }
-            } else {
-                return false;
             }
         }
         return false;
@@ -63,14 +61,6 @@ public class Detective implements Player {
         }
 
         return false;
-    }
-
-    //Get neighbours of current station
-    public int[][] getPlayerNeighbours(){
-      /*  int[][] neighbours;
-        neighbours = this.position.getNeighbours();
-        return neighbours; */
-        return null;
     }
 
     public String getNickname() {
