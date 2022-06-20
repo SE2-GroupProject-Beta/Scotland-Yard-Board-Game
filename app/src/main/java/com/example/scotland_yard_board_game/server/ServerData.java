@@ -112,7 +112,7 @@ public class ServerData {
     public boolean joinPlayer(int conid, String nickname, int type) {
         int playerId = Clients.size();
         for (Player a: Clients){
-            if(a.getNickname() == nickname){
+            if(nickname.equals(a.getNickname())){
             return false;
             }
         }

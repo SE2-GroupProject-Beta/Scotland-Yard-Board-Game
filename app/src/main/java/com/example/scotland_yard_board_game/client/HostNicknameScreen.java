@@ -17,7 +17,7 @@ public class HostNicknameScreen extends AppCompatActivity {
     //nickname variables
     EditText nicknameField;
     String nickname;
-    static ClientData clientData;
+    static ClientData clientData;   //static, global variable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,24 +27,26 @@ public class HostNicknameScreen extends AppCompatActivity {
         //editText nickname, find source of input
         nicknameField = (EditText) findViewById(R.id.editTextHostName);
 
-        //initialise Server when Host creates Lobby
         try {
             new ServerStart(getApplicationContext());
-            ClientStart client = new ClientStart(getApplicationContext(), true);
-            this.clientData = client.getClientData();
-        } catch (IOException e){
+            ClientStart client = new ClientStart(getApplicationContext(), true); //Host is always Mr.X
+            this.clientData = client.getClientData(); //receive data from clientData
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void goLobbyScreen(View view){
 
         nickname = nicknameField.getText().toString();
-        clientData.setNickname(nickname);
-        LobbyScreen.clientData = this.clientData;
+        clientData.setNickname(nickname);           //set nickname on Server
+        LobbyScreen.clientData = this.clientData;   //pass data to LobbyScreen
         Intent LobbyScreen = new Intent(this, LobbyScreen.class);
         startActivity(LobbyScreen);
-        finish();
-
+        finish();           //close activity HostNicknameScreen
     }
+
+
+
 }

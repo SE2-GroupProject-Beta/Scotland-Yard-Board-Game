@@ -13,15 +13,14 @@ import java.io.IOException;
 
 public class ClientStart {
     private final Client client;
-    //private Context context;
     private ClientData clientData;
 
-    public ClientStart(Context context, boolean mrx) throws IOException { //GameScreen gameScreen
+    public ClientStart(Context context, boolean mrx) throws IOException {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         client = new Client();
-        clientData = new ClientData(context,client,mrx); //gameScreen
+        clientData = new ClientData(context,client,mrx);
 
         KryoRegister.registerClasses(client.getKryo());
 

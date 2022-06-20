@@ -49,8 +49,7 @@ public class ClientListener extends Listener {
                 JourneyTable jtable = (JourneyTable) object;
                 clientData.updateJourneyTable(jtable);
             } else if (object instanceof PlayerConnected) {
-                Log.debug(TAG,"Connection successful");
-                //clientData.setNickname();
+                Log.debug(TAG,"Connection successfull");
             } else if (object instanceof PlayerList) {
                 PlayerList list = (PlayerList) object;
                 clientData.updatePlayers(list);

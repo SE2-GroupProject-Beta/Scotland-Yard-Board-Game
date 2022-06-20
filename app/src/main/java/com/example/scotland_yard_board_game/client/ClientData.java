@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 public class ClientData {
 
-    //private Context context;
     private Client client;
     private StationDatabase stationDatabase;
     private ArrayList<Player> Players = new ArrayList<Player>(6);
@@ -34,15 +33,12 @@ public class ClientData {
     private GameScreen gameScreen;
     private LobbyScreen lobbyScreen;
 
-    public ClientData(Context context, Client client, boolean mrx) { //GameScreen gameScreen
-        //this.context = context;
+    public ClientData(Context context, Client client, boolean mrx) {
         this.client = client;
         this.mrx = mrx;
-        //this.gameScreen = gameScreen;
-        //gameScreen.setclientData(this);
         journeyTable.journeyTable = new int[24][2];
 
-        this.stationDatabase = new StationDatabase(context); //this.
+        this.stationDatabase = new StationDatabase(context);
     }
 
 
@@ -67,7 +63,6 @@ public class ClientData {
 
     // Player sends his nickname
     public void setNickname(String nickname) {
-        //prompt for nickname
        if(mrx){
            MrXNickname name = new MrXNickname();
            name.nickname = nickname;
@@ -131,7 +126,7 @@ public class ClientData {
         this.Players = list.Players;
         updateNicknames();
         if (started) {
-            gameScreen.updatePlayerBoardCoordinates(Players);
+           // gameScreen.updatePlayerBoardCoordinates(Players);
         }
     }
 
@@ -144,13 +139,10 @@ public class ClientData {
         for (Player a : Players){
             nicknames[a.getId()] = a.getNickname();
         }
-        //display nicknames while game has not started yet
         if(lobbyScreen!=null && !started){
             lobbyScreen.displayNicknames(nicknames);
         }
-        if(gameScreen!=null){
-            gameScreen.displayNicknames(nicknames);
-        }
+
     }
 
     public String[] getNicknames(){
