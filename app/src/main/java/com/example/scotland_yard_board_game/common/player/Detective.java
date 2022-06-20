@@ -39,8 +39,6 @@ public class Detective implements Player {
                     case 2:
                         return useItem(2);
                 }
-            } else {
-                return false;
             }
         }
         return false;

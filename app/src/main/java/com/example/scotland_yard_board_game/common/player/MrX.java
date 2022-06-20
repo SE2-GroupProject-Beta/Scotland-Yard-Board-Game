@@ -1,5 +1,9 @@
 package com.example.scotland_yard_board_game.common.player;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
 import com.example.scotland_yard_board_game.common.Colour;
 import com.example.scotland_yard_board_game.common.Station;
 
@@ -39,11 +43,10 @@ public class MrX implements Player {
 
     public boolean validmove(int stationid, int type) {
         int[] neighbours = this.position.getNeighbours(type);
+        Log.d(TAG, String.valueOf(neighbours[0]));
         for(int i=0; i<neighbours.length; i++) {
             if (neighbours[i] == stationid) {
                 return true; // TODO: 5/5/2022 implement check for black ticket
-            } else {
-                return false;
             }
         }
         return false;
