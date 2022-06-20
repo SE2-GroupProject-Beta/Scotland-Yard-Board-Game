@@ -47,8 +47,8 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private TimeListener timeListener;
 
     //nickname
-    TextView hostNameOut;
-    String hostString;
+    TextView MrXNameGameView; //Mr.X
+    TextView player2NameGameView; //detective/player 1
 
     //ticket count (adjust maximum)
     int taxiTickets = 10;
@@ -56,8 +56,8 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     int undergroundTickets = 8;
 
     //mode of transportation on journey table
-    private int chosenStation; // variable for chosen station for confirmButton
-    private int chosenTransport; // variable for mode of transport for confirmButton
+    private int chosenStation = -1; // variable for chosen station for confirmButton
+    private int chosenTransport = -1; // variable for mode of transport for confirmButton
     TextView turnView; //variable for transportation marker
 
     //check if blackTicket was used (Mr. X Abilities)
@@ -158,7 +158,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
     private StationDatabase serverDatabase;
     private Station serverStation; // todo: delete if not needed
-    private ClientData clientData;
+    static ClientData clientData;
 
     // int player1CurrentStation = 1; // todo: initialize players coming from lobby
     int currentStation; //  = 1;
@@ -176,12 +176,16 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
+        clientData.setGameScreen(this);
+        //Send start game signal
+        clientData.gameStart();
 
-        //nickname on GameScreen
 
-        hostNameOut = findViewById(R.id.MrXNameGameView);            //find TextView for Host Nickname output
-        // hostString = getIntent().getExtras().getString("Val");  //get value from previous activity
-        hostNameOut.setText(hostString);                            //setText to value of hostString variable
+        //assign nickname variable to TextView for display
+        MrXNameGameView = findViewById(R.id.MrXNameGameView); //Mr. X
+        player2NameGameView = findViewById(R.id.player2NameGameView); //detective/player 1
+        //call display method "displayNicknames"
+        displayNicknames(clientData.getNicknames());
 
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
@@ -194,13 +198,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         confirmButton = findViewById(R.id.confirmButton);
 
         gameBoardView.setMaxZoom(6); // augment zoom
-
-        try {
-            ServerStart server = new ServerStart(getApplicationContext());
-            ClientStart client = new ClientStart(getApplicationContext(), true, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         player0View = findViewById(R.id.player0); // to move players
         player0ViewGroup = (MarginLayoutParams) player0View.getLayoutParams();
@@ -217,7 +214,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         activePlayer = 0;
         initializePlayerBoardCoordinates();
-        placePlayers(); // todo: doesn't place the players from here yet
+        //placePlayers(); // todo: doesn't place the players from here yet
 
         taxiNeighbor0View = findViewById(R.id.taxi_neighbor0); // :( 'dry' again
         taxiNeighbor1View = findViewById(R.id.taxi_neighbor1);
@@ -255,7 +252,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         undergroundNeighborMarginLayoutParams[3] = (MarginLayoutParams) undergroundNeighbor3View.getLayoutParams();
 
         // initialize ServerDatabase
-        serverDatabase = new StationDatabase(this.getApplicationContext());
+        serverDatabase = clientData.getStationDatabase();
 
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
 
@@ -287,13 +284,13 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
             int closestStation = 1;
-            if (chosenTransport == 1) {
+            if (chosenTransport == 0) {
                 closestStation = getClosestStationToTouchedBoardCoordinates(
                         touchedBoardCoordinates, taxiNeighborStations);
-            } else if (chosenTransport == 2) {
+            } else if (chosenTransport == 1) {
                 closestStation = getClosestStationToTouchedBoardCoordinates(
                         touchedBoardCoordinates, busNeighborStations);
-            } else if (chosenTransport == 3) {
+            } else if (chosenTransport == 2) {
                 closestStation = getClosestStationToTouchedBoardCoordinates(
                         touchedBoardCoordinates, undergroundNeighborStations);
             }
@@ -307,7 +304,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
-            chosenTransport = 1;
+            chosenTransport = 0;
             clearAllNeighborStations();
 
             currentStation = getCurrentStation(activePlayer);
@@ -319,7 +316,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         busDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Bus");
-            chosenTransport = 2;
+            chosenTransport = 1;
             clearAllNeighborStations();
 
             currentStation = getCurrentStation(activePlayer);
@@ -331,7 +328,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         undergroundDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Underground");
-            chosenTransport = 3;
+            chosenTransport = 2;
             clearAllNeighborStations();
 
             currentStation = getCurrentStation(activePlayer);
@@ -341,12 +338,11 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             return true;
         });
 
-        confirmButton.setOnClickListener((view) -> {    
-            clientData.gameStart(); // todo: why gameStart() here? -> onCreate?
+        confirmButton.setOnClickListener((view) -> {
             clientData.validateMove(chosenStation, chosenTransport);
           
             switch(chosenTransport){
-                case 1:     //taxi chosen
+                case 0:     //taxi chosen
                     if(!blackTicket) {
                         //change turnView background color
                         changeBackground("#FFEB3B");
@@ -358,7 +354,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                     blackTicket = false;
                     break;
 
-                case 2:     //bus chosen
+                case 1:     //bus chosen
                     if(!blackTicket) {
                         changeBackground("#22EE22");
                         busTickets = busTickets - 1;
@@ -368,7 +364,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                     }
                     blackTicket = false;
                     break;
-                case 3:     //underground chosen
+                case 2:     //underground chosen
                     if(!blackTicket) {
                         changeBackground("#E91E1E");
                         undergroundTickets = undergroundTickets - 1;
@@ -386,6 +382,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             displayBlackTicketCount(blackTicketCount);
 
         });
+
     }
 
     //method set JourneyTable view backgrounds
@@ -491,9 +488,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         }
     }
 
-    void setclientData(ClientData data) {
-        this.clientData = data;
-    }
 
     void clearAllNeighborStations() {
         for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
@@ -583,7 +577,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         }
         ArrayList<Player> playerArray = clientData.getPlayers();
 
-
+        Log.d(TAG, String.valueOf(playerArray.get(0).getPosition().getId())+" ");
 
         return playerArray.get(0).getPosition().getId();
         // return serverDatabase.getStation(67).getId(); // todo: return real value
@@ -604,7 +598,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         player5ViewGroup.setMargins(player5ScreenCoordinates[0] - 25, player5ScreenCoordinates[1] - 25,
                 player5ViewGroup.rightMargin, player5ViewGroup.bottomMargin);
 
-        if (chosenTransport == 1) {
+        if (chosenTransport == 0) {
             taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(currentStation); // todo: change to currentStation
             for (int i = 0; i < taxiNeighborStations.length; i++) {
                 Log.d(TAG, "taxiNeighbor " + i + " = " + taxiNeighborStations[i]);
@@ -617,7 +611,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                         taxiNeighborMarginLayoutParams[i].rightMargin,
                         taxiNeighborMarginLayoutParams[i].bottomMargin);
             }
-        } else if (chosenTransport == 2) {
+        } else if (chosenTransport == 1) {
             busNeighborStations = getBusNeighborStationsFromGivenStation(currentStation);
             for (int i = 0; i < busNeighborStations.length; i++) {
                 Log.d(TAG, "busNeighbor " + i + " = " + busNeighborStations[i]);
@@ -631,7 +625,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                         busNeighborMarginLayoutParams[i].rightMargin,
                         busNeighborMarginLayoutParams[i].bottomMargin);
             }
-        } else if (chosenTransport == 3) {
+        } else if (chosenTransport == 2) {
             undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(currentStation);
             for (int i = 0; i < undergroundNeighborStations.length; i++) {
                 Log.d(TAG, "busNeighbor " + i + " = " + undergroundNeighborStations[i]);
@@ -941,5 +935,19 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private void displayBlackTicketCount(int number){
         TextView displayTurnCount = (TextView) findViewById(R.id.blackTicketCountView);
         displayTurnCount.setText("" + number);
+    }
+
+    //method called to display nicknames on GameScreen
+    void displayNicknames(String[] nicknames) {
+        for (int i = 0; i < nicknames.length; i++) {
+            switch (i) {
+                case 0:
+                    MrXNameGameView.setText(nicknames[i]);
+                    break;
+                case 1:
+                    player2NameGameView.setText(nicknames[i]);
+                    break;
+            }
+        }
     }
 }

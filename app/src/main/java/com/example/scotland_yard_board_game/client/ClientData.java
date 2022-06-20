@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 public class ClientData {
 
-    private Context context;
     private Client client;
     private StationDatabase stationDatabase;
     private ArrayList<Player> Players = new ArrayList<Player>(6);
@@ -32,16 +31,14 @@ public class ClientData {
     private boolean mrx;
     private String[] nicknames = new String[6];
     private GameScreen gameScreen;
+    private LobbyScreen lobbyScreen;
 
-    public ClientData(Context context, Client client, boolean mrx, GameScreen gameScreen) {
-        this.context = context;
+    public ClientData(Context context, Client client, boolean mrx) {
         this.client = client;
         this.mrx = mrx;
-        this.gameScreen = gameScreen;
-        gameScreen.setclientData(this);
         journeyTable.journeyTable = new int[24][2];
 
-        this.stationDatabase = new StationDatabase(this.context);
+        this.stationDatabase = new StationDatabase(context);
     }
 
 
@@ -65,9 +62,7 @@ public class ClientData {
     }
 
     // Player sends his nickname
-    public void setNickname() {
-        // TODO: 6/11/2022 Game needs to promt for nickname
-        String nickname = "test";
+    public void setNickname(String nickname) {
        if(mrx){
            MrXNickname name = new MrXNickname();
            name.nickname = nickname;
@@ -131,7 +126,7 @@ public class ClientData {
         this.Players = list.Players;
         updateNicknames();
         if (started) {
-            gameScreen.updatePlayerBoardCoordinates(Players);
+           // gameScreen.updatePlayerBoardCoordinates(Players);
         }
     }
 
@@ -143,6 +138,9 @@ public class ClientData {
     private void updateNicknames(){
         for (Player a : Players){
             nicknames[a.getId()] = a.getNickname();
+        }
+        if(lobbyScreen!=null && !started){
+            lobbyScreen.displayNicknames(nicknames);
         }
 
     }
@@ -170,5 +168,17 @@ public class ClientData {
 
     public ArrayList<Player> getPlayers() {
         return Players;
+    }
+
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
+
+    public void setLobbyScreen(LobbyScreen lobbyScreen) {
+        this.lobbyScreen = lobbyScreen;
+    }
+
+    public StationDatabase getStationDatabase() {
+        return stationDatabase;
     }
 }

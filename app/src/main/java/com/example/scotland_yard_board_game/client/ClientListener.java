@@ -1,5 +1,7 @@
 package com.example.scotland_yard_board_game.client;
 
+import static android.content.ContentValues.TAG;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
@@ -47,7 +49,7 @@ public class ClientListener extends Listener {
                 JourneyTable jtable = (JourneyTable) object;
                 clientData.updateJourneyTable(jtable);
             } else if (object instanceof PlayerConnected) {
-                clientData.setNickname();
+                Log.debug(TAG,"Connection successfull");
             } else if (object instanceof PlayerList) {
                 PlayerList list = (PlayerList) object;
                 clientData.updatePlayers(list);
