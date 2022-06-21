@@ -11,10 +11,11 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 public class GameScreenTest extends TestCase {
-
-  /*  @Test
+    /*
+    @Test
     public void testGetClosestStationToTouchedBoardCoordinates() {
         // Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
         int[] testTouched = {550, 160};
         int[] testStations = {1, 2, 3};
 
