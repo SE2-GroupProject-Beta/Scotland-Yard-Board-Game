@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class GameScreenTest extends TestCase {
 
-    @Test
+  /*  @Test
     public void testGetClosestStationToTouchedBoardCoordinates() {
         // Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         int[] testTouched = {550, 160};
@@ -21,6 +21,6 @@ public class GameScreenTest extends TestCase {
         assertEquals(1, new GameScreen().getClosestStationToTouchedBoardCoordinates(
                 testTouched, testStations));
         assertTrue(true);
-    }
+    } */
 }
 
