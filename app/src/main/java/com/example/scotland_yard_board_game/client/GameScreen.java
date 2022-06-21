@@ -654,7 +654,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         // calculation of boardX and boardY given screenCoordinates[0] and screenCoordinates[1]
         double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
-        int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
+        int offsetX = ((int) (maxScreenWidth / 2) - (int) (currentBoardWidth / 2)); // offset when boardWidth < maxScreenWidth()
 
         int negativeOffsetX = 0;
         if (offsetX > 0) {
@@ -697,7 +697,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         double zoomFactor = gameBoardView.getCurrentZoom();
 
         double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
-        int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2);
+        int offsetX = ((int) (maxScreenWidth / 2) - (int) (currentBoardWidth / 2));
 
         int negativeOffsetX = 0;
 
