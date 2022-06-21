@@ -948,4 +948,9 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             }
         }
     }
+
+    int myTestMethod(int input) {
+
+        return input * 2;
+    }
 }
