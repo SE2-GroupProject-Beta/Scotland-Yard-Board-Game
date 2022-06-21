@@ -13,23 +13,25 @@ import java.io.IOException;
 
 public class ClientStart {
     private final Client client;
-    private Context context;
     private ClientData clientData;
 
-    public ClientStart(Context context, boolean mrx, GameScreen gameScreen) throws IOException {
+    public ClientStart(Context context, boolean mrx) throws IOException {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         client = new Client();
-        clientData = new ClientData(context,client,mrx,gameScreen);
+        clientData = new ClientData(context, client, mrx);
 
         KryoRegister.registerClasses(client.getKryo());
 
         client.start();
-        client.addListener(new ClientListener(client,clientData));
-        Log.d(TAG,"Client Started!");
+        client.addListener(new ClientListener(clientData));
+        Log.d(TAG, "Client Started!");
         clientData.connectServer();
 
+    }
 
+    public ClientData getClientData() {
+        return clientData;
     }
 }

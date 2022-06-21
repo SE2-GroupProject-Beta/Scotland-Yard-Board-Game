@@ -44,4 +44,3 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
-

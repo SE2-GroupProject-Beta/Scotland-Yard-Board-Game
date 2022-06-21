@@ -1,14 +1,14 @@
 package com.example.scotland_yard_board_game.common;
 
 public class Station {
-   private int id;
-   private int x;
-   private int y;
-   //Neighbours
-   private int[] taxi;
-   private int[] bus;
-   private int[] underground;
-   private int[] ferry;
+    private int id;
+    private int x;
+    private int y;
+    //Neighbours
+    private int[] taxi;
+    private int[] bus;
+    private int[] underground;
+    private int[] ferry;
 
     public Station() {
     }
@@ -51,15 +51,18 @@ public class Station {
         return ferry;
     }
 
-    public int[] getNeighbours(int type){
-        int[] neighbours;
-        switch(type){
-            case 0: return neighbours = taxi;
-            case 1: return neighbours = bus;
-            case 2: return neighbours = underground;
-            case 3: return neighbours = ferry;
-        }
+    public int[] getNeighbours(int type) {
+        switch (type) {
 
+            case 0:
+                return taxi;
+            case 1:
+                return bus;
+            case 2:
+                return underground;
+            case 3:
+                return ferry;
+        }
         return null;
     }
 }

@@ -14,29 +14,12 @@
         android:layout_marginTop="44dp"
         android:text="Lobby"
         android:textColor="#E91E63"
-        app:layout_constraintBottom_toTopOf="@+id/currentLobbyCode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/currentLobbyCode"
-        android:layout_width="209dp"
-        android:layout_height="57dp"
-        android:backgroundTint="#E91E63"
-        android:ems="10"
-        android:hint="Lobby Code"
-        android:inputType="number"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_orange_light"
-        android:textColorHint="@android:color/holo_orange_light"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/playerList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/startGameButton"
@@ -61,8 +44,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentLobbyCode"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.527">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mister X"
+                android:textColor="@android:color/holo_orange_light"
                 android:textSize="16sp" />
 
             <TextView
@@ -81,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Player 2"
+                android:textColor="@android:color/holo_orange_light"
                 android:textSize="16sp" />
 
             <TextView
@@ -88,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Player 3"
+                android:textColor="@android:color/holo_orange_light"
                 android:textSize="16sp" />
 
             <TextView
@@ -95,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Player 4"
+                android:textColor="@android:color/holo_orange_light"
                 android:textSize="16sp" />
 
             <TextView
@@ -102,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Player 5"
+                android:textColor="@android:color/holo_orange_light"
                 android:textSize="16sp" />
 
             <TextView
@@ -109,6 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Player 6"
+                android:textColor="@android:color/holo_orange_light"
                 android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
