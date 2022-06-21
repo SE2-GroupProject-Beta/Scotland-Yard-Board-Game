@@ -23,7 +23,7 @@ public class ClientData {
 
     private Client client;
     private StationDatabase stationDatabase;
-    private ArrayList<Player> Players = new ArrayList<>(6);
+    private ArrayList<Player> players = new ArrayList<>(6);
     private boolean started = false;
     private JourneyTable journeyTable = new JourneyTable();
     private boolean ownturn = false;
@@ -82,8 +82,8 @@ public class ClientData {
     //Handles what happens if server sends game started
     public void gameStarted() {
         started = true;
-        Log.d(TAG, String.valueOf(Players.get(0).getPosition().getId()));
-        gameScreen.updatePlayerBoardCoordinates(Players);
+        Log.d(TAG, String.valueOf(players.get(0).getPosition().getId()));
+        gameScreen.updatePlayerBoardCoordinates(players);
     }
 
     //Player chooses colour -> server checks if available
@@ -102,10 +102,10 @@ public class ClientData {
     }
 
     //Server validates move -> sends updated player list back
-    public void validateMove(int Stationid, int type) {
+    public void validateMove(int stationid, int type) {
         Move move = new Move();
         move.type = type;
-        move.station = Stationid;
+        move.station = stationid;
         move.mrx = mrx;
         client.sendTCP(move);
     }
@@ -115,10 +115,10 @@ public class ClientData {
     }
 
     public void updatePlayers(PlayerList list) {
-        this.Players = list.Players;
+        this.players = list.Players;
         updateNicknames();
         if (started) {
-            gameScreen.updatePlayerBoardCoordinates(Players);
+            gameScreen.updatePlayerBoardCoordinates(players);
         }
     }
 
@@ -129,7 +129,7 @@ public class ClientData {
 
     //List of Nicknames for lobby
     private void updateNicknames() {
-        for (Player a : Players) {
+        for (Player a : players) {
             nicknames[a.getId()] = a.getNickname();
         }
         if (lobbyScreen != null && !started) {
@@ -167,7 +167,7 @@ public class ClientData {
     }
 
     public ArrayList<Player> getPlayers() {
-        return Players;
+        return players;
     }
 
     public void setGameScreen(GameScreen gameScreen) {
