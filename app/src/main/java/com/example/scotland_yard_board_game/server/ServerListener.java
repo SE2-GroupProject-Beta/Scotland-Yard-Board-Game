@@ -3,7 +3,6 @@ package com.example.scotland_yard_board_game.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.example.scotland_yard_board_game.common.Colour;
 import com.example.scotland_yard_board_game.common.messages.fromclient.DetectiveNickname;
@@ -14,13 +13,10 @@ import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerCon
 import com.example.scotland_yard_board_game.common.messages.fromserver.ServerFull;
 
 public class ServerListener extends Listener {
-        private final Server server;
         private ServerData serverData;
 
-        public ServerListener(Server server, ServerData serverData) {
-            this.server = server;
+        public ServerListener(ServerData serverData) {
             this.serverData = serverData;
-
         }
 
         @Override
@@ -29,10 +25,10 @@ public class ServerListener extends Listener {
                     " from endpoint " + connection.getRemoteAddressTCP().toString());
 
             if (serverData.connectPlayer()) {
-                Log.info("Player " + connection.toString() + "joined the server.");
+                Log.info("Player " + connection + "joined the server.");
                 connection.sendTCP(new PlayerConnected());
             } else {
-                Log.error("Connection: " + connection.toString() + " Lobby already full! ");
+                Log.error("Connection: " + connection + " Lobby already full! ");
                 connection.sendTCP(new ServerFull());
                 connection.close();
             }
