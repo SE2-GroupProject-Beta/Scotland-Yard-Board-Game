@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-public class GameScreenTest extends TestCase {
+public class GameScreenTest {
     /*
     @Test
     public void testGetClosestStationToTouchedBoardCoordinates() {
