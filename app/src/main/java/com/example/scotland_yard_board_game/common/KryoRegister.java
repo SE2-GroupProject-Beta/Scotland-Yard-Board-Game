@@ -4,11 +4,13 @@ import com.esotericsoftware.kryo.Kryo;
 import com.example.scotland_yard_board_game.common.messages.fromserver.ColourTaken;
 import com.example.scotland_yard_board_game.common.messages.fromclient.DetectiveNickname;
 import com.example.scotland_yard_board_game.common.messages.GameStart;
+import com.example.scotland_yard_board_game.common.messages.fromserver.DetectivesWon;
 import com.example.scotland_yard_board_game.common.messages.fromserver.EndTurn;
 import com.example.scotland_yard_board_game.common.messages.fromserver.InvalidMove;
 import com.example.scotland_yard_board_game.common.messages.fromserver.JourneyTable;
 import com.example.scotland_yard_board_game.common.messages.fromclient.Move;
 import com.example.scotland_yard_board_game.common.messages.fromclient.MrXNickname;
+import com.example.scotland_yard_board_game.common.messages.fromserver.MrXWon;
 import com.example.scotland_yard_board_game.common.messages.fromserver.NameTaken;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerConnected;
 import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerJoined;
@@ -47,6 +49,9 @@ public class KryoRegister {
         kryo.register(StartTurn.class);
         kryo.register(EndTurn.class);
         kryo.register(NameTaken.class);
+        kryo.register(MrXWon.class);
+        kryo.register(DetectivesWon.class);
+
     }
 
 }

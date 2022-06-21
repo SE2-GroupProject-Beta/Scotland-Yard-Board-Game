@@ -36,7 +36,6 @@ public class ClientData {
         this.client = client;
         this.mrx = mrx;
         journeyTable.journeyTable = new int[24][2];
-
         this.stationDatabase = new StationDatabase(context);
     }
 
@@ -50,11 +49,11 @@ public class ClientData {
         try {
             InetAddress address = client.discoverHost(54777, 5000);
             Log.d(TAG, String.valueOf(address));
-            client.connect(5000, address , 54555, 54777);
+            client.connect(5000, address, 54555, 54777);
             Log.d(TAG, "Server connection successful");
 
         } catch (Exception e) {
-            Log.i(TAG,"Client connection error: ", e);
+            Log.i(TAG, "Client connection error: ", e);
             // TODO: 6/9/2022 handle if no server found
         }
 
@@ -62,52 +61,52 @@ public class ClientData {
 
     // Player sends his nickname
     public void setNickname(String nickname) {
-       if(mrx){
-           MrXNickname name = new MrXNickname();
-           name.nickname = nickname;
-           client.sendTCP(name);
-       } else {
-           DetectiveNickname name = new DetectiveNickname();
-           name.nickname = nickname;
-           client.sendTCP(name);
-       }
+        if (mrx) {
+            MrXNickname name = new MrXNickname();
+            name.nickname = nickname;
+            client.sendTCP(name);
+        } else {
+            DetectiveNickname name = new DetectiveNickname();
+            name.nickname = nickname;
+            client.sendTCP(name);
+        }
 
     }
 
     //Sends GameStart message to server
     public void gameStart() {
-            started = true;
-            client.sendTCP(new GameStart());
+        started = true;
+        client.sendTCP(new GameStart());
     }
 
     //Handles what happens if server sends game started
-    public void gameStarted(){
+    public void gameStarted() {
         started = true;
         Log.d(TAG, String.valueOf(Players.get(0).getPosition().getId()));
-
         gameScreen.updatePlayerBoardCoordinates(Players);
-
-        // TODO: 6/11/2022 implement 
     }
 
     //Player chooses colour -> server checks if available
-    public void chooseColour (Colour colour){
+    public void chooseColour(Colour colour) {
         client.sendTCP(colour);
     }
-    public void colourTaken (){
+
+    public void colourTaken() {
         // TODO: 6/9/2022  implement what happens if colour is taken
     }
 
 
-    public boolean useItem(int itemid){ //will be used for mrx double turn
+    public boolean useItem(int itemid) { //will be used for mrx double turn
         // TODO: 6/9/2022 implement for mrx -> after turns are implemented
         return false;
     }
 
     //Server validates move -> sends updated player list back
-    public void validateMove(int Stationid, int type){
+    public void validateMove(int Stationid, int type) {
         Move move = new Move();
-        move.type = type; move.station = Stationid; move.mrx = mrx;
+        move.type = type;
+        move.station = Stationid;
+        move.mrx = mrx;
         client.sendTCP(move);
     }
 
@@ -115,7 +114,7 @@ public class ClientData {
         // TODO: 6/11/2022 handle invalid move
     }
 
-    public void updatePlayers(PlayerList list){
+    public void updatePlayers(PlayerList list) {
         this.Players = list.Players;
         updateNicknames();
         if (started) {
@@ -125,29 +124,34 @@ public class ClientData {
 
     public void updateJourneyTable(JourneyTable jtable) {
         this.journeyTable = jtable;
+
     }
 
     //List of Nicknames for lobby
-    private void updateNicknames(){
-        for (Player a : Players){
+    private void updateNicknames() {
+        for (Player a : Players) {
             nicknames[a.getId()] = a.getNickname();
         }
-        if(lobbyScreen!=null && !started){
+        if (lobbyScreen != null && !started) {
             lobbyScreen.displayNicknames(nicknames);
         }
 
     }
 
-    public String[] getNicknames(){
+    public String[] getNicknames() {
         return nicknames;
     }
 
-    public void startTurn(){
-        ownturn = true;
+    public void startTurn() {
+        this.ownturn = true;
     }
 
-    public void endTurn(){
-        ownturn = false;
+    public void endTurn() {
+        this.ownturn = false;
+    }
+
+    //What happens when someone wins
+    public void won(int i) {
     }
 
     public void disconnectPlayer() {
@@ -177,4 +181,6 @@ public class ClientData {
     public StationDatabase getStationDatabase() {
         return stationDatabase;
     }
+
+
 }

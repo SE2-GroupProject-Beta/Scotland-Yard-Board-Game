@@ -20,15 +20,14 @@ public class ClientStart {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         client = new Client();
-        clientData = new ClientData(context,client,mrx);
+        clientData = new ClientData(context, client, mrx);
 
         KryoRegister.registerClasses(client.getKryo());
 
         client.start();
-        client.addListener(new ClientListener(client,clientData));
-        Log.d(TAG,"Client Started!");
+        client.addListener(new ClientListener(clientData));
+        Log.d(TAG, "Client Started!");
         clientData.connectServer();
-
 
     }
 
