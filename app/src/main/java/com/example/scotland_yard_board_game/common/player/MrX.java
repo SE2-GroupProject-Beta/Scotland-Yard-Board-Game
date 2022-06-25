@@ -1,5 +1,9 @@
 package com.example.scotland_yard_board_game.common.player;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
 import com.example.scotland_yard_board_game.common.Colour;
 import com.example.scotland_yard_board_game.common.Station;
 
@@ -7,7 +11,7 @@ public class MrX implements Player {
     private int id;
     private int conId;
     private String nickname;
-    private int[] inventory = {2,0}; //Double move, Black Tickets
+    private int[] inventory = {2, 0}; //Double move, Black Tickets
     private Station position;
     private Colour colour = Colour.BLUE; // Colour.TRANSPARENT ; // todo: change to transparent later
     private boolean turn;
@@ -25,7 +29,7 @@ public class MrX implements Player {
     }
 
     //MrX gets as many Double moves as there are detectives -> declared after game start
-    public void setDoubleMove (int NumDetectives) {
+    public void setDoubleMove(int NumDetectives) {
         this.inventory[1] = NumDetectives;
     }
 
@@ -39,35 +43,25 @@ public class MrX implements Player {
 
     public boolean validmove(int stationid, int type) {
         int[] neighbours = this.position.getNeighbours(type);
-        for(int i=0; i<neighbours.length; i++) {
+        Log.d(TAG, String.valueOf(neighbours[0]));
+        for (int i = 0; i < neighbours.length; i++) {
             if (neighbours[i] == stationid) {
                 return true; // TODO: 5/5/2022 implement check for black ticket
-            } else {
-                return false;
             }
         }
         return false;
     }
 
 
-
     //If item available -> use it, otherwise return false
-    public boolean useItem(int itemid){
+    public boolean useItem(int itemid) {
 
-        if(this.inventory[itemid]>0){ // TODO: 4/30/2022 implement double move action
-            this.inventory[itemid] -=1;
+        if (this.inventory[itemid] > 0) { // TODO: 4/30/2022 implement double move action
+            this.inventory[itemid] -= 1;
             return true;
         }
 
         return false;
-    }
-
-    //Get neighbours of current station
-    public int[][] getPlayerNeighbours(){
-      /*  int[][] neighbours;
-        neighbours = this.position.getNeighbours();
-        return neighbours; */
-        return null;
     }
 
     public String getNickname() {

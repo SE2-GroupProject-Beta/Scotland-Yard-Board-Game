@@ -20,22 +20,10 @@ public class MainActivity extends AppCompatActivity {
 
         Button goToTitleScreen = findViewById(R.id.goToTitleScreen);
         goToTitleScreen.setOnClickListener(view -> {
-            Intent TitleScreen = new Intent(this, com.example.scotland_yard_board_game.client.TitleScreen.class);
+            Intent TitleScreen = new Intent(this,
+                    com.example.scotland_yard_board_game.client.TitleScreen.class);
             startActivity(TitleScreen);
         });
-        Button goToGameScreen = findViewById(R.id.goToGameScreen);
-        goToGameScreen.setOnClickListener(view -> {
-            Intent GameScreen = new Intent(this, com.example.scotland_yard_board_game.client.GameScreen.class);
-            startActivity(GameScreen);
-        });
-        Button goToAsync = findViewById(R.id.goToAsync);
-        goToAsync.setOnClickListener(view -> {
-            Intent ActivityAsync = new Intent(this, com.example.scotland_yard_board_game.sideProjects.ActivityAsync.class);
-            startActivity(ActivityAsync);
-        });
-
-
-
 
     }
 }

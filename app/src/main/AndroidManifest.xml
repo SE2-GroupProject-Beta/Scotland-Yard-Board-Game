@@ -14,8 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScotlandYardBoardGame">
-        <activity
-            android:name=".sideProjects.ActivityAsync" />
+
         <activity
             android:name=".client.GameScreen"
             android:exported="false"
@@ -35,7 +34,10 @@
         <activity
             android:name=".client.TitleScreen"
             android:exported="true"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:readPermission="com.example.scotland_yard_board_game.client.READ_PERMISSION"
+            android:writePermission="com.example.scotland_yard_board_game.client.WRITE_PERMISSION"
+            >
         </activity>
         <activity
             android:name=".MainActivity"

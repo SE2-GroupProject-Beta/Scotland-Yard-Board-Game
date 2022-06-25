@@ -26,15 +26,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.scotland_yard_board_game.R;
 
-import com.example.scotland_yard_board_game.common.Station;
 import com.example.scotland_yard_board_game.common.StationDatabase;
 
-import com.example.scotland_yard_board_game.common.messages.fromserver.PlayerList;
 import com.example.scotland_yard_board_game.common.player.Player;
-import com.example.scotland_yard_board_game.server.ServerStart;
 import com.ortiz.touchview.TouchImageView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -66,28 +62,30 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
     private int turnCounter = 1; //turn count view
 
+    // declare buttons
     private Button taxiDrawButton;
     private Button busDrawButton;
     private Button undergroundDrawButton;
     private Button journeyTableButton;
     private Button confirmButton;
 
+    // static data of board-pixels and neighbors_max
     private final int BOARD_MAX_X = 4368; // pixel coordinates of board
     private final int BOARD_MAX_Y = 3312;
     private final int TAXI_NEIGHBORS_MAX = 7;
     private final int BUS_NEIGHBORS_MAX = 5;
     private final int UNDERGROUND_NEIGHBORS_MAX = 4;
 
-
-    private TextView showBoardX; // todo: delete before production release
+    // show board coordinates and means of transport
+    private TextView showBoardX;
     private TextView showBoardY;
     private TextView showTransport;
 
+    // touched coordinates
     private int[] touchedBoardCoordinates = new int[2];
     private int[] touchedScreenCoordinates = new int[2];
 
-    Player[] players;
-
+    // player coordinates
     private int[] player0BoardCoordinates = new int[2];
     private int[] player0ScreenCoordinates = new int[2];
     private int[] player1BoardCoordinates = new int[2];
@@ -101,8 +99,10 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private int[] player5BoardCoordinates = new int[2];
     private int[] player5ScreenCoordinates = new int[2];
 
+    // which player's turn
     private int activePlayer;
 
+    // declare player views
     private View player0View;
     private MarginLayoutParams player0ViewGroup;
     private View player1View;
@@ -116,6 +116,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private View player5View;
     private MarginLayoutParams player5ViewGroup;
 
+    // declare neighbor views (taxi, bus, underground)
     private MarginLayoutParams[] taxiNeighborMarginLayoutParams =
             new MarginLayoutParams[TAXI_NEIGHBORS_MAX];
     private View taxiNeighbor0View; // sorry for violation of 'dry'...
@@ -126,7 +127,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private View taxiNeighbor5View;
     private View taxiNeighbor6View;
     private int[] taxiNeighborStations;
-
     private int[][] taxiNeighborsBoardCoordinates = new int[TAXI_NEIGHBORS_MAX][2];
     private int[][] taxiNeighborsScreenCoordinates = new int[TAXI_NEIGHBORS_MAX][2];
 
@@ -138,7 +138,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private View busNeighbor3View;
     private View busNeighbor4View;
     private int[] busNeighborStations;
-
     private int[][] busNeighborsBoardCoordinates = new int[BUS_NEIGHBORS_MAX][2];
     private int[][] busNeighborsScreenCoordinates = new int[BUS_NEIGHBORS_MAX][2];
 
@@ -149,37 +148,34 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     private View undergroundNeighbor2View;
     private View undergroundNeighbor3View;
     private int[] undergroundNeighborStations;
-
     private int[][] undergroundNeighborsBoardCoordinates = new int[UNDERGROUND_NEIGHBORS_MAX][2];
     private int[][] undergroundNeighborsScreenCoordinates = new int[UNDERGROUND_NEIGHBORS_MAX][2];
 
 
-    private int[] selectionOfStations = new int[200];
+    // private int[] selectionOfStations = new int[200]; // was used for testing purposes
 
+    // declare serverDatabase and clientData in GameScreen
     private StationDatabase serverDatabase;
-    private Station serverStation; // todo: delete if not needed
     static ClientData clientData;
-
-    // int player1CurrentStation = 1; // todo: initialize players coming from lobby
-    int currentStation; //  = 1;
+    int currentStation;
 
 
-    @SuppressLint("ClickableViewAccessibility") // todo: remove later?
+    // method onCreate to initialize variables and set listeners
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // getSupportActionBar().hide(); //hides the action bar
-        Objects.requireNonNull(getSupportActionBar()).hide(); // todo: hides the action bar, suggestion to change to this line
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        // set according layout
         setContentView(R.layout.activity_game_screen);
 
         gameScreenLayout = findViewById(R.id.gameScreenLayout);
         gameBoardView = findViewById(R.id.gameBoardView);
         journeyTableLayout = findViewById(R.id.journeyTableLayout);
 
-        clientData.setGameScreen(this);
         //Send start game signal
+        clientData.setGameScreen(this);
         clientData.gameStart();
-
 
         //assign nickname variable to TextView for display
         MrXNameGameView = findViewById(R.id.MrXNameGameView); //Mr. X
@@ -187,19 +183,23 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         //call display method "displayNicknames"
         displayNicknames(clientData.getNicknames());
 
+        // initialize show coordinates and means of transport
         showBoardX = findViewById(R.id.showBoardX);
         showBoardY = findViewById(R.id.showBoardY);
         showTransport = findViewById(R.id.showTransport);
 
+        // initialize buttons on GameScreen
         taxiDrawButton = findViewById(R.id.taxiDrawButton);
         busDrawButton = findViewById(R.id.busDrawButton);
         undergroundDrawButton = findViewById(R.id.undergroundDrawButton);
         journeyTableButton = findViewById(R.id.journeyTableButton);
         confirmButton = findViewById(R.id.confirmButton);
 
-        gameBoardView.setMaxZoom(6); // augment zoom
+        // augment zoom to 6 times max zoom
+        gameBoardView.setMaxZoom(6);
 
-        player0View = findViewById(R.id.player0); // to move players
+        // initialize player views (to move players)
+        player0View = findViewById(R.id.player0);
         player0ViewGroup = (MarginLayoutParams) player0View.getLayoutParams();
         player1View = findViewById(R.id.player1);
         player1ViewGroup = (MarginLayoutParams) player1View.getLayoutParams();
@@ -212,10 +212,11 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         player5View = findViewById(R.id.player5);
         player5ViewGroup = (MarginLayoutParams) player5View.getLayoutParams();
 
+        // hardcoded active player (= mister X) and test setup of players
         activePlayer = 0;
         initializePlayerBoardCoordinates();
-        //placePlayers(); // todo: doesn't place the players from here yet
 
+        // initialize neighbor views
         taxiNeighbor0View = findViewById(R.id.taxi_neighbor0); // :( 'dry' again
         taxiNeighbor1View = findViewById(R.id.taxi_neighbor1);
         taxiNeighbor2View = findViewById(R.id.taxi_neighbor2);
@@ -254,19 +255,18 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         // initialize ServerDatabase
         serverDatabase = clientData.getStationDatabase();
 
+        // general onTouchListener
         gameBoardView.setOnTouchListener((view, motionEvent) -> {
-
-            touchedScreenCoordinates[0] = (int) motionEvent.getX(); // touched screen coordinates
+            // get touched coordinates
+            touchedScreenCoordinates[0] = (int) motionEvent.getX();
             touchedScreenCoordinates[1] = (int) motionEvent.getY();
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
-            // print boardX and boardY to screen, todo: delete later
+            // print boardX and boardY to screen
             showBoardX.setText("X = " + touchedBoardCoordinates[0]);
             showBoardY.setText("Y = " + touchedBoardCoordinates[1]);
 
-            // getPlayerBoardCoordinates();
-
-            // calculate player1ScreenCoordinates and set circle to these coordinates
+            // calculate player screen coordinates and set circle to these coordinates
             player0ScreenCoordinates = calculateScreenCoordinates(player0BoardCoordinates);
             player1ScreenCoordinates = calculateScreenCoordinates(player1BoardCoordinates);
             player2ScreenCoordinates = calculateScreenCoordinates(player2BoardCoordinates);
@@ -274,15 +274,18 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             player4ScreenCoordinates = calculateScreenCoordinates(player4BoardCoordinates);
             player5ScreenCoordinates = calculateScreenCoordinates(player5BoardCoordinates);
 
-            placePlayers();
+            // call method to draw all players and the according neighbors to board
+            placePlayersAndNeighbors();
 
             return true;
         });
 
+        // onLongClickListener
         gameBoardView.setOnLongClickListener(motionEvent -> {
-            // info: uses touchedScreenCoordinates from .setOnTouchListener
+            // info: uses touchedScreenCoordinates from .setOnTouchListener!
             touchedBoardCoordinates = calculateBoardCoordinates(touchedScreenCoordinates);
 
+            // find closest station to touched coordinates
             int closestStation = 1;
             if (chosenTransport == 0) {
                 closestStation = getClosestStationToTouchedBoardCoordinates(
@@ -298,18 +301,19 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             Log.d(TAG, "onLongClickListener, chosen transport: " + chosenTransport);
             Log.d(TAG, "onLongClickListener, closest station: " + closestStation);
 
+            // change text of confirmButton to show the chosen station
             confirmButton.setText("Go to " + chosenStation);
             return true;
         });
 
+        // onTouchListener for taxiDrawButton, busDrawButton, undergroundDrawButton
         taxiDrawButton.setOnTouchListener((view, motionEvent) -> {
             showTransport.setText("Taxi");
             chosenTransport = 0;
-            clearAllNeighborStations();
-
+            clearAllNeighborStations(); // otherwise the old ones are left behind...
             currentStation = getCurrentStation(activePlayer);
             taxiNeighborStations = getTaxiNeighborStationsFromGivenStation(currentStation);
-            placePlayers();
+            placePlayersAndNeighbors();
 
             return true;
         });
@@ -318,10 +322,9 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             showTransport.setText("Bus");
             chosenTransport = 1;
             clearAllNeighborStations();
-
             currentStation = getCurrentStation(activePlayer);
             busNeighborStations = getBusNeighborStationsFromGivenStation(currentStation);
-            placePlayers();
+            placePlayersAndNeighbors();
 
             return true;
         });
@@ -330,14 +333,14 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             showTransport.setText("Underground");
             chosenTransport = 2;
             clearAllNeighborStations();
-
             currentStation = getCurrentStation(activePlayer);
             undergroundNeighborStations = getUndergroundNeighborStationsFromGivenStation(currentStation);
-            placePlayers();
+            placePlayersAndNeighbors();
 
             return true;
         });
 
+        // onClickListener for confirmButton
         confirmButton.setOnClickListener((view) -> {
             clientData.validateMove(chosenStation, chosenTransport);
           
@@ -353,7 +356,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                     }
                     blackTicket = false;
                     break;
-
                 case 1:     //bus chosen
                     if(!blackTicket) {
                         changeBackground("#22EE22");
@@ -381,8 +383,9 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             displayTurnCount(turnCounter);
             displayBlackTicketCount(blackTicketCount);
 
-        });
+            placePlayersAndNeighbors();
 
+        });
     }
 
     //method set JourneyTable view backgrounds
@@ -488,7 +491,8 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         }
     }
 
-
+    // clears all neighbors, otherwise not newly assigned neighbors
+    // are "left behind" on the board, all are deleted first
     void clearAllNeighborStations() {
         for (int i = 0; i < TAXI_NEIGHBORS_MAX; i++) {
             taxiNeighborsScreenCoordinates[i][0] = -100;
@@ -519,26 +523,10 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         }
     }
 
-    void initializePlayerBoardCoordinates() {
-        // todo: get player coordinates from server, delete this method
-        player0BoardCoordinates[0] = 552;
-        player0BoardCoordinates[1] = 162;
-        player1BoardCoordinates[0] = 1601;
-        player1BoardCoordinates[1] = 721;
-        player2BoardCoordinates[0] = 779;
-        player2BoardCoordinates[1] = 1089;
-        player3BoardCoordinates[0] = 2504; // active at start (station 67)
-        player3BoardCoordinates[1] = 1077;
-        player4BoardCoordinates[0] = 4017;
-        player4BoardCoordinates[1] = 2227;
-        player5BoardCoordinates[0] = 2867;
-        player5BoardCoordinates[1] = 2317;
-    }
-
+    // get data from server and place all players accordingly
     void updatePlayerBoardCoordinates(ArrayList<Player> playerList) {
-        // todo: get player coordinates from server
 
-        for (Player player : playerList) { // not beautiful, but it works...
+        for (Player player : playerList) {
             switch (player.getId()) {
                 case 0:
                     player0BoardCoordinates[0] = player.getPosition().getX();
@@ -567,24 +555,35 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             }
         }
 
-        placePlayers();
+        placePlayersAndNeighbors();
 
     }
-
+    void initializePlayerBoardCoordinates() {
+        // later coordinates are received from server
+        player0BoardCoordinates[0] = 552;
+        player0BoardCoordinates[1] = 162;
+        player1BoardCoordinates[0] = 1601;
+        player1BoardCoordinates[1] = 721;
+        player2BoardCoordinates[0] = 779;
+        player2BoardCoordinates[1] = 1089;
+        player3BoardCoordinates[0] = 2504; // active at start (station 67)
+        player3BoardCoordinates[1] = 1077;
+        player4BoardCoordinates[0] = 4017;
+        player4BoardCoordinates[1] = 2227;
+        player5BoardCoordinates[0] = 2867;
+        player5BoardCoordinates[1] = 2317;
+    }
+    //
     int getCurrentStation(int activePlayer) {
-        if (activePlayer == 0) {
-            // todo: complete code with .getStation() or .getPosition()
-        }
+        // returns the coordinates of player 0 (=mister X) at the moment
         ArrayList<Player> playerArray = clientData.getPlayers();
-
         Log.d(TAG, String.valueOf(playerArray.get(0).getPosition().getId())+" ");
-
-        return playerArray.get(0).getPosition().getId();
-        // return serverDatabase.getStation(67).getId(); // todo: return real value
+        return playerArray.get(activePlayer).getPosition().getId();
     }
 
-
-    void placePlayers() {
+    // method to draw players and the taxi-, bus- or underground-neighbors
+    // of the active player to the board
+    void placePlayersAndNeighbors() {
         player0ViewGroup.setMargins(player0ScreenCoordinates[0] - 25, player0ScreenCoordinates[1] - 25,
                 player0ViewGroup.rightMargin, player0ViewGroup.bottomMargin);
         player1ViewGroup.setMargins(player1ScreenCoordinates[0] - 25, player1ScreenCoordinates[1] - 25,
@@ -618,7 +617,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                 busNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(busNeighborStations[i]).getX();
                 busNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(busNeighborStations[i]).getY();
                 busNeighborsScreenCoordinates[i] = calculateScreenCoordinates(busNeighborsBoardCoordinates[i]);
-
                 busNeighborMarginLayoutParams[i].setMargins(
                         busNeighborsScreenCoordinates[i][0] - 25,
                         busNeighborsScreenCoordinates[i][1] - 25,
@@ -632,7 +630,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
                 undergroundNeighborsBoardCoordinates[i][0] = serverDatabase.getStation(undergroundNeighborStations[i]).getX();
                 undergroundNeighborsBoardCoordinates[i][1] = serverDatabase.getStation(undergroundNeighborStations[i]).getY();
                 undergroundNeighborsScreenCoordinates[i] = calculateScreenCoordinates(undergroundNeighborsBoardCoordinates[i]);
-
                 undergroundNeighborMarginLayoutParams[i].setMargins(
                         undergroundNeighborsScreenCoordinates[i][0] - 25,
                         undergroundNeighborsScreenCoordinates[i][1] - 25,
@@ -642,6 +639,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         }
     }
 
+    // converts board coordinates to screen coordinates
     int[] calculateBoardCoordinates(int[] screenCoordinates) {
         int[] boardCoordinates = new int[2];
 
@@ -656,13 +654,13 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
         // calculation of boardX and boardY given screenCoordinates[0] and screenCoordinates[1]
         double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
-        int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2); // offset when boardWidth < maxScreenWidth()
+        int offsetX = ((int) (maxScreenWidth / 2) - (int) (currentBoardWidth / 2)); // offset when boardWidth < maxScreenWidth()
 
         int negativeOffsetX = 0;
         if (offsetX > 0) {
             boardCoordinates[0] = (int) ((screenCoordinates[0] - offsetX) * conversionFactor / zoomFactor);
         } else {
-            negativeOffsetX = (int) (left * BOARD_MAX_X); // *** nächstes Heureka ***
+            negativeOffsetX = (int) (left * BOARD_MAX_X);
             boardCoordinates[0] = (int) (screenCoordinates[0] * conversionFactor / zoomFactor) + negativeOffsetX;
         }
         int negativeOffsetY = (int) (top * BOARD_MAX_Y);
@@ -685,6 +683,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         return boardCoordinates;
     }
 
+    // convert screen coordinates to board coordinates
     int[] calculateScreenCoordinates(int[] boardCoordinates) {
         int[] screenCoordinates = new int[2];
 
@@ -698,7 +697,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         double zoomFactor = gameBoardView.getCurrentZoom();
 
         double currentBoardWidth = (BOARD_MAX_X * zoomFactor / conversionFactor);
-        int offsetX = (int) (maxScreenWidth / 2 - currentBoardWidth / 2);
+        int offsetX = ((int) (maxScreenWidth / 2) - (int) (currentBoardWidth / 2));
 
         int negativeOffsetX = 0;
 
@@ -715,6 +714,8 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         return screenCoordinates;
     }
 
+    // general function to get closest station from board coordinates
+    // pass in the board coordinates and a selection of stations (i.e. the neighbors of a station)
     int getClosestStationToTouchedBoardCoordinates(int[] touchedBoardCoordinates,
                                                    int[] selectionOfStations) {
         int distance;
@@ -722,7 +723,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         int deltaX;
         int deltaY;
         int closestStation = 0;
-        int amountOfStations = selectionOfStations.length; // info: station 0 does not exist
+        int amountOfStations = selectionOfStations.length;
         Log.d(TAG, "getClosestStationToTouchedBoardCoordinates: amountOfStations = " + amountOfStations);
         // int[] stations = new int[amountOfStations + 1]; // todo: delete later
         int[] stationsXCoordinates = new int[amountOfStations];
@@ -736,6 +737,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             deltaX = touchedBoardCoordinates[0] - stationsXCoordinates[i]; // no need to get absolute value,
             deltaY = touchedBoardCoordinates[1] - stationsYCoordinates[i]; // because they are squared later
 
+            // get closest distance by pythagoras
             distance = deltaX * deltaX + deltaY * deltaY;
             if (distance < closestDistance) {
                 closestDistance = distance;
@@ -747,11 +749,6 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         return closestStation;
     }
 
-    int[] getPlayerStationsFromTouchCoordinates(int[] coordinates) {
-        int[] playerStations = new int[2]; // change to amount of players
-
-        return playerStations;
-    }
 
     int[] getTaxiNeighborStationsFromGivenStation(int station) {
         return serverDatabase.getStation(station).getTaxi();
@@ -765,7 +762,8 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         return serverDatabase.getStation(station).getUnderground();
     }
 
-    int[] getAllStations() { // todo: delete later
+    // was here for testing purposes only
+    int[] getAllStations() {
         int[] allStations = new int[200];
         // select all Stations for testing purposes
         for (int i = 1; i < 200; i++) {
