@@ -737,89 +737,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/playerLayout1"
-            android:layout_width="82dp"
-            android:layout_height="143dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.039"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.29">
-
-            <TextView
-                android:id="@+id/player2NameGameView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Player 2" />
-
-            <TextView
-                android:id="@+id/player2ColorView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Player Color" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="84dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/transportP2Layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/TaxiP2View"
-                        android:layout_width="64dp"
-                        android:layout_height="wrap_content"
-                        android:text="Taxi: " />
-
-                    <TextView
-                        android:id="@+id/busP2View"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Bus:" />
-
-                    <TextView
-                        android:id="@+id/undergroundP2View"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Underground:" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ticketCountP2Layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/taxiTicketView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="10" />
-
-                    <TextView
-                        android:id="@+id/busTicketView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="10" />
-
-                    <TextView
-                        android:id="@+id/undergroundTicketView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="8" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
         <TextView
             android:id="@+id/blackTicketCountView"
             android:layout_width="wrap_content"
@@ -831,6 +748,112 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.775" />
+
+        <LinearLayout
+            android:id="@+id/jTPosition1"
+            android:layout_width="83dp"
+            android:layout_height="148dp"
+            android:background="@android:color/holo_blue_bright"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.039"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.296">
+
+            <LinearLayout
+                android:id="@+id/playerLayout1"
+                android:layout_width="82dp"
+                android:layout_height="143dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player2NameGameView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Player 2" />
+
+                <TextView
+                    android:id="@+id/player2ColorView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Player Color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="84dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/transportP2Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/TaxiP2View"
+                            android:layout_width="64dp"
+                            android:layout_height="wrap_content"
+                            android:text="Taxi: " />
+
+                        <TextView
+                            android:id="@+id/busP2View"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bus:" />
+
+                        <TextView
+                            android:id="@+id/undergroundP2View"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Underground:" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ticketCountP2Layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/taxiTicketView1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="10" />
+
+                        <TextView
+                            android:id="@+id/busTicketView1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="10" />
+
+                        <TextView
+                            android:id="@+id/undergroundTicketView1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="8" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/jTPosition2"
+            android:layout_width="83dp"
+            android:layout_height="149dp"
+            android:background="@android:color/holo_green_dark"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.96"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.297"></LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

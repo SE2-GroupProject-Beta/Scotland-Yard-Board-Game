@@ -34,7 +34,7 @@ import com.ortiz.touchview.TouchImageView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener { // extends View {
+public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, View.OnDragListener, View.OnLongClickListener { // extends View {
     private static final String TAG = "GameScreen";
 
     private ConstraintLayout gameScreenLayout;
@@ -46,6 +46,10 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     TextView MrXNameGameView; //Mr.X
     TextView player2NameGameView; //detective/player 1
 
+    //LinearLayout variables + tags
+    private LinearLayout playerLayout1;
+    private static final String pLAYOUT_VIEW_TAG = "1";
+
     //ticket count (adjust maximum)
     int taxiTickets = 10;
     int busTickets = 10;
@@ -54,6 +58,10 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
     //mode of transportation on journey table
     private int chosenStation = -1; // variable for chosen station for confirmButton
     private int chosenTransport = -1; // variable for mode of transport for confirmButton
+    //set method for test
+    public void setChosenTransport(int value){
+        chosenTransport = value;
+    }
     TextView turnView; //variable for transportation marker
 
     //check if blackTicket was used (Mr. X Abilities)
@@ -168,6 +176,9 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         Objects.requireNonNull(getSupportActionBar()).hide();
         // set according layout
         setContentView(R.layout.activity_game_screen);
+
+        findViews();
+        implementEvents();
 
         gameScreenLayout = findViewById(R.id.gameScreenLayout);
         gameBoardView = findViewById(R.id.gameBoardView);
@@ -343,49 +354,53 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         // onClickListener for confirmButton
         confirmButton.setOnClickListener((view) -> {
             clientData.validateMove(chosenStation, chosenTransport);
-          
-            switch(chosenTransport){
-                case 0:     //taxi chosen
-                    if(!blackTicket) {
-                        //change turnView background color
-                        changeBackground("#FFEB3B");
-                        taxiTickets = taxiTickets - 1; //decrease taxi tickets
-                        displayTaxi(taxiTickets);         //display current taxi tickets
-                        Toast.makeText(this, "Go to station " + chosenStation +
-                            " by taxi", Toast.LENGTH_SHORT).show();
-                    }
-                    blackTicket = false;
-                    break;
-                case 1:     //bus chosen
-                    if(!blackTicket) {
-                        changeBackground("#22EE22");
-                        busTickets = busTickets - 1;
-                        displayBus(busTickets);
-                        Toast.makeText(this, "Go to station " + chosenStation +
-                            " by bus", Toast.LENGTH_SHORT).show();
-                    }
-                    blackTicket = false;
-                    break;
-                case 2:     //underground chosen
-                    if(!blackTicket) {
-                        changeBackground("#E91E1E");
-                        undergroundTickets = undergroundTickets - 1;
-                        displayUnderground(undergroundTickets);
-                        Toast.makeText(this, "Go to station " + chosenStation +
-                            " by underground", Toast.LENGTH_SHORT).show();
-                    }
-                    blackTicket = false;
-                    break;
-            }
 
-            //increase turnCounter on "confirm"
-            turnCounter = turnCounter +1;
-            displayTurnCount(turnCounter);
-            displayBlackTicketCount(blackTicketCount);
+            moveOnConfirmButton();
 
             placePlayersAndNeighbors();
 
         });
+    }
+    //set public for Test access
+    public void moveOnConfirmButton() {
+        switch(chosenTransport){
+            case 0:     //taxi chosen
+                if(!blackTicket) {
+                    //change turnView background color
+                    changeBackground("#FFEB3B");
+                    taxiTickets = taxiTickets - 1; //decrease taxi tickets
+                    displayTaxi(taxiTickets);         //display current taxi tickets
+                    Toast.makeText(this, "Go to station " + chosenStation +
+                        " by taxi", Toast.LENGTH_SHORT).show();
+                }
+                blackTicket = false;
+                break;
+            case 1:     //bus chosen
+                if(!blackTicket) {
+                    changeBackground("#22EE22");
+                    busTickets = busTickets - 1;
+                    displayBus(busTickets);
+                    Toast.makeText(this, "Go to station " + chosenStation +
+                        " by bus", Toast.LENGTH_SHORT).show();
+                }
+                blackTicket = false;
+                break;
+            case 2:     //underground chosen
+                if(!blackTicket) {
+                    changeBackground("#E91E1E");
+                    undergroundTickets = undergroundTickets - 1;
+                    displayUnderground(undergroundTickets);
+                    Toast.makeText(this, "Go to station " + chosenStation +
+                        " by underground", Toast.LENGTH_SHORT).show();
+                }
+                blackTicket = false;
+                break;
+        }
+
+        //increase turnCounter on "confirm"
+        turnCounter = turnCounter +1;
+        displayTurnCount(turnCounter);
+        displayBlackTicketCount(blackTicketCount);
     }
 
     //method set JourneyTable view backgrounds
@@ -800,6 +815,22 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
         }
     }
 
+    //Find all views and set Tag to all draggable views
+    private void findViews() {
+        playerLayout1 = (LinearLayout) findViewById(R.id.playerLayout1);
+        playerLayout1.setTag(pLAYOUT_VIEW_TAG);
+    }
+
+    //Implement long click and drag listener
+    private void implementEvents() {
+        //add or remove any view that you don't want to be dragged
+        playerLayout1.setOnLongClickListener(this);
+
+        //add or remove any layout view that you don't want to accept dragged view
+        findViewById(R.id.jTPosition1).setOnDragListener(this); //require color set in xml
+        findViewById(R.id.jTPosition2).setOnDragListener(this);
+    }
+
     //drag object
     //response to long press on a view
     public boolean onLongClick(View view) {
@@ -829,8 +860,7 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
             case DragEvent.ACTION_DRAG_STARTED:
                 // Determines if this View can accept the dragged data
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                    // returns true to indicate that the View can accept the dragged data.
-                    return true;
+                    return true; // returns true to indicate that the View can accept the dragged data.
                 }
                 // Returns false. During the current drag and drop operation, this View will
                 // not receive events again until ACTION_DRAG_ENDED is sent.
@@ -885,9 +915,9 @@ public class GameScreen extends AppCompatActivity implements PopupMenu.OnMenuIte
 
                 // Does a getResult(), and displays what happened.
                 if (event.getResult())
-                    Toast.makeText(this, "Character has been moved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Player Info has been moved", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(this, "Character has not been moved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Player Info has not been moved", Toast.LENGTH_SHORT).show();
 
                 return true;
             //unknown action type received
